@@ -32,12 +32,12 @@ export function MenuPage() {
           {categories.map((category) => (
             <Card
               key={category.id}
-              className="cursor-pointer transition-transform hover:scale-105 border-0 shadow-lg"
+              className="cursor-pointer transition-transform hover:scale-105 border-0 shadow-lg aspect-square md:aspect-auto"
               onClick={() => navigate(`/category/${category.id}`)}
             >
               <CardContent className="p-6 text-center">
                 {/* Image placeholder */}
-                <div className="w-full h-24 md:h-24 bg-gray-200 rounded-lg mb-4 flex items-center justify-center aspect-square md:aspect-auto">
+                <div className="w-full h-24 md:h-24 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                   <span className="text-gray-400 text-sm">Image</span>
                 </div>
                 
