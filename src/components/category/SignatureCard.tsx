@@ -44,8 +44,8 @@ export function SignatureCard({ item }: SignatureCardProps) {
     if (!items || items.length === 0) return null;
     
     return (
-      <div className="text-xs text-primary leading-tight">
-        <span className="font-medium">{label}:</span> {items.join(', ')}
+      <div className="text-xs text-primary leading-tight whitespace-nowrap truncate">
+        <span className="font-medium">{label}:&nbsp;</span>{items.join(', ')}
       </div>
     );
   };
@@ -59,9 +59,9 @@ export function SignatureCard({ item }: SignatureCardProps) {
             alt={item.name}
             className="w-24 h-24 md:w-24 lg:w-28 lg:h-28 rounded-lg object-cover bg-gray-200 shrink-0"
           />
-          <div className="flex-1 basis-2/3 lg:basis-3/4 flex flex-col justify-between min-w-0">
+          <div className="flex-auto flex flex-col justify-between">
             <div className="flex justify-between items-start">
-              <div className="flex-1 pr-2 min-w-0">
+              <div className="flex-1 pr-2">
                 <h3 className="font-semibold text-primary text-sm leading-tight mb-1">
                   {item.name}
                 </h3>
