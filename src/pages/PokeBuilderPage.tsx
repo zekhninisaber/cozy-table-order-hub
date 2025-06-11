@@ -1,7 +1,8 @@
 
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, Eye } from 'lucide-react';
 import { PokeBuilderProvider, usePokeBuilder } from '@/contexts/PokeBuilderContext';
 import { SizeStep } from '@/components/builder/SizeStep';
 import { BaseStep } from '@/components/builder/BaseStep';
@@ -12,6 +13,7 @@ import { ToppingsStep } from '@/components/builder/ToppingsStep';
 import { ExtraSauceStep } from '@/components/builder/ExtraSauceStep';
 import { ExtraGarnitureStep } from '@/components/builder/ExtraGarnitureStep';
 import { ExtraProteinStep } from '@/components/builder/ExtraProteinStep';
+import { ReviewBowlModal } from '@/components/builder/ReviewBowlModal';
 import { useAppStore } from '@/lib/store';
 import { formatPrice } from '@/lib/utils';
 
@@ -19,12 +21,16 @@ function PokeBuilderContent() {
   const navigate = useNavigate();
   const { state, isValidForCart, getTotalPrice } = usePokeBuilder();
   const { addToCart } = useAppStore();
+  const [showReviewModal, setShowReviewModal] = useState(false);
 
   const totalPrice = getTotalPrice();
 
-  const handleAddToCart = () => {
+  const handleReviewBowl = () => {
     if (!isValidForCart) return;
-    
+    setShowReviewModal(true);
+  };
+
+  const handleConfirmAddToCart = () => {
     // Add the custom poke bowl to cart
     addToCart({
       id: Date.now(), // Temporary ID for custom bowls
@@ -45,7 +51,12 @@ function PokeBuilderContent() {
       }
     });
     
+    setShowReviewModal(false);
     navigate('/basket');
+  };
+
+  const handleCloseModal = () => {
+    setShowReviewModal(false);
   };
 
   return (
@@ -97,11 +108,11 @@ function PokeBuilderContent() {
         <ExtraProteinStep />
       </div>
 
-      {/* Add to Cart Button with Price */}
+      {/* Review Bowl Button with Price */}
       <div className="fixed bottom-0 left-0 right-0 bg-peach-cream border-t border-primary/10 p-4">
         <div className="max-w-md mx-auto">
           <Button
-            onClick={handleAddToCart}
+            onClick={handleReviewBowl}
             disabled={!isValidForCart}
             className={`w-full py-4 ${
               isValidForCart
@@ -112,14 +123,21 @@ function PokeBuilderContent() {
           >
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2">
-                <ShoppingCart className="w-5 h-5" />
-                <span>Add to cart</span>
+                <Eye className="w-5 h-5" />
+                <span>Review bowl</span>
               </div>
               <span className="font-bold">{formatPrice(totalPrice)}</span>
             </div>
           </Button>
         </div>
       </div>
+
+      {/* Review Modal */}
+      <ReviewBowlModal
+        isOpen={showReviewModal}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmAddToCart}
+      />
     </div>
   );
 }
