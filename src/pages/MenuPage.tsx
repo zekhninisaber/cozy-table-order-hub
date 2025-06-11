@@ -37,7 +37,7 @@ export function MenuPage() {
             >
               <CardContent className="p-6 text-center flex flex-col justify-center items-center h-full md:block">
                 {/* Image placeholder */}
-                <div className="w-[80.5%] aspect-square md:w-full md:h-24 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                <div className="w-[88.5%] aspect-square md:w-full md:h-24 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                   <span className="text-gray-400 text-sm">Image</span>
                 </div>
                 
