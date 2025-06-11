@@ -120,7 +120,7 @@ export function PokeBowlTabs() {
         <TabsTrigger value="make-your-own">Make Your Own Bowl</TabsTrigger>
       </TabsList>
       
-      <TabsContent value="signatures" className="space-y-4">
+      <TabsContent value="signatures" className="flex flex-wrap gap-4">
         {signatureItems.map((item) => (
           <SignatureCard key={item.id} item={item} />
         ))}

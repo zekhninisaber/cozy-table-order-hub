@@ -51,7 +51,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
   };
 
   return (
-    <Card className="shadow-md border-0 min-h-[140px] sm:min-h-[160px]">
+    <Card className="shadow-md border-0 min-h-[140px] sm:min-h-[160px] basis-[22rem] lg:basis-[24rem]">
       <CardContent className="p-3 sm:p-4 h-full">
         <div className="flex gap-3 sm:gap-4 h-full">
           <img
