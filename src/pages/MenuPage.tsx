@@ -1,4 +1,3 @@
-
 import { Card, CardContent } from '@/components/ui/card';
 import { useAppStore } from '@/lib/store';
 import { useTranslation } from '@/lib/i18n';
@@ -41,9 +40,6 @@ export function MenuPage() {
                   <span className="text-gray-400 text-sm">Image</span>
                 </div>
                 
-                <div className={`w-16 h-16 mx-auto rounded-full ${category.color} flex items-center justify-center mb-4 shadow-md`}>
-                  <span className="text-2xl">{category.icon}</span>
-                </div>
                 <h3 className="font-semibold text-primary text-sm leading-tight">
                   {category.name}
                 </h3>
