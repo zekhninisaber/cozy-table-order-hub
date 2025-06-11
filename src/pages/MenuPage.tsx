@@ -35,9 +35,9 @@ export function MenuPage() {
               className="cursor-pointer transition-transform hover:scale-105 border-0 shadow-lg aspect-square md:aspect-auto"
               onClick={() => navigate(`/category/${category.id}`)}
             >
-              <CardContent className="p-6 text-center">
+              <CardContent className="p-6 text-center flex flex-col justify-center items-center h-full md:block">
                 {/* Image placeholder */}
-                <div className="w-full h-45 md:h-24 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                <div className="w-[70%] aspect-square md:w-full md:h-24 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                   <span className="text-gray-400 text-sm">Image</span>
                 </div>
                 
