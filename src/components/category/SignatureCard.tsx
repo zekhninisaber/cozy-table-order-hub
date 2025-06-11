@@ -88,42 +88,48 @@ export function SignatureCard({ item }: SignatureCardProps) {
             </h3>
           </div>
           
-          {/* Size Selector with inline price - positioned under title area */}
-          <div className="mb-2">
-            <div className="flex items-center gap-3 text-base sm:text-lg">
-              <button
-                type="button"
-                onClick={() => setSelectedSize('Regular')}
-                className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                  selectedSize === 'Regular'
-                    ? 'bg-[#F39720] text-white shadow-sm'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Regular
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedSize('Large')}
-                className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                  selectedSize === 'Large'
-                    ? 'bg-[#F39720] text-white shadow-sm'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Large
-              </button>
-              {selectedSize && (
-                <span className="ml-auto font-semibold text-[#F39720] text-base sm:text-lg">
-                  {formatPrice(BOWL_PRICES[selectedSize])}
-                </span>
-              )}
-            </div>
+          {/* Size Selector - moved directly under title */}
+          <div className="flex gap-3 mt-1 sm:mt-2 text-base sm:text-lg">
+            <button
+              type="button"
+              onClick={() => setSelectedSize('Regular')}
+              className={`px-4 py-2 rounded-full font-medium transition-colors ${
+                selectedSize === 'Regular'
+                  ? 'bg-[#F39720] text-white shadow-sm'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Regular
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedSize('Large')}
+              className={`px-4 py-2 rounded-full font-medium transition-colors ${
+                selectedSize === 'Large'
+                  ? 'bg-[#F39720] text-white shadow-sm'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Large
+            </button>
+            {/* Price inline on desktop */}
+            {selectedSize && (
+              <span className="ml-auto font-semibold text-[#F39720] text-base sm:text-lg hidden sm:block">
+                {formatPrice(BOWL_PRICES[selectedSize])}
+              </span>
+            )}
           </div>
+          
+          {/* Price below selector on mobile only */}
+          {selectedSize && (
+            <span className="block mt-1 font-semibold text-[#F39720] sm:hidden">
+              {formatPrice(BOWL_PRICES[selectedSize])}
+            </span>
+          )}
           
           {/* Components List */}
           {item.components ? (
-            <div className="space-y-0.5 mb-3">
+            <div className="space-y-0.5 mb-3 mt-3">
               {renderComponentLine(t('componentsBase'), item.components.base)}
               {renderComponentLine(t('componentsSauce'), item.components.sauce)}
               {renderComponentLine(t('componentsGarnitures'), item.components.garnitures)}
@@ -131,7 +137,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
               {renderComponentLine(t('componentsToppings'), item.components.toppings)}
             </div>
           ) : (
-            <p className="text-xs text-primary whitespace-normal break-words mb-3">
+            <p className="text-xs text-primary whitespace-normal break-words mb-3 mt-3">
               {item.description}
             </p>
           )}
@@ -163,4 +169,3 @@ export function SignatureCard({ item }: SignatureCardProps) {
     </Card>
   );
 }
-
