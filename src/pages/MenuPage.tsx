@@ -1,3 +1,4 @@
+
 import { Card, CardContent } from '@/components/ui/card';
 import { useAppStore } from '@/lib/store';
 import { useTranslation } from '@/lib/i18n';
@@ -27,7 +28,7 @@ export function MenuPage() {
           </h1>
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {categories.map((category) => (
             <Card
               key={category.id}
