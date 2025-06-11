@@ -69,57 +69,55 @@ export function SignatureCard({ item }: SignatureCardProps) {
 
   return (
     <Card className="shadow-md border-0 w-full">
-      <CardContent className="p-3 sm:p-4 relative flex flex-col sm:flex-row gap-3 sm:gap-4 pt-32 sm:pt-3">
+      <CardContent className="p-3 sm:p-4 relative flex flex-col sm:flex-row gap-3 sm:gap-4 pt-36 sm:pt-3">
         {/* Image - repositioned to top-right on mobile, left on desktop */}
         <div className="absolute top-2 right-2 sm:static sm:flex sm:justify-start">
           <img
             src={item.photo_url}
             alt={item.name}
-            className="w-28 h-28 rounded-xl shadow sm:rounded-lg sm:shadow-none object-cover bg-gray-200 shrink-0"
+            className="w-32 h-32 sm:w-28 sm:h-28 rounded-xl shadow sm:shadow-none object-cover bg-gray-200 shrink-0"
           />
         </div>
         
         {/* Content - right column on desktop, full width on mobile */}
         <div className="flex-1 flex flex-col justify-start">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold text-primary text-sm leading-tight flex-1 pr-2">
+            <h3 className="font-semibold text-primary text-xl sm:text-sm leading-tight flex-1 pr-2 -mt-10 sm:mt-0">
               {item.name}
             </h3>
           </div>
           
-          {/* Size Selector - positioned under title area */}
+          {/* Size Selector with inline price - positioned under title area */}
           <div className="mb-2">
-            <div className="flex gap-1">
+            <div className="flex items-center gap-3 text-base sm:text-lg">
               <button
                 type="button"
                 onClick={() => setSelectedSize('Regular')}
-                className={`px-3 py-1 rounded-full text-base sm:text-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full font-medium transition-colors ${
                   selectedSize === 'Regular'
                     ? 'bg-[#F39720] text-white shadow-sm'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
-                style={{ width: '64px', height: '24px' }}
               >
                 Regular
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedSize('Large')}
-                className={`px-3 py-1 rounded-full text-base sm:text-lg font-medium transition-colors ${
+                className={`px-4 py-2 rounded-full font-medium transition-colors ${
                   selectedSize === 'Large'
                     ? 'bg-[#F39720] text-white shadow-sm'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
-                style={{ width: '64px', height: '24px' }}
               >
                 Large
               </button>
+              {selectedSize && (
+                <span className="ml-auto font-semibold text-[#F39720]">
+                  {formatPrice(BOWL_PRICES[selectedSize])}
+                </span>
+              )}
             </div>
-            {selectedSize && (
-              <div className="text-base sm:text-lg font-semibold text-gray-600 mt-1">
-                {formatPrice(BOWL_PRICES[selectedSize])}
-              </div>
-            )}
           </div>
           
           {/* Components List */}
@@ -148,7 +146,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
                 onClick={handleAddToCart}
                 disabled={!selectedSize}
                 size="sm"
-                className={`w-full text-base sm:text-lg py-2 px-4 mt-2 ${
+                className={`w-full text-base sm:text-lg py-2 px-4 mt-3 font-medium ${
                   !selectedSize 
                     ? 'opacity-50 cursor-not-allowed' 
                     : 'bg-accent hover:bg-accent/90 text-accent-foreground'
