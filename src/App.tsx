@@ -16,6 +16,7 @@ import { OrderCompletePage } from '@/pages/OrderCompletePage';
 import { ClosedPage } from '@/pages/ClosedPage';
 import { AdminLoginPage } from '@/pages/admin/AdminLoginPage';
 import { AdminMenuPage } from '@/pages/admin/AdminMenuPage';
+import { PokeBuilderPage } from '@/pages/PokeBuilderPage';
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/menu" element={<MenuPage />} />
                 <Route path="/category/:id" element={<CategoryPage />} />
+                <Route path="/poke-builder" element={<PokeBuilderPage />} />
                 <Route path="/basket" element={<BasketPage />} />
                 <Route path="/summary" element={<SummaryPage />} />
                 <Route path="/order-complete" element={<OrderCompletePage />} />
