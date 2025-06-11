@@ -108,16 +108,26 @@ export function ReviewBowlModal({ isOpen, onClose, onConfirm }: ReviewBowlModalP
     </div>
   );
 
+  // Handle loading state for mobile detection
+  if (isMobile === undefined) {
+    return null;
+  }
+
   if (isMobile) {
     return (
       <Sheet open={isOpen} onOpenChange={onClose}>
-        <SheetContent side="bottom" className="bg-peach-cream border-0 rounded-t-2xl p-6">
-          <SheetHeader className="text-left">
+        <SheetContent 
+          side="bottom" 
+          className="h-auto max-h-[90vh] p-6 z-[100]"
+        >
+          <SheetHeader className="text-left pb-4">
             <SheetTitle className="text-xl font-bold text-primary">
               Votre bowl personnalisé
             </SheetTitle>
           </SheetHeader>
-          {content}
+          <div className="overflow-y-auto max-h-[70vh]">
+            {content}
+          </div>
         </SheetContent>
       </Sheet>
     );
