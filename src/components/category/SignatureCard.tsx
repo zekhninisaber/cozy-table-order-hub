@@ -69,20 +69,20 @@ export function SignatureCard({ item }: SignatureCardProps) {
 
   return (
     <Card className="shadow-md border-0 w-full">
-      <CardContent className="p-3 sm:p-4 relative flex flex-col sm:flex-row gap-3 sm:gap-4 pt-36 sm:pt-3">
+      <CardContent className="p-3 sm:p-4 relative flex flex-col sm:flex-row gap-3 sm:gap-4 pt-44 sm:pt-3">
         {/* Image - repositioned to top-right on mobile, left on desktop */}
         <div className="absolute top-2 right-2 sm:static sm:flex sm:justify-start">
           <img
             src={item.photo_url}
             alt={item.name}
-            className="w-32 h-32 sm:w-28 sm:h-28 rounded-xl shadow sm:shadow-none object-cover bg-gray-200 shrink-0"
+            className="w-36 h-36 sm:w-28 sm:h-28 rounded-xl shadow sm:shadow-none object-cover bg-gray-200 shrink-0"
           />
         </div>
         
         {/* Content - right column on desktop, full width on mobile */}
         <div className="flex-1 flex flex-col justify-start">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold text-primary text-[1.125rem] leading-tight flex-1 pr-2 -mt-8 sm:mt-0 sm:text-[1.25rem]">
+            <h3 className="font-semibold text-primary text-xl leading-tight flex-1 pr-2 -mt-10 sm:mt-0 sm:text-lg">
               {item.name}
             </h3>
           </div>
@@ -113,7 +113,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
                 Large
               </button>
               {selectedSize && (
-                <span className="ml-auto font-semibold text-[#F39720]">
+                <span className="ml-auto font-semibold text-[#F39720] text-base sm:text-lg">
                   {formatPrice(BOWL_PRICES[selectedSize])}
                 </span>
               )}
