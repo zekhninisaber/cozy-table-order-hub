@@ -17,6 +17,10 @@ type PokeBuilderAction =
   | { type: 'SET_SIZE'; payload: 'Regular' | 'Large' }
   | { type: 'ADD_BASE'; payload: string }
   | { type: 'REMOVE_BASE'; payload: string }
+  | { type: 'ADD_SAUCE'; payload: string }
+  | { type: 'REMOVE_SAUCE'; payload: string }
+  | { type: 'ADD_GARNITURE'; payload: string }
+  | { type: 'REMOVE_GARNITURE'; payload: string }
   | { type: 'RESET' };
 
 const initialState: PokeBuilderState = {
@@ -42,6 +46,20 @@ function pokeBuilderReducer(state: PokeBuilderState, action: PokeBuilderAction):
       return state;
     case 'REMOVE_BASE':
       return { ...state, base: state.base.filter(item => item !== action.payload) };
+    case 'ADD_SAUCE':
+      if (state.sauce.length < 2 && !state.sauce.includes(action.payload)) {
+        return { ...state, sauce: [...state.sauce, action.payload] };
+      }
+      return state;
+    case 'REMOVE_SAUCE':
+      return { ...state, sauce: state.sauce.filter(item => item !== action.payload) };
+    case 'ADD_GARNITURE':
+      if (state.garnitures.length < 5 && !state.garnitures.includes(action.payload)) {
+        return { ...state, garnitures: [...state.garnitures, action.payload] };
+      }
+      return state;
+    case 'REMOVE_GARNITURE':
+      return { ...state, garnitures: state.garnitures.filter(item => item !== action.payload) };
     case 'RESET':
       return initialState;
     default:
