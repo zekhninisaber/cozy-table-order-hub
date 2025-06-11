@@ -88,8 +88,8 @@ export function SignatureCard({ item }: SignatureCardProps) {
             </h3>
           </div>
           
-          {/* Size Selector - moved directly under title */}
-          <div className="flex gap-3 mt-1 sm:mt-2 text-base sm:text-lg">
+          {/* Size Selector - moved up on mobile to align with bottom of image */}
+          <div className="flex gap-3 -mt-16 sm:mt-2 text-base sm:text-lg">
             <button
               type="button"
               onClick={() => setSelectedSize('Regular')}
