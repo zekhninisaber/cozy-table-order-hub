@@ -82,7 +82,7 @@ export function CategoryPage() {
                   <img
                     src={item.photo_url}
                     alt={item.name}
-                    className="w-20 h-20 rounded-lg object-cover bg-gray-200"
+                    className="w-24 h-24 rounded-lg object-cover bg-gray-200"
                   />
                   <div className="flex-1">
                     <div className="flex justify-between items-start mb-2">
