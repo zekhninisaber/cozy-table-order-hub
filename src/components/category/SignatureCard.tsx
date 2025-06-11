@@ -57,9 +57,9 @@ export function SignatureCard({ item }: SignatureCardProps) {
           <img
             src={item.photo_url}
             alt={item.name}
-            className="w-24 h-24 rounded-lg object-cover bg-gray-200 shrink-0"
+            className="w-24 h-24 md:w-24 lg:w-28 lg:h-28 rounded-lg object-cover bg-gray-200 shrink-0"
           />
-          <div className="flex-1 flex flex-col justify-between min-w-0">
+          <div className="flex-1 basis-2/3 lg:basis-3/4 flex flex-col justify-between min-w-0">
             <div className="flex justify-between items-start">
               <div className="flex-1 pr-2 min-w-0">
                 <h3 className="font-semibold text-primary text-sm leading-tight mb-1">
