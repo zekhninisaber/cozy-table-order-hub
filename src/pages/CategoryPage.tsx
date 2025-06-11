@@ -86,16 +86,18 @@ export function CategoryPage() {
                   />
                   <div className="flex-1">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-semibold text-primary text-sm leading-tight">
-                        {item.name}
-                      </h3>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-primary text-sm leading-tight mb-1">
+                          {item.name}
+                        </h3>
+                        <p className="text-xs text-muted-foreground mb-2">
+                          {item.description}
+                        </p>
+                      </div>
                       <span className="font-bold text-accent shrink-0 ml-2">
                         {formatPrice(item.price)}
                       </span>
                     </div>
-                    <p className="text-xs text-muted-foreground mb-3 line-clamp-2">
-                      {item.description}
-                    </p>
                     <div className="flex justify-between items-center">
                       {item.out_of_stock ? (
                         <Badge variant="destructive" className="text-xs">
