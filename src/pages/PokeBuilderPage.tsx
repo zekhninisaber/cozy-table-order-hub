@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Eye } from 'lucide-react';
+import { ArrowLeft, ShoppingCart } from 'lucide-react';
 import { PokeBuilderProvider, usePokeBuilder } from '@/contexts/PokeBuilderContext';
 import { SizeStep } from '@/components/builder/SizeStep';
 import { BaseStep } from '@/components/builder/BaseStep';
@@ -108,7 +108,7 @@ function PokeBuilderContent() {
         <ExtraProteinStep />
       </div>
 
-      {/* Review Bowl Button with Price */}
+      {/* Add to Cart Button with Price */}
       <div className="fixed bottom-0 left-0 right-0 bg-peach-cream border-t border-primary/10 p-4">
         <div className="max-w-md mx-auto">
           <Button
@@ -123,8 +123,8 @@ function PokeBuilderContent() {
           >
             <div className="flex items-center justify-between w-full">
               <div className="flex items-center gap-2">
-                <Eye className="w-5 h-5" />
-                <span>Review bowl</span>
+                <ShoppingCart className="w-5 h-5" />
+                <span>Add to cart</span>
               </div>
               <span className="font-bold">{formatPrice(totalPrice)}</span>
             </div>
