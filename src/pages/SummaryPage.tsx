@@ -88,7 +88,7 @@ export function SummaryPage() {
                     </div>
                     {item.builderData?.size && (
                       <div className="text-xs text-muted-foreground pl-4">
-                        Taille: {item.builderData.size}
+                        · Taille : {t(item.builderData.size === 'Regular' ? 'sizeRegular' : 'sizeLarge')}
                       </div>
                     )}
                   </div>

@@ -62,6 +62,10 @@ interface TranslationKeys {
   componentsProtein: string;
   componentsToppings: string;
   
+  // Sizes
+  sizeRegular: string;
+  sizeLarge: string;
+  
   // Errors
   closedMessage: string;
   wifiRequired: string;
@@ -120,6 +124,9 @@ const translations: Record<Language, TranslationKeys> = {
     componentsProtein: 'Protéine',
     componentsToppings: 'Toppings',
     
+    sizeRegular: 'Regular',
+    sizeLarge: 'Large',
+    
     closedMessage: 'Nous sommes fermés. Horaires : Lundi-Samedi 11h-22h, Dimanche fermé.',
     wifiRequired: 'Veuillez vous connecter au Wi-Fi TakeABowl-WiFi pour confirmer votre commande.'
   },
@@ -175,6 +182,9 @@ const translations: Record<Language, TranslationKeys> = {
     componentsProtein: 'Protein',
     componentsToppings: 'Toppings',
     
+    sizeRegular: 'Regular',
+    sizeLarge: 'Large',
+    
     closedMessage: 'We are closed. Hours: Monday-Saturday 11am-10pm, Sunday closed.',
     wifiRequired: 'Please connect to TakeABowl-WiFi to confirm your order.'
   },
@@ -229,6 +239,9 @@ const translations: Record<Language, TranslationKeys> = {
     componentsGarnitures: 'Groenten',
     componentsProtein: 'Proteïne',
     componentsToppings: 'Toppings',
+    
+    sizeRegular: 'Regular',
+    sizeLarge: 'Large',
     
     closedMessage: 'We zijn gesloten. Openingstijden: Maandag-Zaterdag 11u-22u, Zondag gesloten.',
     wifiRequired: 'Verbind met TakeABowl-WiFi om je bestelling te bevestigen.'

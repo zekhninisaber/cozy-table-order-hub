@@ -72,7 +72,7 @@ export function BasketPage() {
                     </h3>
                     {item.builderData?.size && (
                       <p className="text-xs text-muted-foreground mt-1">
-                        Taille: {item.builderData.size}
+                        · Taille : {t(item.builderData.size === 'Regular' ? 'sizeRegular' : 'sizeLarge')}
                       </p>
                     )}
                   </div>
