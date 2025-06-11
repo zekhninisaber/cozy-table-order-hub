@@ -90,7 +90,7 @@ export function CategoryPage() {
                         <h3 className="font-semibold text-primary text-sm leading-tight mb-1">
                           {item.name}
                         </h3>
-                        <p className="text-xs text-muted-foreground mb-2">
+                        <p className="text-xs text-primary mb-2">
                           {item.description}
                         </p>
                       </div>
