@@ -65,7 +65,7 @@ export function ReviewBowlModal({ isOpen, onClose, onConfirm }: ReviewBowlModalP
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="fixed inset-x-0 bottom-0 w-full max-h-[85vh] rounded-t-2xl bg-peach-cream shadow-xl sm:static sm:inset-auto sm:rounded-xl sm:w-auto sm:max-w-md overflow-y-auto border-0 sm:border">
+      <DialogContent className="fixed bottom-0 left-0 right-0 w-full max-h-[85vh] rounded-t-2xl bg-peach-cream shadow-xl sm:fixed sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:bottom-auto sm:w-auto sm:max-w-md sm:rounded-xl overflow-y-auto border-0 sm:border p-6">
         <DialogHeader className="text-left">
           <DialogTitle className="text-xl font-bold text-primary">
             Votre bowl personnalisé
@@ -107,7 +107,7 @@ export function ReviewBowlModal({ isOpen, onClose, onConfirm }: ReviewBowlModalP
               className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground"
             >
               <Check className="w-4 h-4 mr-2" />
-              Confirmer et ajouter
+              Add to cart
             </Button>
           </div>
         </div>
