@@ -37,7 +37,7 @@ export function MenuPage() {
             >
               <CardContent className="p-6 text-center">
                 {/* Image placeholder */}
-                <div className="w-full h-40 md:h-24 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+                <div className="w-full h-45 md:h-24 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
                   <span className="text-gray-400 text-sm">Image</span>
                 </div>
                 
