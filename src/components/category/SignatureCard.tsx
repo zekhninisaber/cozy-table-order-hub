@@ -82,7 +82,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
         {/* Content - right column on desktop, full width on mobile */}
         <div className="flex-1 flex flex-col justify-start">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold text-primary text-xl sm:text-sm leading-tight flex-1 pr-2 -mt-10 sm:mt-0">
+            <h3 className="font-semibold text-primary text-[1.125rem] leading-tight flex-1 pr-2 -mt-8 sm:mt-0 sm:text-[1.25rem]">
               {item.name}
             </h3>
           </div>
