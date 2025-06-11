@@ -21,6 +21,10 @@ type PokeBuilderAction =
   | { type: 'REMOVE_SAUCE'; payload: string }
   | { type: 'ADD_GARNITURE'; payload: string }
   | { type: 'REMOVE_GARNITURE'; payload: string }
+  | { type: 'SET_PROTEIN'; payload: string }
+  | { type: 'REMOVE_PROTEIN' }
+  | { type: 'ADD_TOPPING'; payload: string }
+  | { type: 'REMOVE_TOPPING'; payload: string }
   | { type: 'RESET' };
 
 const initialState: PokeBuilderState = {
@@ -60,6 +64,17 @@ function pokeBuilderReducer(state: PokeBuilderState, action: PokeBuilderAction):
       return state;
     case 'REMOVE_GARNITURE':
       return { ...state, garnitures: state.garnitures.filter(item => item !== action.payload) };
+    case 'SET_PROTEIN':
+      return { ...state, protein: action.payload };
+    case 'REMOVE_PROTEIN':
+      return { ...state, protein: null };
+    case 'ADD_TOPPING':
+      if (state.toppings.length < 2 && !state.toppings.includes(action.payload)) {
+        return { ...state, toppings: [...state.toppings, action.payload] };
+      }
+      return state;
+    case 'REMOVE_TOPPING':
+      return { ...state, toppings: state.toppings.filter(item => item !== action.payload) };
     case 'RESET':
       return initialState;
     default:

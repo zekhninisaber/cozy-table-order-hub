@@ -7,6 +7,8 @@ import { SizeStep } from '@/components/builder/SizeStep';
 import { BaseStep } from '@/components/builder/BaseStep';
 import { SauceStep } from '@/components/builder/SauceStep';
 import { GarnituresStep } from '@/components/builder/GarnituresStep';
+import { ProteinStep } from '@/components/builder/ProteinStep';
+import { ToppingsStep } from '@/components/builder/ToppingsStep';
 import { BuilderStep } from '@/components/builder/BuilderStep';
 import { useAppStore } from '@/lib/store';
 
@@ -76,15 +78,13 @@ function PokeBuilderContent() {
         {/* Garnitures Step */}
         <GarnituresStep />
         
+        {/* Protein Step */}
+        <ProteinStep />
+        
+        {/* Toppings Step */}
+        <ToppingsStep />
+        
         {/* Placeholder Steps */}
-        <BuilderStep title="Protein" subtitle="coming soon">
-          <p className="text-sm text-primary opacity-60">Step coming soon...</p>
-        </BuilderStep>
-        
-        <BuilderStep title="Toppings" subtitle="coming soon">
-          <p className="text-sm text-primary opacity-60">Step coming soon...</p>
-        </BuilderStep>
-        
         <BuilderStep title="Extra Sauce" subtitle="coming soon">
           <p className="text-sm text-primary opacity-60">Step coming soon...</p>
         </BuilderStep>
