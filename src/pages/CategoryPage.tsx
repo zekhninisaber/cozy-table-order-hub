@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAppStore } from '@/lib/store';
 import { useTranslation } from '@/lib/i18n';
 import { formatPrice } from '@/lib/utils';
@@ -91,60 +92,59 @@ export function CategoryPage() {
         </div>
         
         {isPokeBowls ? (
-          <div className="space-y-6">
-            {/* Signatures Section */}
-            <div>
-              <h2 className="text-lg font-semibold text-primary mb-4">Signatures</h2>
-              <div className="space-y-4">
-                {signatureItems.map((item) => (
-                  <Card key={item.id} className="shadow-md border-0 min-h-[100px] sm:min-h-[120px]">
-                    <CardContent className="p-3 sm:p-4 h-full">
-                      <div className="flex gap-3 sm:gap-4 h-full">
-                        <img
-                          src={item.photo_url}
-                          alt={item.name}
-                          className="w-24 h-24 rounded-lg object-cover bg-gray-200 shrink-0"
-                        />
-                        <div className="flex-1 flex flex-col justify-between">
-                          <div className="flex justify-between items-start">
-                            <div className="flex-1 pr-2">
-                              <h3 className="font-semibold text-primary text-sm leading-tight mb-1">
-                                {item.name}
-                              </h3>
-                              <p className="text-xs text-primary mb-2">
-                                {item.description}
-                              </p>
-                            </div>
-                            <span className="font-bold text-accent shrink-0 text-sm sm:text-base">
-                              {formatPrice(item.price)}
-                            </span>
+          <Tabs defaultValue="signatures" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="signatures">Signatures</TabsTrigger>
+              <TabsTrigger value="make-your-own">Make Your Own Bowl</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="signatures" className="space-y-4">
+              {signatureItems.map((item) => (
+                <Card key={item.id} className="shadow-md border-0 min-h-[100px] sm:min-h-[120px]">
+                  <CardContent className="p-3 sm:p-4 h-full">
+                    <div className="flex gap-3 sm:gap-4 h-full">
+                      <img
+                        src={item.photo_url}
+                        alt={item.name}
+                        className="w-24 h-24 rounded-lg object-cover bg-gray-200 shrink-0"
+                      />
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1 pr-2">
+                            <h3 className="font-semibold text-primary text-sm leading-tight mb-1">
+                              {item.name}
+                            </h3>
+                            <p className="text-xs text-primary mb-2">
+                              {item.description}
+                            </p>
                           </div>
-                          <div className="flex justify-between items-center mt-auto">
-                            {item.out_of_stock ? (
-                              <Badge variant="destructive" className="text-xs">
-                                {t('outOfStock')}
-                              </Badge>
-                            ) : (
-                              <Button
-                                onClick={() => handleAddToCart(item)}
-                                size="sm"
-                                className="bg-accent hover:bg-accent/90 text-accent-foreground text-xs sm:text-sm px-2 sm:px-3"
-                              >
-                                {t('addToCart')}
-                              </Button>
-                            )}
-                          </div>
+                          <span className="font-bold text-accent shrink-0 text-sm sm:text-base">
+                            {formatPrice(item.price)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center mt-auto">
+                          {item.out_of_stock ? (
+                            <Badge variant="destructive" className="text-xs">
+                              {t('outOfStock')}
+                            </Badge>
+                          ) : (
+                            <Button
+                              onClick={() => handleAddToCart(item)}
+                              size="sm"
+                              className="bg-accent hover:bg-accent/90 text-accent-foreground text-xs sm:text-sm px-2 sm:px-3"
+                            >
+                              {t('addToCart')}
+                            </Button>
+                          )}
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </TabsContent>
 
-            {/* Make Your Own Bowl Section */}
-            <div>
-              <h2 className="text-lg font-semibold text-primary mb-4">Make Your Own Bowl</h2>
+            <TabsContent value="make-your-own">
               <Card className="shadow-md border-0 cursor-pointer hover:shadow-lg transition-shadow" onClick={handleMakeYourOwn}>
                 <CardContent className="p-6 text-center">
                   <div className="space-y-3">
@@ -166,8 +166,8 @@ export function CategoryPage() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-          </div>
+            </TabsContent>
+          </Tabs>
         ) : (
           <div className="space-y-4">
             {categoryItems.map((item) => (
