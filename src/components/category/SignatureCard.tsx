@@ -1,4 +1,5 @@
 
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -82,7 +83,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
         {/* Content - right column on desktop, full width on mobile */}
         <div className="flex-1 flex flex-col justify-start">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold text-primary text-xl leading-tight flex-1 pr-2 -mt-10 sm:mt-0 sm:text-lg max-w-[60%] break-words">
+            <h3 className="font-semibold text-primary text-xl leading-tight flex-1 pr-2 -mt-28 sm:mt-0 sm:text-lg max-w-[60%] break-words">
               {item.name}
             </h3>
           </div>
@@ -162,3 +163,4 @@ export function SignatureCard({ item }: SignatureCardProps) {
     </Card>
   );
 }
+
