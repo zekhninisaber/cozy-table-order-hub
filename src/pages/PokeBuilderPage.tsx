@@ -9,13 +9,18 @@ import { SauceStep } from '@/components/builder/SauceStep';
 import { GarnituresStep } from '@/components/builder/GarnituresStep';
 import { ProteinStep } from '@/components/builder/ProteinStep';
 import { ToppingsStep } from '@/components/builder/ToppingsStep';
-import { BuilderStep } from '@/components/builder/BuilderStep';
+import { ExtraSauceStep } from '@/components/builder/ExtraSauceStep';
+import { ExtraGarnitureStep } from '@/components/builder/ExtraGarnitureStep';
+import { ExtraProteinStep } from '@/components/builder/ExtraProteinStep';
 import { useAppStore } from '@/lib/store';
+import { formatPrice } from '@/lib/utils';
 
 function PokeBuilderContent() {
   const navigate = useNavigate();
-  const { state, isValidForCart } = usePokeBuilder();
+  const { state, isValidForCart, getTotalPrice } = usePokeBuilder();
   const { addToCart } = useAppStore();
+
+  const totalPrice = getTotalPrice();
 
   const handleAddToCart = () => {
     if (!isValidForCart) return;
@@ -23,8 +28,8 @@ function PokeBuilderContent() {
     // Add the custom poke bowl to cart
     addToCart({
       id: Date.now(), // Temporary ID for custom bowls
-      name: `Custom Poke Bowl (${state.size})`,
-      price: state.size === 'Large' ? 14.90 : 12.90,
+      name: "Poke perso",
+      price: totalPrice,
       builderData: {
         size: state.size,
         components: {
@@ -84,21 +89,15 @@ function PokeBuilderContent() {
         {/* Toppings Step */}
         <ToppingsStep />
         
-        {/* Placeholder Steps */}
-        <BuilderStep title="Extra Sauce" subtitle="coming soon">
-          <p className="text-sm text-primary opacity-60">Step coming soon...</p>
-        </BuilderStep>
+        {/* Extra Steps */}
+        <ExtraSauceStep />
         
-        <BuilderStep title="Extra Garniture" subtitle="coming soon">
-          <p className="text-sm text-primary opacity-60">Step coming soon...</p>
-        </BuilderStep>
+        <ExtraGarnitureStep />
         
-        <BuilderStep title="Extra Protein" subtitle="coming soon">
-          <p className="text-sm text-primary opacity-60">Step coming soon...</p>
-        </BuilderStep>
+        <ExtraProteinStep />
       </div>
 
-      {/* Add to Cart Button */}
+      {/* Add to Cart Button with Price */}
       <div className="fixed bottom-0 left-0 right-0 bg-peach-cream border-t border-primary/10 p-4">
         <div className="max-w-md mx-auto">
           <Button
@@ -111,8 +110,13 @@ function PokeBuilderContent() {
             }`}
             size="lg"
           >
-            <ShoppingCart className="w-5 h-5 mr-2" />
-            Add to cart
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-2">
+                <ShoppingCart className="w-5 h-5" />
+                <span>Add to cart</span>
+              </div>
+              <span className="font-bold">{formatPrice(totalPrice)}</span>
+            </div>
           </Button>
         </div>
       </div>

@@ -25,6 +25,12 @@ type PokeBuilderAction =
   | { type: 'REMOVE_PROTEIN' }
   | { type: 'ADD_TOPPING'; payload: string }
   | { type: 'REMOVE_TOPPING'; payload: string }
+  | { type: 'ADD_EXTRA_SAUCE'; payload: string }
+  | { type: 'REMOVE_EXTRA_SAUCE'; payload: string }
+  | { type: 'ADD_EXTRA_GARNITURE'; payload: string }
+  | { type: 'REMOVE_EXTRA_GARNITURE'; payload: string }
+  | { type: 'ADD_EXTRA_PROTEIN'; payload: string }
+  | { type: 'REMOVE_EXTRA_PROTEIN'; payload: string }
   | { type: 'RESET' };
 
 const initialState: PokeBuilderState = {
@@ -75,6 +81,27 @@ function pokeBuilderReducer(state: PokeBuilderState, action: PokeBuilderAction):
       return state;
     case 'REMOVE_TOPPING':
       return { ...state, toppings: state.toppings.filter(item => item !== action.payload) };
+    case 'ADD_EXTRA_SAUCE':
+      if (!state.extraSauce.includes(action.payload)) {
+        return { ...state, extraSauce: [...state.extraSauce, action.payload] };
+      }
+      return state;
+    case 'REMOVE_EXTRA_SAUCE':
+      return { ...state, extraSauce: state.extraSauce.filter(item => item !== action.payload) };
+    case 'ADD_EXTRA_GARNITURE':
+      if (!state.extraGarniture.includes(action.payload)) {
+        return { ...state, extraGarniture: [...state.extraGarniture, action.payload] };
+      }
+      return state;
+    case 'REMOVE_EXTRA_GARNITURE':
+      return { ...state, extraGarniture: state.extraGarniture.filter(item => item !== action.payload) };
+    case 'ADD_EXTRA_PROTEIN':
+      if (!state.extraProtein.includes(action.payload)) {
+        return { ...state, extraProtein: [...state.extraProtein, action.payload] };
+      }
+      return state;
+    case 'REMOVE_EXTRA_PROTEIN':
+      return { ...state, extraProtein: state.extraProtein.filter(item => item !== action.payload) };
     case 'RESET':
       return initialState;
     default:
@@ -86,6 +113,7 @@ interface PokeBuilderContextValue {
   state: PokeBuilderState;
   dispatch: React.Dispatch<PokeBuilderAction>;
   isValidForCart: boolean;
+  getTotalPrice: () => number;
 }
 
 const PokeBuilderContext = createContext<PokeBuilderContextValue | undefined>(undefined);
@@ -95,8 +123,22 @@ export function PokeBuilderProvider({ children }: { children: ReactNode }) {
   
   const isValidForCart = state.size !== null && state.base.length >= 1;
 
+  const getTotalPrice = () => {
+    if (!state.size) return 0;
+    
+    // Base price
+    let total = state.size === 'Regular' ? 12.90 : 14.90;
+    
+    // Extra pricing
+    total += state.extraSauce.length * 1; // +€1 each
+    total += state.extraGarniture.length * 1; // +€1 each
+    total += state.extraProtein.length * 2; // +€2 each
+    
+    return total;
+  };
+
   return (
-    <PokeBuilderContext.Provider value={{ state, dispatch, isValidForCart }}>
+    <PokeBuilderContext.Provider value={{ state, dispatch, isValidForCart, getTotalPrice }}>
       {children}
     </PokeBuilderContext.Provider>
   );
