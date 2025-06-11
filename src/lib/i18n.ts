@@ -55,6 +55,13 @@ interface TranslationKeys {
   liveOrders: string;
   orderHistory: string;
   
+  // Components
+  componentsBase: string;
+  componentsSauce: string;
+  componentsGarnitures: string;
+  componentsProtein: string;
+  componentsToppings: string;
+  
   // Errors
   closedMessage: string;
   wifiRequired: string;
@@ -107,6 +114,12 @@ const translations: Record<Language, TranslationKeys> = {
     liveOrders: 'Commandes en cours',
     orderHistory: 'Historique des commandes',
     
+    componentsBase: 'Base',
+    componentsSauce: 'Sauce',
+    componentsGarnitures: 'Garnitures',
+    componentsProtein: 'Protéine',
+    componentsToppings: 'Toppings',
+    
     closedMessage: 'Nous sommes fermés. Horaires : Lundi-Samedi 11h-22h, Dimanche fermé.',
     wifiRequired: 'Veuillez vous connecter au Wi-Fi TakeABowl-WiFi pour confirmer votre commande.'
   },
@@ -156,6 +169,12 @@ const translations: Record<Language, TranslationKeys> = {
     liveOrders: 'Live Orders',
     orderHistory: 'Order History',
     
+    componentsBase: 'Base',
+    componentsSauce: 'Sauce',
+    componentsGarnitures: 'Vegetables',
+    componentsProtein: 'Protein',
+    componentsToppings: 'Toppings',
+    
     closedMessage: 'We are closed. Hours: Monday-Saturday 11am-10pm, Sunday closed.',
     wifiRequired: 'Please connect to TakeABowl-WiFi to confirm your order.'
   },
@@ -204,6 +223,12 @@ const translations: Record<Language, TranslationKeys> = {
     admin: 'Beheer',
     liveOrders: 'Live bestellingen',
     orderHistory: 'Bestelgeschiedenis',
+    
+    componentsBase: 'Basis',
+    componentsSauce: 'Saus',
+    componentsGarnitures: 'Groenten',
+    componentsProtein: 'Proteïne',
+    componentsToppings: 'Toppings',
     
     closedMessage: 'We zijn gesloten. Openingstijden: Maandag-Zaterdag 11u-22u, Zondag gesloten.',
     wifiRequired: 'Verbind met TakeABowl-WiFi om je bestelling te bevestigen.'
