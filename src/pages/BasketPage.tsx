@@ -66,9 +66,16 @@ export function BasketPage() {
             <Card key={`${item.id}-${index}`} className="shadow-md border-0">
               <CardContent className="p-4">
                 <div className="flex justify-between items-start mb-3">
-                  <h3 className="font-semibold text-primary text-sm leading-tight flex-1 pr-2">
-                    {item.name}
-                  </h3>
+                  <div className="flex-1 pr-2">
+                    <h3 className="font-semibold text-primary text-sm leading-tight">
+                      {item.name}
+                    </h3>
+                    {item.builderData?.size && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Taille: {item.builderData.size}
+                      </p>
+                    )}
+                  </div>
                   <Button
                     variant="ghost"
                     size="icon"

@@ -8,7 +8,11 @@ interface CartItem {
   name: string;
   price: number;
   quantity: number;
-  builderData?: Record<string, any>;
+  builderData?: {
+    size?: 'Regular' | 'Large';
+    components?: Record<string, any>;
+    [key: string]: any;
+  };
 }
 
 interface AppState {

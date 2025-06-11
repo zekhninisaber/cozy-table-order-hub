@@ -81,9 +81,16 @@ export function SummaryPage() {
               <h2 className="font-semibold text-primary mb-4">Votre commande</h2>
               <div className="space-y-3">
                 {cart.map((item, index) => (
-                  <div key={`${item.id}-${index}`} className="flex justify-between items-center text-sm">
-                    <span>{item.quantity}x {item.name}</span>
-                    <span className="font-medium">{formatPrice(item.price * item.quantity)}</span>
+                  <div key={`${item.id}-${index}`} className="space-y-1">
+                    <div className="flex justify-between items-center text-sm">
+                      <span>{item.quantity}x {item.name}</span>
+                      <span className="font-medium">{formatPrice(item.price * item.quantity)}</span>
+                    </div>
+                    {item.builderData?.size && (
+                      <div className="text-xs text-muted-foreground pl-4">
+                        Taille: {item.builderData.size}
+                      </div>
+                    )}
                   </div>
                 ))}
                 <div className="border-t pt-3 flex justify-between items-center font-bold">
