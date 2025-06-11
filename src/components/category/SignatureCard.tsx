@@ -69,97 +69,95 @@ export function SignatureCard({ item }: SignatureCardProps) {
 
   return (
     <Card className="shadow-md border-0 w-full">
-      <CardContent className="p-3 sm:p-4">
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          {/* Image - left column */}
-          <div className="flex justify-center sm:justify-start">
-            <img
-              src={item.photo_url}
-              alt={item.name}
-              className="w-24 h-24 sm:w-28 sm:h-28 md:w-28 md:h-28 rounded-lg object-cover bg-gray-200 shrink-0"
-            />
+      <CardContent className="p-3 sm:p-4 relative flex flex-col sm:flex-row gap-3 sm:gap-4 pt-32 sm:pt-3">
+        {/* Image - repositioned to top-right on mobile, left on desktop */}
+        <div className="absolute top-2 right-2 sm:static sm:flex sm:justify-start">
+          <img
+            src={item.photo_url}
+            alt={item.name}
+            className="w-28 h-28 rounded-xl shadow sm:rounded-lg sm:shadow-none object-cover bg-gray-200 shrink-0"
+          />
+        </div>
+        
+        {/* Content - right column on desktop, full width on mobile */}
+        <div className="flex-1 flex flex-col justify-start">
+          <div className="flex justify-between items-start mb-2">
+            <h3 className="font-semibold text-primary text-sm leading-tight flex-1 pr-2">
+              {item.name}
+            </h3>
           </div>
           
-          {/* Content - right column */}
-          <div className="flex-1 flex flex-col justify-start">
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="font-semibold text-primary text-sm leading-tight flex-1 pr-2">
-                {item.name}
-              </h3>
+          {/* Size Selector - positioned under title area */}
+          <div className="mb-2">
+            <div className="flex gap-1">
+              <button
+                type="button"
+                onClick={() => setSelectedSize('Regular')}
+                className={`px-3 py-1 rounded-full text-base sm:text-lg font-medium transition-colors ${
+                  selectedSize === 'Regular'
+                    ? 'bg-[#F39720] text-white shadow-sm'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+                style={{ width: '64px', height: '24px' }}
+              >
+                Regular
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedSize('Large')}
+                className={`px-3 py-1 rounded-full text-base sm:text-lg font-medium transition-colors ${
+                  selectedSize === 'Large'
+                    ? 'bg-[#F39720] text-white shadow-sm'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+                style={{ width: '64px', height: '24px' }}
+              >
+                Large
+              </button>
             </div>
-            
-            {/* Size Selector - positioned under title area */}
-            <div className="mb-2">
-              <div className="flex gap-1">
-                <button
-                  type="button"
-                  onClick={() => setSelectedSize('Regular')}
-                  className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                    selectedSize === 'Regular'
-                      ? 'bg-[#F39720] text-white shadow-sm'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                  style={{ width: '64px', height: '24px' }}
-                >
-                  Regular
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSelectedSize('Large')}
-                  className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
-                    selectedSize === 'Large'
-                      ? 'bg-[#F39720] text-white shadow-sm'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                  style={{ width: '64px', height: '24px' }}
-                >
-                  Large
-                </button>
+            {selectedSize && (
+              <div className="text-base sm:text-lg font-semibold text-gray-600 mt-1">
+                {formatPrice(BOWL_PRICES[selectedSize])}
               </div>
-              {selectedSize && (
-                <div className="text-xs text-gray-600 mt-1">
-                  {formatPrice(BOWL_PRICES[selectedSize])}
-                </div>
-              )}
-            </div>
-            
-            {/* Components List */}
-            {item.components ? (
-              <div className="space-y-0.5 mb-3">
-                {renderComponentLine(t('componentsBase'), item.components.base)}
-                {renderComponentLine(t('componentsSauce'), item.components.sauce)}
-                {renderComponentLine(t('componentsGarnitures'), item.components.garnitures)}
-                {renderComponentLine(t('componentsProtein'), item.components.protein)}
-                {renderComponentLine(t('componentsToppings'), item.components.toppings)}
-              </div>
-            ) : (
-              <p className="text-xs text-primary whitespace-normal break-words mb-3">
-                {item.description}
-              </p>
             )}
-            
-            {/* Add to Cart Button */}
-            <div className="mt-auto">
-              {item.out_of_stock ? (
-                <Badge variant="destructive" className="text-xs w-full justify-center py-2">
-                  {t('outOfStock')}
-                </Badge>
-              ) : (
-                <Button
-                  onClick={handleAddToCart}
-                  disabled={!selectedSize}
-                  size="sm"
-                  className={`w-full text-xs sm:text-sm mt-2 ${
-                    !selectedSize 
-                      ? 'opacity-50 cursor-not-allowed' 
-                      : 'bg-accent hover:bg-accent/90 text-accent-foreground'
-                  }`}
-                  title={!selectedSize ? 'Choisissez une taille' : ''}
-                >
-                  {t('addToCart')}
-                </Button>
-              )}
+          </div>
+          
+          {/* Components List */}
+          {item.components ? (
+            <div className="space-y-0.5 mb-3">
+              {renderComponentLine(t('componentsBase'), item.components.base)}
+              {renderComponentLine(t('componentsSauce'), item.components.sauce)}
+              {renderComponentLine(t('componentsGarnitures'), item.components.garnitures)}
+              {renderComponentLine(t('componentsProtein'), item.components.protein)}
+              {renderComponentLine(t('componentsToppings'), item.components.toppings)}
             </div>
+          ) : (
+            <p className="text-xs text-primary whitespace-normal break-words mb-3">
+              {item.description}
+            </p>
+          )}
+          
+          {/* Add to Cart Button */}
+          <div className="mt-auto">
+            {item.out_of_stock ? (
+              <Badge variant="destructive" className="text-xs w-full justify-center py-2">
+                {t('outOfStock')}
+              </Badge>
+            ) : (
+              <Button
+                onClick={handleAddToCart}
+                disabled={!selectedSize}
+                size="sm"
+                className={`w-full text-base sm:text-lg py-2 px-4 mt-2 ${
+                  !selectedSize 
+                    ? 'opacity-50 cursor-not-allowed' 
+                    : 'bg-accent hover:bg-accent/90 text-accent-foreground'
+                }`}
+                title={!selectedSize ? 'Choisissez une taille' : ''}
+              >
+                {t('addToCart')}
+              </Button>
+            )}
           </div>
         </div>
       </CardContent>
