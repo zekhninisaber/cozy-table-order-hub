@@ -46,15 +46,14 @@ export function HomePage() {
             
             <div className="space-y-3">
               {languages.map((lang) => (
-                <Button
+                <button
                   key={lang.code}
                   onClick={() => handleLanguageSelect(lang.code)}
-                  variant={language === lang.code ? "default" : "outline"}
-                  className="w-full h-14 text-lg justify-start gap-4"
+                  className="w-full h-14 text-lg justify-start gap-4 bg-primary text-peach-cream hover:bg-accent active:bg-accent transition-colors duration-200 rounded-md flex items-center px-4 font-medium"
                 >
                   <span className="text-2xl">{lang.flag}</span>
                   <span>{lang.name}</span>
-                </Button>
+                </button>
               ))}
             </div>
           </CardContent>

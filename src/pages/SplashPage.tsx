@@ -35,9 +35,6 @@ export function SplashPage() {
         <h1 className="text-4xl font-display font-bold text-peach-cream mb-2">
           Take A Bowl
         </h1>
-        <p className="text-peach-cream/80 text-lg">
-          Restaurant Japonais
-        </p>
       </div>
     </div>
   );
