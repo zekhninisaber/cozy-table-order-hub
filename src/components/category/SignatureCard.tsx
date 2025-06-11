@@ -1,5 +1,4 @@
 
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -112,20 +111,13 @@ export function SignatureCard({ item }: SignatureCardProps) {
             >
               Large
             </button>
-            {/* Price inline on desktop */}
+            {/* Price inline on desktop only */}
             {selectedSize && (
               <span className="ml-auto font-semibold text-[#F39720] text-base sm:text-lg hidden sm:block">
                 {formatPrice(BOWL_PRICES[selectedSize])}
               </span>
             )}
           </div>
-          
-          {/* Price below selector on mobile only */}
-          {selectedSize && (
-            <span className="block mt-1 font-semibold text-[#F39720] sm:hidden">
-              {formatPrice(BOWL_PRICES[selectedSize])}
-            </span>
-          )}
           
           {/* Components List */}
           {item.components ? (
@@ -160,7 +152,14 @@ export function SignatureCard({ item }: SignatureCardProps) {
                 }`}
                 title={!selectedSize ? 'Choisissez une taille' : ''}
               >
-                {t('addToCart')}
+                <div className="flex justify-between items-center w-full sm:justify-center">
+                  <span className="sm:text-center">{t('addToCart')}</span>
+                  {selectedSize && (
+                    <span className="font-semibold sm:hidden">
+                      {formatPrice(BOWL_PRICES[selectedSize])}
+                    </span>
+                  )}
+                </div>
               </Button>
             )}
           </div>
