@@ -76,29 +76,29 @@ export function CategoryPage() {
         
         <div className="space-y-4">
           {categoryItems.map((item) => (
-            <Card key={item.id} className="shadow-md border-0">
-              <CardContent className="p-4">
-                <div className="flex gap-4">
+            <Card key={item.id} className="shadow-md border-0 h-32">
+              <CardContent className="p-4 h-full">
+                <div className="flex gap-4 h-full">
                   <img
                     src={item.photo_url}
                     alt={item.name}
-                    className="w-24 h-24 rounded-lg object-cover bg-gray-200"
+                    className="w-24 h-24 rounded-lg object-cover bg-gray-200 shrink-0"
                   />
-                  <div className="flex-1">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex-1">
+                  <div className="flex-1 flex flex-col justify-between">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1 pr-2">
                         <h3 className="font-semibold text-primary text-sm leading-tight mb-1">
                           {item.name}
                         </h3>
-                        <p className="text-xs text-primary mb-2">
+                        <p className="text-xs text-primary mb-2 line-clamp-2">
                           {item.description}
                         </p>
                       </div>
-                      <span className="font-bold text-accent shrink-0 ml-2">
+                      <span className="font-bold text-accent shrink-0">
                         {formatPrice(item.price)}
                       </span>
                     </div>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center mt-auto">
                       {item.out_of_stock ? (
                         <Badge variant="destructive" className="text-xs">
                           {t('outOfStock')}
