@@ -1,4 +1,3 @@
-
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -7,15 +6,19 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function checkOpeningHours(): boolean {
-  const now = new Date();
-  const day = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
-  const hour = now.getHours();
+  // For demo purposes, always return true
+  return true;
   
-  // Sunday is closed (day 0)
-  if (day === 0) return false;
-  
-  // Monday-Saturday: 11:00-22:00
-  return hour >= 11 && hour < 22;
+  // Original logic (commented out for demo):
+  // const now = new Date();
+  // const day = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+  // const hour = now.getHours();
+  // 
+  // // Sunday is closed (day 0)
+  // if (day === 0) return false;
+  // 
+  // // Monday-Saturday: 11:00-22:00
+  // return hour >= 11 && hour < 22;
 }
 
 export function checkWiFiConnection(): boolean {
