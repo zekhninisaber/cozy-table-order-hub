@@ -2,6 +2,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
+import { ScrollToTop } from '@/components/layout/ScrollToTop';
 import { checkOpeningHours } from '@/lib/utils';
 
 // Pages
@@ -24,6 +25,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
+        <ScrollToTop />
         <div className="App">
           <Routes>
             {/* Always accessible routes */}
