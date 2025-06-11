@@ -44,29 +44,29 @@ export function SignatureCard({ item }: SignatureCardProps) {
     if (!items || items.length === 0) return null;
     
     return (
-      <div className="text-xs text-primary leading-tight whitespace-nowrap truncate">
+      <div className="text-xs text-primary leading-tight whitespace-nowrap truncate md:whitespace-nowrap sm:whitespace-normal">
         <span className="font-medium">{label}:&nbsp;</span>{items.join(', ')}
       </div>
     );
   };
 
   return (
-    <Card className="shadow-md border-0 min-h-[140px] sm:min-h-[160px] basis-[22rem] lg:basis-[24rem]">
+    <Card className="shadow-md border-0 min-h-[140px] sm:min-h-[160px] w-full sm:basis-full md:basis-[22rem] lg:basis-[24rem] overflow-hidden">
       <CardContent className="p-3 sm:p-4 h-full">
         <div className="flex gap-3 sm:gap-4 h-full">
           <img
             src={item.photo_url}
             alt={item.name}
-            className="w-24 h-24 md:w-24 lg:w-28 lg:h-28 rounded-lg object-cover bg-gray-200 shrink-0"
+            className="w-20 h-20 sm:w-24 sm:h-24 md:w-24 lg:w-28 lg:h-28 rounded-lg object-cover bg-gray-200 shrink-0"
           />
-          <div className="flex-auto flex flex-col justify-between">
+          <div className="flex-auto flex flex-col justify-between overflow-hidden">
             <div className="flex justify-between items-start">
-              <div className="flex-1 pr-2">
-                <h3 className="font-semibold text-primary text-sm leading-tight mb-1">
+              <div className="flex-1 pr-2 overflow-hidden">
+                <h3 className="font-semibold text-primary text-sm leading-tight mb-1 truncate">
                   {item.name}
                 </h3>
                 {item.components ? (
-                  <div className="mt-1 space-y-0.5">
+                  <div className="mt-1 space-y-0.5 overflow-hidden">
                     {renderComponentLine(t('componentsBase'), item.components.base)}
                     {renderComponentLine(t('componentsSauce'), item.components.sauce)}
                     {renderComponentLine(t('componentsGarnitures'), item.components.garnitures)}
@@ -74,7 +74,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
                     {renderComponentLine(t('componentsToppings'), item.components.toppings)}
                   </div>
                 ) : (
-                  <p className="text-xs text-primary mb-2">
+                  <p className="text-xs text-primary mb-2 truncate">
                     {item.description}
                   </p>
                 )}
