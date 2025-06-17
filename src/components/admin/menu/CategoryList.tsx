@@ -23,14 +23,14 @@ interface CategoryListProps {
 export function CategoryList({ categories, canEdit, onSelectCategory, onToggleVisibility }: CategoryListProps) {
   return (
     <Table>
-      <TableHeader>
-        <TableRow>
-          {canEdit && <TableHead className="w-12"></TableHead>}
-          <TableHead>Mini-image</TableHead>
-          <TableHead>Nom</TableHead>
-          <TableHead>Ordre</TableHead>
-          <TableHead>Visible ?</TableHead>
-          {canEdit && <TableHead>Actions</TableHead>}
+      <TableHeader className="bg-gray-50">
+        <TableRow className="hover:bg-gray-50">
+          {canEdit && <TableHead className="w-12 bg-gray-50"></TableHead>}
+          <TableHead className="bg-gray-50">Mini-image</TableHead>
+          <TableHead className="bg-gray-50">Nom</TableHead>
+          <TableHead className="bg-gray-50">Ordre</TableHead>
+          <TableHead className="bg-gray-50">Visible ?</TableHead>
+          {canEdit && <TableHead className="bg-gray-50">Actions</TableHead>}
         </TableRow>
       </TableHeader>
       <TableBody>
