@@ -1,48 +1,67 @@
+
 import { useState, useEffect } from 'react';
-import { getCategories, getMenuItems, getBuilderSteps, getBuilderOptions, updateCategory, updateMenuItem } from '@/lib/database';
+import { 
+  getSupabaseCategories, 
+  getSupabaseMenuItems, 
+  getSupabaseBuilderSteps, 
+  getSupabaseBuilderOptions,
+  updateSupabaseCategory,
+  updateSupabaseMenuItem,
+  migrateLocalStorageToSupabase
+} from '@/lib/supabase-database';
+import { supabase } from '@/integrations/supabase/client';
 import type { Category, MenuItem, BuilderStep, BuilderOption } from '@/data/menuSeed';
-
-// Custom event for localStorage changes
-const STORAGE_CHANGE_EVENT = 'takeabowl_storage_change';
-
-// Helper function to trigger storage change events
-function triggerStorageChange() {
-  window.dispatchEvent(new CustomEvent(STORAGE_CHANGE_EVENT));
-}
 
 export function useCategories() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchCategories = () => {
+  const fetchCategories = async () => {
     setLoading(true);
-    const data = getCategories();
-    setCategories(data);
-    setLoading(false);
+    try {
+      const data = await getSupabaseCategories();
+      setCategories(data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchCategories();
-
-    // Listen for storage changes
-    const handleStorageChange = () => {
-      fetchCategories();
+    // Run migration on first load
+    const runMigration = async () => {
+      const migrated = localStorage.getItem('takeabowl_migrated_to_supabase');
+      if (!migrated) {
+        await migrateLocalStorageToSupabase();
+        localStorage.setItem('takeabowl_migrated_to_supabase', 'true');
+      }
+      await fetchCategories();
     };
 
-    window.addEventListener(STORAGE_CHANGE_EVENT, handleStorageChange);
-    window.addEventListener('storage', handleStorageChange);
+    runMigration();
+
+    // Subscribe to real-time changes
+    const subscription = supabase
+      .channel('categories_changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'categories' },
+        () => {
+          fetchCategories();
+        }
+      )
+      .subscribe();
 
     return () => {
-      window.removeEventListener(STORAGE_CHANGE_EVENT, handleStorageChange);
-      window.removeEventListener('storage', handleStorageChange);
+      subscription.unsubscribe();
     };
   }, []);
 
-  const toggleVisibility = (id: number) => {
+  const toggleVisibility = async (id: number) => {
     const category = categories.find(c => c.id === id);
     if (category) {
-      updateCategory(id, { visible: !category.visible });
-      triggerStorageChange();
+      await updateSupabaseCategory(id, { visible: !category.visible });
+      await fetchCategories();
     }
   };
 
@@ -58,35 +77,42 @@ export function useMenuItems(categoryId?: number) {
   const [items, setItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchItems = () => {
+  const fetchItems = async () => {
     setLoading(true);
-    const data = getMenuItems(categoryId);
-    setItems(data);
-    setLoading(false);
+    try {
+      const data = await getSupabaseMenuItems(categoryId);
+      setItems(data);
+    } catch (error) {
+      console.error('Error fetching menu items:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchItems();
 
-    // Listen for storage changes
-    const handleStorageChange = () => {
-      fetchItems();
-    };
-
-    window.addEventListener(STORAGE_CHANGE_EVENT, handleStorageChange);
-    window.addEventListener('storage', handleStorageChange);
+    // Subscribe to real-time changes
+    const subscription = supabase
+      .channel('menu_items_changes')
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'menu_items' },
+        () => {
+          fetchItems();
+        }
+      )
+      .subscribe();
 
     return () => {
-      window.removeEventListener(STORAGE_CHANGE_EVENT, handleStorageChange);
-      window.removeEventListener('storage', handleStorageChange);
+      subscription.unsubscribe();
     };
   }, [categoryId]);
 
-  const toggleStock = (id: number) => {
+  const toggleStock = async (id: number) => {
     const item = items.find(i => i.id === id);
     if (item) {
-      updateMenuItem(id, { out_of_stock: !item.out_of_stock });
-      triggerStorageChange();
+      await updateSupabaseMenuItem(id, { out_of_stock: !item.out_of_stock });
+      await fetchItems();
     }
   };
 
@@ -103,10 +129,19 @@ export function useBuilderSteps() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    const data = getBuilderSteps();
-    setSteps(data);
-    setLoading(false);
+    const fetchSteps = async () => {
+      setLoading(true);
+      try {
+        const data = await getSupabaseBuilderSteps();
+        setSteps(data);
+      } catch (error) {
+        console.error('Error fetching builder steps:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSteps();
   }, []);
 
   return { steps, loading };
@@ -117,10 +152,19 @@ export function useBuilderOptions(stepId?: number) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    const data = getBuilderOptions(stepId);
-    setOptions(data);
-    setLoading(false);
+    const fetchOptions = async () => {
+      setLoading(true);
+      try {
+        const data = await getSupabaseBuilderOptions(stepId);
+        setOptions(data);
+      } catch (error) {
+        console.error('Error fetching builder options:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOptions();
   }, [stepId]);
 
   return { options, loading };

@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ItemList } from './ItemList';
 import { ItemDialog } from './ItemDialog';
 import { useMenuItems } from '@/hooks/useMenu';
-import { createMenuItem, updateMenuItem } from '@/lib/database';
+import { createSupabaseMenuItem, updateSupabaseMenuItem } from '@/lib/supabase-database';
 import type { Category, MenuItem } from '@/data/menuSeed';
 
 interface CategoryViewProps {
@@ -26,7 +26,7 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
     setShowItemDialog(true);
   };
 
-  const handleSaveItem = (itemData: {
+  const handleSaveItem = async (itemData: {
     name: string;
     description: string;
     price: string;
@@ -54,9 +54,9 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
     };
     
     if (editingItem) {
-      updateMenuItem(editingItem.id, newItemData);
+      await updateSupabaseMenuItem(editingItem.id, newItemData);
     } else {
-      createMenuItem(newItemData);
+      await createSupabaseMenuItem(newItemData);
     }
     
     setShowItemDialog(false);

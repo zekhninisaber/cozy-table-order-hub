@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { CategoryList } from './CategoryList';
 import { CategoryDialog } from './CategoryDialog';
 import { useCategories } from '@/hooks/useMenu';
-import { createCategory } from '@/lib/database';
+import { createSupabaseCategory } from '@/lib/supabase-database';
 import type { Category } from '@/data/menuSeed';
 
 interface CategoryListViewProps {
@@ -14,8 +14,8 @@ interface CategoryListViewProps {
 export function CategoryListView({ canEdit, onSelectCategory }: CategoryListViewProps) {
   const { categories, toggleVisibility, refetch: refetchCategories } = useCategories();
 
-  const handleCreateCategory = (name: string, thumbnail: File | null) => {
-    const newCat = createCategory({
+  const handleCreateCategory = async (name: string, thumbnail: File | null) => {
+    const newCat = await createSupabaseCategory({
       names: { 
         fr: name,
         en: name, // Would be translated via API
@@ -26,7 +26,9 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
       thumbnail_url: thumbnail ? URL.createObjectURL(thumbnail) : undefined
     });
     
-    refetchCategories();
+    if (newCat) {
+      refetchCategories();
+    }
   };
 
   return (
