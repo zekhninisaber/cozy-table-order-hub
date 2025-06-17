@@ -9,7 +9,213 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      builder_options: {
+        Row: {
+          extra_price: number
+          id: number
+          name: string
+          out_of_stock: boolean
+          step_id: number | null
+        }
+        Insert: {
+          extra_price?: number
+          id?: number
+          name: string
+          out_of_stock?: boolean
+          step_id?: number | null
+        }
+        Update: {
+          extra_price?: number
+          id?: number
+          name?: string
+          out_of_stock?: boolean
+          step_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "builder_options_step_id_fkey"
+            columns: ["step_id"]
+            isOneToOne: false
+            referencedRelation: "builder_steps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      builder_steps: {
+        Row: {
+          id: number
+          max_select: number
+          name: string
+          sort: number
+        }
+        Insert: {
+          id?: number
+          max_select?: number
+          name: string
+          sort?: number
+        }
+        Update: {
+          id?: number
+          max_select?: number
+          name?: string
+          sort?: number
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          id: number
+          names: Json
+          sort: number
+          thumbnail_url: string | null
+          visible: boolean
+        }
+        Insert: {
+          id?: number
+          names?: Json
+          sort?: number
+          thumbnail_url?: string | null
+          visible?: boolean
+        }
+        Update: {
+          id?: number
+          names?: Json
+          sort?: number
+          thumbnail_url?: string | null
+          visible?: boolean
+        }
+        Relationships: []
+      }
+      menu_items: {
+        Row: {
+          category_id: number | null
+          descriptions: Json
+          id: number
+          names: Json
+          out_of_stock: boolean
+          photo_url: string | null
+          price: number
+          tags: string[] | null
+        }
+        Insert: {
+          category_id?: number | null
+          descriptions?: Json
+          id?: number
+          names?: Json
+          out_of_stock?: boolean
+          photo_url?: string | null
+          price?: number
+          tags?: string[] | null
+        }
+        Update: {
+          category_id?: number | null
+          descriptions?: Json
+          id?: number
+          names?: Json
+          out_of_stock?: boolean
+          photo_url?: string | null
+          price?: number
+          tags?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_lines: {
+        Row: {
+          builder_json: Json | null
+          id: number
+          item_id: number | null
+          order_id: number | null
+          price_each: number
+          qty: number
+        }
+        Insert: {
+          builder_json?: Json | null
+          id?: number
+          item_id?: number | null
+          order_id?: number | null
+          price_each: number
+          qty?: number
+        }
+        Update: {
+          builder_json?: Json | null
+          id?: number
+          item_id?: number | null
+          order_id?: number | null
+          price_each?: number
+          qty?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_lines_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "menu_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_lines_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          customer_name: string
+          id: number
+          lang: string
+          table_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          customer_name: string
+          id?: number
+          lang?: string
+          table_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string
+          id?: number
+          lang?: string
+          table_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_table_id_fkey"
+            columns: ["table_id"]
+            isOneToOne: false
+            referencedRelation: "tables"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tables: {
+        Row: {
+          id: number
+          label: string
+        }
+        Insert: {
+          id?: number
+          label: string
+        }
+        Update: {
+          id?: number
+          label?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
