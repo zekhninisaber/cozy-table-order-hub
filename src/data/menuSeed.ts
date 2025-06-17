@@ -1,4 +1,3 @@
-
 export interface Category {
   id: number;
   names: { fr: string; en: string; nl: string };
@@ -134,6 +133,42 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: 7,
+    category_id: 4,
+    names: { fr: 'Scampi Tempura', en: 'Scampi Tempura', nl: 'Scampi Tempura' },
+    descriptions: { fr: 'Délicieuses crevettes en tempura croustillante', en: 'Delicious crispy tempura prawns', nl: 'Heerlijke krokante tempura garnalen' },
+    price: 7.50,
+    out_of_stock: false,
+    tags: []
+  },
+  {
+    id: 8,
+    category_id: 4,
+    names: { fr: 'Falafels', en: 'Falafels', nl: 'Falafels' },
+    descriptions: { fr: 'Falafels croustillants aux épices du Moyen-Orient', en: 'Crispy Middle Eastern spiced falafels', nl: 'Krokante Midden-Oosterse gekruide falafels' },
+    price: 6.00,
+    out_of_stock: false,
+    tags: ['végétarien']
+  },
+  {
+    id: 9,
+    category_id: 4,
+    names: { fr: 'Gyozas Crevettes', en: 'Prawn Gyozas', nl: 'Garnalen Gyozas' },
+    descriptions: { fr: 'Raviolis japonais aux crevettes', en: 'Japanese prawn dumplings', nl: 'Japanse garnalen dumplings' },
+    price: 8.50,
+    out_of_stock: false,
+    tags: []
+  },
+  {
+    id: 10,
+    category_id: 4,
+    names: { fr: 'Gyozas Légumes', en: 'Vegetable Gyozas', nl: 'Groenten Gyozas' },
+    descriptions: { fr: 'Raviolis japonais aux légumes', en: 'Japanese vegetable dumplings', nl: 'Japanse groenten dumplings' },
+    price: 7.50,
+    out_of_stock: false,
+    tags: ['végétarien']
+  },
+  {
+    id: 11,
     category_id: 5,
     names: { fr: 'Soft Drinks', en: 'Soft Drinks', nl: 'Frisdranken' },
     descriptions: { fr: 'Sélection de boissons rafraîchissantes', en: 'Selection of refreshing drinks', nl: 'Selectie van verfrissende drankjes' },
@@ -142,11 +177,29 @@ export const menuItems: MenuItem[] = [
     tags: []
   },
   {
-    id: 8,
+    id: 12,
+    category_id: 5,
+    names: { fr: 'Eau SPA', en: 'SPA Water', nl: 'SPA Water' },
+    descriptions: { fr: 'Eau plate ou pétillante SPA', en: 'Still or sparkling SPA water', nl: 'Plat of bruisend SPA water' },
+    price: 2.00,
+    out_of_stock: false,
+    tags: []
+  },
+  {
+    id: 13,
     category_id: 6,
     names: { fr: 'Iced Mochis (2 pcs)', en: 'Iced Mochis (2 pcs)', nl: 'IJsmochi (2 stuks)' },
     descriptions: { fr: 'Délicieux mochis glacés, 2 pièces', en: 'Delicious iced mochis, 2 pieces', nl: 'Heerlijke ijsmochi, 2 stuks' },
     price: 5.50,
+    out_of_stock: false,
+    tags: ['dessert']
+  },
+  {
+    id: 14,
+    category_id: 6,
+    names: { fr: 'Iced Mochis (4 pcs)', en: 'Iced Mochis (4 pcs)', nl: 'IJsmochi (4 stuks)' },
+    descriptions: { fr: 'Délicieux mochis glacés, 4 pièces', en: 'Delicious iced mochis, 4 pieces', nl: 'Heerlijke ijsmochi, 4 stuks' },
+    price: 9.50,
     out_of_stock: false,
     tags: ['dessert']
   }

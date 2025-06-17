@@ -31,9 +31,9 @@ function upsertArray<T extends { id: number }>(storageKey: string, seedData: T[]
   localStorage.setItem(storageKey, JSON.stringify(updatedData));
 }
 
-export async function menuSync(): Promise<void> {
+export async function importMissingMenuItems(): Promise<void> {
   return new Promise((resolve) => {
-    console.log('Starting menu sync...');
+    console.log('Importing missing menu items from seed data...');
     
     // Upsert all seed data into localStorage
     upsertArray(STORAGE_KEYS.CATEGORIES, categories);
@@ -44,9 +44,12 @@ export async function menuSync(): Promise<void> {
     // Mark as initialized
     localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
     
-    console.log('Menu sync complete - all seed data synchronized');
+    console.log('Menu import complete - all missing items added');
     resolve();
   });
 }
 
-export default menuSync;
+// Auto-import on module load to ensure admin has all customer menu items
+importMissingMenuItems();
+
+export default importMissingMenuItems;
