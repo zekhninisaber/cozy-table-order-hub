@@ -5,6 +5,7 @@ import { ScheduleSettings } from '@/components/admin/settings/ScheduleSettings';
 import { PrinterSettings } from '@/components/admin/settings/PrinterSettings';
 import { ReportsSettings } from '@/components/admin/settings/ReportsSettings';
 import { MenuResetSettings } from '@/components/admin/settings/MenuResetSettings';
+import { MenuSyncSettings } from '@/components/admin/settings/MenuSyncSettings';
 
 export function AdminSettingsPage() {
   // Mock user role - in real app this would come from auth context
@@ -19,11 +20,12 @@ export function AdminSettingsPage() {
         </h1>
         
         <Tabs defaultValue="accounts" className="w-full">
-          <TabsList className={`grid w-full ${isSuper ? 'grid-cols-5' : 'grid-cols-4'}`}>
+          <TabsList className={`grid w-full ${isSuper ? 'grid-cols-6' : 'grid-cols-4'}`}>
             <TabsTrigger value="accounts">Comptes</TabsTrigger>
             <TabsTrigger value="schedule">Horaires</TabsTrigger>
             <TabsTrigger value="printer">Imprimante</TabsTrigger>
             <TabsTrigger value="reports">Rapports</TabsTrigger>
+            {isSuper && <TabsTrigger value="menu-sync">Sync Menu</TabsTrigger>}
             {isSuper && <TabsTrigger value="menu-reset">Reset Menu</TabsTrigger>}
           </TabsList>
           
@@ -42,6 +44,12 @@ export function AdminSettingsPage() {
           <TabsContent value="reports" className="mt-6">
             <ReportsSettings />
           </TabsContent>
+          
+          {isSuper && (
+            <TabsContent value="menu-sync" className="mt-6">
+              <MenuSyncSettings />
+            </TabsContent>
+          )}
           
           {isSuper && (
             <TabsContent value="menu-reset" className="mt-6">
