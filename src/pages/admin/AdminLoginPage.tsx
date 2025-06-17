@@ -20,7 +20,7 @@ export function AdminLoginPage() {
     // Simple password check - in production, use proper authentication
     if (password === 'admin123') {
       localStorage.setItem('admin-auth', 'true');
-      navigate('/admin/menu');
+      navigate('/admin');
     } else {
       toast({
         title: 'Erreur',

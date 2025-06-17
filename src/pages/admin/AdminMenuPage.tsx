@@ -16,8 +16,8 @@ export function AdminMenuPage() {
   ]);
   
   return (
-    <div className="min-h-screen bg-peach-cream p-4">
-      <div className="max-w-4xl mx-auto pt-8">
+    <div className="p-6">
+      <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-display font-bold text-primary">
             Gestion du Menu
