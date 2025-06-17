@@ -8,7 +8,7 @@ import {
   updateSupabaseCategory,
   updateSupabaseMenuItem,
   migrateLocalStorageToSupabase
-} from '@/lib/supabase-database';
+} from '@/lib/supabase';
 import { supabase } from '@/integrations/supabase/client';
 import type { Category, MenuItem, BuilderStep, BuilderOption } from '@/data/menuSeed';
 

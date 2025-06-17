@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { CategoryList } from './CategoryList';
 import { CategoryDialog } from './CategoryDialog';
 import { useCategories } from '@/hooks/useMenu';
-import { createSupabaseCategory, updateSupabaseCategory } from '@/lib/supabase-database';
+import { createSupabaseCategory, updateSupabaseCategory } from '@/lib/supabase';
 import type { Category } from '@/data/menuSeed';
 
 interface CategoryListViewProps {

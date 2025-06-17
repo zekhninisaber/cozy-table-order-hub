@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ItemList } from './ItemList';
 import { ItemDialog } from './ItemDialog';
 import { useMenuItems } from '@/hooks/useMenu';
-import { createSupabaseMenuItem, updateSupabaseMenuItem } from '@/lib/supabase-database';
+import { createSupabaseMenuItem, updateSupabaseMenuItem } from '@/lib/supabase';
 import type { Category, MenuItem } from '@/data/menuSeed';
 
 interface CategoryViewProps {
