@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import type { Category, MenuItem, BuilderStep, BuilderOption } from '@/data/menuSeed';
 import type { Database } from '@/integrations/supabase/types';
@@ -122,7 +123,8 @@ export async function createSupabaseMenuItem(item: Omit<MenuItem, 'id'>): Promis
     price: Number(data.price),
     photo_url: data.photo_url || undefined,
     out_of_stock: data.out_of_stock,
-    tags: data.tags || []
+    tags: data.tags || [],
+    sort: data.sort || 0
   };
 }
 

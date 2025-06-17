@@ -95,6 +95,7 @@ export type Database = {
           out_of_stock: boolean
           photo_url: string | null
           price: number
+          sort: number
           tags: string[] | null
         }
         Insert: {
@@ -105,6 +106,7 @@ export type Database = {
           out_of_stock?: boolean
           photo_url?: string | null
           price?: number
+          sort?: number
           tags?: string[] | null
         }
         Update: {
@@ -115,6 +117,7 @@ export type Database = {
           out_of_stock?: boolean
           photo_url?: string | null
           price?: number
+          sort?: number
           tags?: string[] | null
         }
         Relationships: [
