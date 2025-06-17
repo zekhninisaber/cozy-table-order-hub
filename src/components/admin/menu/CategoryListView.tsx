@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { CategoryList } from './CategoryList';
 import { CategoryDialog } from './CategoryDialog';
 import { useCategories } from '@/hooks/useMenu';
-import { createSupabaseCategory } from '@/lib/supabase-database';
+import { createSupabaseCategory, updateSupabaseCategory } from '@/lib/supabase-database';
 import type { Category } from '@/data/menuSeed';
 
 interface CategoryListViewProps {
@@ -29,6 +29,16 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
     if (newCat) {
       refetchCategories();
     }
+  };
+
+  const handleReorderCategories = async (reorderedCategories: Category[]) => {
+    // Update all categories with new sort order
+    for (const category of reorderedCategories) {
+      await updateSupabaseCategory(category.id, { sort: category.sort });
+    }
+    
+    // Refresh the categories list
+    refetchCategories();
   };
 
   return (
@@ -60,6 +70,7 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
                 canEdit={canEdit}
                 onSelectCategory={onSelectCategory}
                 onToggleVisibility={toggleVisibility}
+                onReorderCategories={handleReorderCategories}
               />
             </CardContent>
           </Card>
