@@ -1,6 +1,6 @@
 
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LogOut, Menu, Settings, Clock, BarChart3 } from 'lucide-react';
+import { LogOut, Menu, Settings, Clock, Cog } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function AdminLayout() {
@@ -15,7 +15,7 @@ export function AdminLayout() {
     { to: '/admin/menu', label: 'Menu', icon: Menu },
     { to: '/admin/builder', label: 'Builder', icon: Settings },
     { to: '/admin/live-orders', label: 'Live Orders', icon: Clock },
-    { to: '/admin/history', label: 'History', icon: BarChart3 }
+    { to: '/admin/settings', label: 'Settings', icon: Cog }
   ];
   
   return (
@@ -58,7 +58,7 @@ export function AdminLayout() {
             className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/5"
           >
             <LogOut className="h-5 w-5 mr-3" />
-            Logout
+            Déconnexion
           </Button>
         </div>
       </div>
@@ -69,7 +69,7 @@ export function AdminLayout() {
         <header className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-semibold text-gray-900">
-              Administration Panel
+              Panneau d'administration
             </h2>
             <Button
               onClick={handleLogout}
@@ -78,7 +78,7 @@ export function AdminLayout() {
               className="text-gray-600 hover:text-gray-900"
             >
               <LogOut className="h-4 w-4 mr-2" />
-              Logout
+              Déconnexion
             </Button>
           </div>
         </header>
