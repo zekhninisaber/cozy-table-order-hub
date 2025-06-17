@@ -55,14 +55,7 @@ export function CategoryPage() {
               .map((item) => (
                 <MenuItemCard 
                   key={item.id} 
-                  item={{
-                    id: item.id,
-                    name: item.names[language],
-                    description: item.descriptions[language],
-                    price: item.price,
-                    photo_url: item.photo_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=150&fit=crop',
-                    out_of_stock: item.out_of_stock
-                  }} 
+                  item={item} 
                 />
               ))}
             {categoryItems.length === 0 && (
