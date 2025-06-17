@@ -53,11 +53,21 @@ export function CategoryPage() {
             {categoryItems
               .filter(item => !item.out_of_stock)
               .map((item) => (
-                <MenuItemCard key={item.id} item={item} />
+                <MenuItemCard 
+                  key={item.id} 
+                  item={{
+                    id: item.id,
+                    name: item.names[language],
+                    description: item.descriptions[language],
+                    price: item.price,
+                    photo_url: item.photo_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=150&fit=crop',
+                    out_of_stock: item.out_of_stock
+                  }} 
+                />
               ))}
             {categoryItems.length === 0 && (
               <div className="text-center py-8 text-gray-500">
-                {t('noItemsAvailable')}
+                {t('menu')}
               </div>
             )}
           </div>

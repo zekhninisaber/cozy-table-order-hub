@@ -1,4 +1,3 @@
-
 export type Language = 'fr' | 'en' | 'nl';
 
 interface TranslationKeys {
@@ -23,6 +22,7 @@ interface TranslationKeys {
   menu: string;
   outOfStock: string;
   addToCart: string;
+  noItemsAvailable: string;
   
   // Categories
   sushiBurgerMenu: string;
@@ -90,6 +90,7 @@ const translations: Record<Language, TranslationKeys> = {
     menu: 'Menu',
     outOfStock: 'Rupture de stock',
     addToCart: 'Ajouter au panier',
+    noItemsAvailable: 'Aucun article disponible',
     
     sushiBurgerMenu: 'Menu Sushi Burger',
     baoBunMenu: 'Menu Bao Bun',
@@ -148,6 +149,7 @@ const translations: Record<Language, TranslationKeys> = {
     menu: 'Menu',
     outOfStock: 'Out of stock',
     addToCart: 'Add to cart',
+    noItemsAvailable: 'No items available',
     
     sushiBurgerMenu: 'Sushi Burger Menu',
     baoBunMenu: 'Bao Bun Menu',
@@ -206,6 +208,7 @@ const translations: Record<Language, TranslationKeys> = {
     menu: 'Menu',
     outOfStock: 'Uitverkocht',
     addToCart: 'Toevoegen aan winkelwagen',
+    noItemsAvailable: 'Geen items beschikbaar',
     
     sushiBurgerMenu: 'Sushi Burger Menu',
     baoBunMenu: 'Bao Bun Menu',
