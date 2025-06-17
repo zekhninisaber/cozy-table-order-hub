@@ -3,12 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Save, Clock } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 interface DaySchedule {
-  enabled: boolean;
+  closed: boolean;
   openTime: string;
   closeTime: string;
 }
@@ -23,16 +24,20 @@ interface WeekSchedule {
   sunday: DaySchedule;
 }
 
+const defaultSchedule: WeekSchedule = {
+  monday: { closed: false, openTime: '11:00', closeTime: '22:00' },
+  tuesday: { closed: false, openTime: '11:00', closeTime: '22:00' },
+  wednesday: { closed: false, openTime: '11:00', closeTime: '22:00' },
+  thursday: { closed: false, openTime: '11:00', closeTime: '22:00' },
+  friday: { closed: false, openTime: '11:00', closeTime: '22:00' },
+  saturday: { closed: false, openTime: '11:00', closeTime: '22:00' },
+  sunday: { closed: true, openTime: '11:00', closeTime: '22:00' }
+};
+
 export function ScheduleSettings() {
-  const [schedule, setSchedule] = useState<WeekSchedule>({
-    monday: { enabled: true, openTime: '11:00', closeTime: '22:00' },
-    tuesday: { enabled: true, openTime: '11:00', closeTime: '22:00' },
-    wednesday: { enabled: true, openTime: '11:00', closeTime: '22:00' },
-    thursday: { enabled: true, openTime: '11:00', closeTime: '22:00' },
-    friday: { enabled: true, openTime: '11:00', closeTime: '22:00' },
-    saturday: { enabled: true, openTime: '11:00', closeTime: '22:00' },
-    sunday: { enabled: false, openTime: '11:00', closeTime: '22:00' }
-  });
+  const [schedule, setSchedule] = useState<WeekSchedule>(defaultSchedule);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   const dayNames = {
     monday: 'Lundi',
@@ -42,6 +47,30 @@ export function ScheduleSettings() {
     friday: 'Vendredi',
     saturday: 'Samedi',
     sunday: 'Dimanche'
+  };
+
+  // Load schedule on component mount
+  useEffect(() => {
+    loadSchedule();
+  }, []);
+
+  const loadSchedule = async () => {
+    try {
+      // TODO: Replace with Supabase query when integrated
+      // const { data } = await supabase
+      //   .from('settings')
+      //   .select('opening_hours')
+      //   .eq('key', 'opening_hours')
+      //   .single();
+      
+      // For now, use localStorage
+      const saved = localStorage.getItem('opening_hours');
+      if (saved) {
+        setSchedule(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.error('Error loading schedule:', error);
+    }
   };
 
   const updateDay = (day: keyof WeekSchedule, field: keyof DaySchedule, value: boolean | string) => {
@@ -54,9 +83,34 @@ export function ScheduleSettings() {
     }));
   };
 
-  const handleSave = () => {
-    console.log('Saving schedule:', schedule);
-    // TODO: Implement schedule save logic
+  const handleSave = async () => {
+    setIsLoading(true);
+    try {
+      // TODO: Replace with Supabase mutation when integrated
+      // await supabase
+      //   .from('settings')
+      //   .upsert({
+      //     key: 'opening_hours',
+      //     opening_hours: schedule
+      //   });
+
+      // For now, save to localStorage
+      localStorage.setItem('opening_hours', JSON.stringify(schedule));
+      
+      toast({
+        title: "Horaires sauvegardés",
+        description: "Les horaires d'ouverture ont été mis à jour avec succès.",
+      });
+    } catch (error) {
+      console.error('Error saving schedule:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de sauvegarder les horaires.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -75,13 +129,16 @@ export function ScheduleSettings() {
                 <Label className="font-medium">{dayNames[day as keyof typeof dayNames]}</Label>
               </div>
               
-              <Switch
-                checked={daySchedule.enabled}
-                onCheckedChange={(checked) => updateDay(day as keyof WeekSchedule, 'enabled', checked)}
-              />
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  checked={daySchedule.closed}
+                  onCheckedChange={(checked) => updateDay(day as keyof WeekSchedule, 'closed', !!checked)}
+                />
+                <Label className="text-sm">Fermé</Label>
+              </div>
               
-              {daySchedule.enabled ? (
-                <div className="flex items-center space-x-2">
+              {!daySchedule.closed && (
+                <div className="flex items-center space-x-4">
                   <div>
                     <Label className="text-sm text-muted-foreground">Ouverture</Label>
                     <Input
@@ -101,15 +158,17 @@ export function ScheduleSettings() {
                     />
                   </div>
                 </div>
-              ) : (
-                <span className="text-muted-foreground italic">Fermé</span>
               )}
             </div>
           ))}
           
-          <Button onClick={handleSave} className="bg-accent hover:bg-accent/90">
+          <Button 
+            onClick={handleSave} 
+            disabled={isLoading}
+            className="bg-accent hover:bg-accent/90"
+          >
             <Save className="h-4 w-4 mr-2" />
-            Sauvegarder les horaires
+            {isLoading ? 'Sauvegarde...' : 'Sauvegarder les horaires'}
           </Button>
         </div>
       </CardContent>
