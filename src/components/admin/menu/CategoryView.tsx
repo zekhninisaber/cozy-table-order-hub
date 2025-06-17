@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ArrowLeft, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -48,15 +47,37 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
         nl: itemData.description  // Would be translated via API
       },
       price: parseFloat(itemData.price) || 0,
-      photo_url: itemData.photo ? URL.createObjectURL(itemData.photo) : editingItem?.photo_url,
       out_of_stock: editingItem?.out_of_stock || false,
       tags: itemData.tags.split(',').map(t => t.trim()).filter(Boolean)
     };
     
+    let photoUrl = editingItem?.photo_url;
+    
     if (editingItem) {
+      // Update existing item
       await updateSupabaseMenuItem(editingItem.id, newItemData);
+      
+      // Handle photo upload for existing item
+      if (itemData.photo) {
+        const { uploadMenuItemPhoto } = await import('@/lib/storage');
+        const uploadedUrl = await uploadMenuItemPhoto(itemData.photo, editingItem.id);
+        if (uploadedUrl) {
+          photoUrl = uploadedUrl;
+          await updateSupabaseMenuItem(editingItem.id, { photo_url: photoUrl });
+        }
+      }
     } else {
-      await createSupabaseMenuItem(newItemData);
+      // Create new item
+      const createdItem = await createSupabaseMenuItem(newItemData);
+      
+      // Handle photo upload for new item
+      if (createdItem && itemData.photo) {
+        const { uploadMenuItemPhoto } = await import('@/lib/storage');
+        const uploadedUrl = await uploadMenuItemPhoto(itemData.photo, createdItem.id);
+        if (uploadedUrl) {
+          await updateSupabaseMenuItem(createdItem.id, { photo_url: uploadedUrl });
+        }
+      }
     }
     
     setShowItemDialog(false);
