@@ -7,25 +7,9 @@ import { CategoryList } from '@/components/admin/menu/CategoryList';
 import { ItemList } from '@/components/admin/menu/ItemList';
 import { CategoryDialog } from '@/components/admin/menu/CategoryDialog';
 import { ItemDialog } from '@/components/admin/menu/ItemDialog';
-
-interface Category {
-  id: number;
-  names: { fr: string; en: string; nl: string };
-  sort: number;
-  visible: boolean;
-  thumbnail_url?: string;
-}
-
-interface MenuItem {
-  id: number;
-  category_id: number;
-  names: { fr: string; en: string; nl: string };
-  descriptions: { fr: string; en: string; nl: string };
-  price: number;
-  photo_url?: string;
-  out_of_stock: boolean;
-  tags: string[];
-}
+import { useCategories, useMenuItems } from '@/hooks/useMenu';
+import { createCategory, createMenuItem, updateMenuItem } from '@/lib/database';
+import type { Category, MenuItem } from '@/data/menuSeed';
 
 export function AdminMenuPage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
@@ -35,86 +19,11 @@ export function AdminMenuPage() {
   // Mock user role - in real app this would come from auth context
   const userRole = 'admin'; // or 'staff'
   
-  const [categories, setCategories] = useState<Category[]>([
-    { 
-      id: 1, 
-      names: { fr: 'Sushi Burger Menu', en: 'Sushi Burger Menu', nl: 'Sushi Burger Menu' },
-      sort: 1, 
-      visible: true,
-      thumbnail_url: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=100&h=100&fit=crop'
-    },
-    { 
-      id: 2, 
-      names: { fr: 'Menu Bao Bun', en: 'Bao Bun Menu', nl: 'Bao Bun Menu' },
-      sort: 2, 
-      visible: true,
-      thumbnail_url: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=100&h=100&fit=crop'
-    },
-    { 
-      id: 3, 
-      names: { fr: 'Poke Bowls', en: 'Poke Bowls', nl: 'Poke Bowls' },
-      sort: 3, 
-      visible: true,
-      thumbnail_url: 'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=100&h=100&fit=crop'
-    },
-    { 
-      id: 4, 
-      names: { fr: 'Accompagnements', en: 'Sides', nl: 'Bijgerechten' },
-      sort: 4, 
-      visible: true 
-    },
-    { 
-      id: 5, 
-      names: { fr: 'Boissons', en: 'Drinks', nl: 'Drankjes' },
-      sort: 5, 
-      visible: false 
-    },
-    { 
-      id: 6, 
-      names: { fr: 'Desserts', en: 'Desserts', nl: 'Desserts' },
-      sort: 6, 
-      visible: true 
-    }
-  ]);
-
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([
-    {
-      id: 1,
-      category_id: 1,
-      names: { fr: 'Sushi Burger Crispy Chicken', en: 'Crispy Chicken Sushi Burger', nl: 'Crispy Chicken Sushi Burger' },
-      descriptions: { fr: 'Délicieux burger sushi au poulet croustillant', en: 'Delicious crispy chicken sushi burger', nl: 'Heerlijke crispy chicken sushi burger' },
-      price: 12.50,
-      photo_url: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=200&h=150&fit=crop',
-      out_of_stock: false,
-      tags: ['populaire']
-    },
-    {
-      id: 2,
-      category_id: 1,
-      names: { fr: 'Sushi Burger Saumon Crémeux', en: 'Creamy Salmon Sushi Burger', nl: 'Romige Zalm Sushi Burger' },
-      descriptions: { fr: 'Burger sushi au saumon avec sauce crémeuse', en: 'Sushi burger with salmon and creamy sauce', nl: 'Sushi burger met zalm en romige saus' },
-      price: 14.00,
-      photo_url: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=200&h=150&fit=crop',
-      out_of_stock: true,
-      tags: ['premium']
-    }
-  ]);
-
-  const toggleCategoryVisibility = (id: number) => {
-    setCategories(cats => cats.map(cat => 
-      cat.id === id ? { ...cat, visible: !cat.visible } : cat
-    ));
-  };
-
-  const toggleItemStock = (id: number) => {
-    setMenuItems(items => items.map(item => 
-      item.id === id ? { ...item, out_of_stock: !item.out_of_stock } : item
-    ));
-  };
+  const { categories, toggleVisibility, refetch: refetchCategories } = useCategories();
+  const { items: categoryItems, toggleStock, refetch: refetchItems } = useMenuItems(selectedCategory?.id);
 
   const handleCreateCategory = (name: string, thumbnail: File | null) => {
-    const newCat: Category = {
-      id: Math.max(...categories.map(c => c.id)) + 1,
+    const newCat = createCategory({
       names: { 
         fr: name,
         en: name, // Would be translated via API
@@ -123,9 +32,9 @@ export function AdminMenuPage() {
       sort: categories.length + 1,
       visible: true,
       thumbnail_url: thumbnail ? URL.createObjectURL(thumbnail) : undefined
-    };
+    });
     
-    setCategories([...categories, newCat]);
+    refetchCategories();
   };
 
   const handleEditItem = (item: MenuItem) => {
@@ -142,8 +51,7 @@ export function AdminMenuPage() {
   }) => {
     if (!itemData.name.trim() || !selectedCategory) return;
     
-    const newItemData: MenuItem = {
-      id: editingItem?.id || Math.max(...menuItems.map(i => i.id)) + 1,
+    const newItemData = {
       category_id: selectedCategory.id,
       names: {
         fr: itemData.name,
@@ -162,18 +70,15 @@ export function AdminMenuPage() {
     };
     
     if (editingItem) {
-      setMenuItems(items => items.map(item => item.id === editingItem.id ? newItemData : item));
+      updateMenuItem(editingItem.id, newItemData);
     } else {
-      setMenuItems([...menuItems, newItemData]);
+      createMenuItem(newItemData);
     }
     
     setShowItemDialog(false);
     setEditingItem(null);
+    refetchItems();
   };
-
-  const categoryItems = selectedCategory 
-    ? menuItems.filter(item => item.category_id === selectedCategory.id)
-    : [];
 
   const canEdit = userRole === 'admin';
 
@@ -220,7 +125,7 @@ export function AdminMenuPage() {
                   items={categoryItems}
                   canEdit={canEdit}
                   onEditItem={handleEditItem}
-                  onToggleStock={toggleItemStock}
+                  onToggleStock={toggleStock}
                 />
               </CardContent>
             </Card>
@@ -265,7 +170,7 @@ export function AdminMenuPage() {
                 categories={categories}
                 canEdit={canEdit}
                 onSelectCategory={setSelectedCategory}
-                onToggleVisibility={toggleCategoryVisibility}
+                onToggleVisibility={toggleVisibility}
               />
             </CardContent>
           </Card>
