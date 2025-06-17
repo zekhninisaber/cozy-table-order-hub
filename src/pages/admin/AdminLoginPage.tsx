@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 
 export function AdminLoginPage() {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -17,14 +18,14 @@ export function AdminLoginPage() {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simple password check - in production, use proper authentication
-    if (password === 'admin123') {
+    // Demo credentials - in production, use proper authentication
+    if (email === 'admin@takeabowl.com' && password === 'admin123') {
       localStorage.setItem('admin-auth', 'true');
       navigate('/admin');
     } else {
       toast({
         title: 'Erreur',
-        description: 'Mot de passe incorrect',
+        description: 'Email ou mot de passe incorrect',
         variant: 'destructive'
       });
     }
@@ -38,11 +39,25 @@ export function AdminLoginPage() {
         <Card className="shadow-xl border-0">
           <CardHeader>
             <CardTitle className="text-center text-primary">
-              Administration
+              Administration Take A Bowl
             </CardTitle>
+            <p className="text-center text-sm text-muted-foreground mt-2">
+              Demo: admin@takeabowl.com / admin123
+            </p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@takeabowl.com"
+                  required
+                />
+              </div>
               <div>
                 <Label htmlFor="password">Mot de passe</Label>
                 <Input
@@ -50,6 +65,7 @@ export function AdminLoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="admin123"
                   required
                 />
               </div>
