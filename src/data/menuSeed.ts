@@ -15,6 +15,7 @@ export interface MenuItem {
   photo_url?: string;
   out_of_stock: boolean;
   tags: string[];
+  sort?: number;
 }
 
 export interface BuilderStep {

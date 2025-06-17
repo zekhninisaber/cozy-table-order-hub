@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import type { Category, MenuItem, BuilderStep, BuilderOption } from '@/data/menuSeed';
 import type { Database } from '@/integrations/supabase/types';
@@ -76,7 +75,8 @@ export async function updateSupabaseCategory(id: number, updates: Partial<Catego
 export async function getSupabaseMenuItems(categoryId?: number): Promise<MenuItem[]> {
   let query = supabase
     .from('menu_items')
-    .select('*');
+    .select('*')
+    .order('sort', { ascending: true });
   
   if (categoryId) {
     query = query.eq('category_id', categoryId);
@@ -97,7 +97,8 @@ export async function getSupabaseMenuItems(categoryId?: number): Promise<MenuIte
     price: Number(row.price),
     photo_url: row.photo_url || undefined,
     out_of_stock: row.out_of_stock,
-    tags: row.tags || []
+    tags: row.tags || [],
+    sort: row.sort || 0
   }));
 }
 

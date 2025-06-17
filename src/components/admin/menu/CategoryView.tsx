@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { ArrowLeft, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,16 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
     setShowItemDialog(true);
   };
 
+  const handleReorderItems = async (reorderedItems: MenuItem[]) => {
+    // Update all items with new sort order
+    for (const item of reorderedItems) {
+      await updateSupabaseMenuItem(item.id, { sort: item.sort });
+    }
+    
+    // Refresh the items list
+    refetchItems();
+  };
+
   const handleSaveItem = async (itemData: {
     name: string;
     description: string;
@@ -48,7 +59,8 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
       },
       price: parseFloat(itemData.price) || 0,
       out_of_stock: editingItem?.out_of_stock || false,
-      tags: itemData.tags.split(',').map(t => t.trim()).filter(Boolean)
+      tags: itemData.tags.split(',').map(t => t.trim()).filter(Boolean),
+      sort: editingItem?.sort || categoryItems.length + 1
     };
     
     let photoUrl = editingItem?.photo_url;
@@ -84,6 +96,10 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
     setEditingItem(null);
     refetchItems();
   };
+
+  // Check if this is a builder category (we don't want reordering for builder categories)
+  const isBuilderCategory = category.names.fr.toLowerCase().includes('poke') && 
+                           category.names.fr.toLowerCase().includes('your own');
 
   return (
     <div className="flex flex-col h-full">
@@ -128,6 +144,7 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
                 canEdit={canEdit}
                 onEditItem={handleEditItem}
                 onToggleStock={toggleStock}
+                onReorderItems={!isBuilderCategory ? handleReorderItems : undefined}
               />
             </CardContent>
           </Card>
