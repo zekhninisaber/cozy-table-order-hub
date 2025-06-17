@@ -1,32 +1,42 @@
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Settings } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AccountsSettings } from '@/components/admin/settings/AccountsSettings';
+import { ScheduleSettings } from '@/components/admin/settings/ScheduleSettings';
+import { PrinterSettings } from '@/components/admin/settings/PrinterSettings';
+import { ReportsSettings } from '@/components/admin/settings/ReportsSettings';
 
 export function AdminSettingsPage() {
   return (
     <div className="p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-display font-bold text-primary">
-            Paramètres
-          </h1>
-          <Button className="bg-accent hover:bg-accent/90">
-            <Settings className="h-4 w-4 mr-2" />
-            Sauvegarder
-          </Button>
-        </div>
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-display font-bold text-primary mb-8">
+          Paramètres
+        </h1>
         
-        <Card className="shadow-md border-0">
-          <CardHeader>
-            <CardTitle className="text-primary">Configuration générale</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">
-              Les paramètres du restaurant et de l'application seront affichés ici.
-            </p>
-          </CardContent>
-        </Card>
+        <Tabs defaultValue="accounts" className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="accounts">Comptes</TabsTrigger>
+            <TabsTrigger value="schedule">Horaires</TabsTrigger>
+            <TabsTrigger value="printer">Imprimante</TabsTrigger>
+            <TabsTrigger value="reports">Rapports</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="accounts" className="mt-6">
+            <AccountsSettings />
+          </TabsContent>
+          
+          <TabsContent value="schedule" className="mt-6">
+            <ScheduleSettings />
+          </TabsContent>
+          
+          <TabsContent value="printer" className="mt-6">
+            <PrinterSettings />
+          </TabsContent>
+          
+          <TabsContent value="reports" className="mt-6">
+            <ReportsSettings />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
