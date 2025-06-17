@@ -199,103 +199,111 @@ export function AdminMenuPage() {
 
   if (selectedCategory) {
     return (
-      <div className="p-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-4 mb-8">
-            <Button 
-              variant="outline" 
-              onClick={() => setSelectedCategory(null)}
-              className="flex items-center gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Retour aux catégories
-            </Button>
-            <h1 className="text-3xl font-display font-bold text-primary">
-              {selectedCategory.names.fr}
-            </h1>
-            {canEdit && (
+      <div className="flex flex-col h-full">
+        {/* Fixed Header */}
+        <div className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200 p-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center gap-4">
               <Button 
-                onClick={() => {
-                  setEditingItem(null);
-                  setNewItem({ name: '', description: '', price: '', photo: null, tags: '' });
-                  setShowItemDialog(true);
-                }}
-                className="bg-accent hover:bg-accent/90"
+                variant="outline" 
+                onClick={() => setSelectedCategory(null)}
+                className="flex items-center gap-2"
               >
-                <Plus className="h-4 w-4 mr-2" />
-                Nouveau plat
+                <ArrowLeft className="h-4 w-4" />
+                Retour aux catégories
               </Button>
-            )}
+              <h1 className="text-3xl font-display font-bold text-primary">
+                {selectedCategory.names.fr}
+              </h1>
+              {canEdit && (
+                <Button 
+                  onClick={() => {
+                    setEditingItem(null);
+                    setNewItem({ name: '', description: '', price: '', photo: null, tags: '' });
+                    setShowItemDialog(true);
+                  }}
+                  className="bg-accent hover:bg-accent/90"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Nouveau plat
+                </Button>
+              )}
+            </div>
           </div>
-          
-          <Card className="shadow-md border-0">
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Photo</TableHead>
-                    <TableHead>Nom</TableHead>
-                    <TableHead>Prix</TableHead>
-                    <TableHead>En stock</TableHead>
-                    <TableHead>Tags</TableHead>
-                    {canEdit && <TableHead>Actions</TableHead>}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {categoryItems.map((item) => (
-                    <TableRow key={item.id}>
-                      <TableCell>
-                        {item.photo_url ? (
-                          <img 
-                            src={item.photo_url} 
-                            alt={item.names.fr}
-                            className="w-12 h-12 rounded object-cover"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
-                            Photo
-                          </div>
-                        )}
-                      </TableCell>
-                      <TableCell className="font-medium">{item.names.fr}</TableCell>
-                      <TableCell>€{item.price.toFixed(2)}</TableCell>
-                      <TableCell>
-                        <Switch
-                          checked={!item.out_of_stock}
-                          onCheckedChange={() => toggleItemStock(item.id)}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex gap-1">
-                          {item.tags.map(tag => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </TableCell>
-                      {canEdit && (
+        </div>
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-auto p-6">
+          <div className="max-w-6xl mx-auto">
+            <Card className="shadow-md border-0">
+              <CardContent className="p-0">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Photo</TableHead>
+                      <TableHead>Nom</TableHead>
+                      <TableHead>Prix</TableHead>
+                      <TableHead>En stock</TableHead>
+                      <TableHead>Tags</TableHead>
+                      {canEdit && <TableHead>Actions</TableHead>}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {categoryItems.map((item) => (
+                      <TableRow key={item.id}>
                         <TableCell>
-                          <div className="flex gap-2">
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => handleEditItem(item)}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button variant="outline" size="sm">
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+                          {item.photo_url ? (
+                            <img 
+                              src={item.photo_url} 
+                              alt={item.names.fr}
+                              className="w-12 h-12 rounded object-cover"
+                            />
+                          ) : (
+                            <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
+                              Photo
+                            </div>
+                          )}
+                        </TableCell>
+                        <TableCell className="font-medium">{item.names.fr}</TableCell>
+                        <TableCell>€{item.price.toFixed(2)}</TableCell>
+                        <TableCell>
+                          <Switch
+                            checked={!item.out_of_stock}
+                            onCheckedChange={() => toggleItemStock(item.id)}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex gap-1">
+                            {item.tags.map(tag => (
+                              <Badge key={tag} variant="secondary" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))}
                           </div>
                         </TableCell>
-                      )}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
+                        {canEdit && (
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => handleEditItem(item)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
         </div>
 
         {/* Edit Item Dialog */}
@@ -372,130 +380,138 @@ export function AdminMenuPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-display font-bold text-primary">
-            Gestion du Menu
-          </h1>
-          {canEdit && (
-            <Dialog open={showCategoryDialog} onOpenChange={setShowCategoryDialog}>
-              <DialogTrigger asChild>
-                <Button className="bg-accent hover:bg-accent/90">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Nouvelle catégorie
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Nouvelle catégorie</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="category-name">Nom (français)</Label>
-                    <Input
-                      id="category-name"
-                      value={newCategory.name}
-                      onChange={(e) => setNewCategory({...newCategory, name: e.target.value})}
-                      placeholder="Nom de la catégorie"
-                    />
+    <div className="flex flex-col h-full">
+      {/* Fixed Header */}
+      <div className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200 p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex justify-between items-center">
+            <h1 className="text-3xl font-display font-bold text-primary">
+              Gestion du Menu
+            </h1>
+            {canEdit && (
+              <Dialog open={showCategoryDialog} onOpenChange={setShowCategoryDialog}>
+                <DialogTrigger asChild>
+                  <Button className="bg-accent hover:bg-accent/90">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Nouvelle catégorie
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Nouvelle catégorie</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="category-name">Nom (français)</Label>
+                      <Input
+                        id="category-name"
+                        value={newCategory.name}
+                        onChange={(e) => setNewCategory({...newCategory, name: e.target.value})}
+                        placeholder="Nom de la catégorie"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="category-thumbnail">Mini-image</Label>
+                      <Input
+                        id="category-thumbnail"
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setNewCategory({...newCategory, thumbnail: e.target.files?.[0] || null})}
+                      />
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <Button variant="outline" onClick={() => setShowCategoryDialog(false)}>
+                        Annuler
+                      </Button>
+                      <Button onClick={handleCreateCategory}>
+                        Créer
+                      </Button>
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="category-thumbnail">Mini-image</Label>
-                    <Input
-                      id="category-thumbnail"
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setNewCategory({...newCategory, thumbnail: e.target.files?.[0] || null})}
-                    />
-                  </div>
-                  <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={() => setShowCategoryDialog(false)}>
-                      Annuler
-                    </Button>
-                    <Button onClick={handleCreateCategory}>
-                      Créer
-                    </Button>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          )}
+                </DialogContent>
+              </Dialog>
+            )}
+          </div>
         </div>
-        
-        <Card className="shadow-md border-0">
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {canEdit && <TableHead className="w-12"></TableHead>}
-                  <TableHead>Mini-image</TableHead>
-                  <TableHead>Nom</TableHead>
-                  <TableHead>Ordre</TableHead>
-                  <TableHead>Visible ?</TableHead>
-                  {canEdit && <TableHead>Actions</TableHead>}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {categories.map((category) => (
-                  <TableRow 
-                    key={category.id}
-                    className="cursor-pointer hover:bg-gray-50"
-                    onClick={() => setSelectedCategory(category)}
-                  >
-                    {canEdit && (
-                      <TableCell onClick={(e) => e.stopPropagation()}>
-                        <GripVertical className="h-4 w-4 text-gray-400" />
-                      </TableCell>
-                    )}
-                    <TableCell onClick={(e) => e.stopPropagation()}>
-                      {category.thumbnail_url ? (
-                        <img 
-                          src={category.thumbnail_url} 
-                          alt={category.names.fr}
-                          className="w-10 h-10 rounded object-cover"
-                        />
-                      ) : (
-                        <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
-                          IMG
-                        </div>
-                      )}
-                    </TableCell>
-                    <TableCell className="font-medium">{category.names.fr}</TableCell>
-                    <TableCell>
-                      <Badge variant="secondary">{category.sort}</Badge>
-                    </TableCell>
-                    <TableCell onClick={(e) => e.stopPropagation()}>
-                      <div className="flex items-center gap-2">
-                        <Switch
-                          checked={category.visible}
-                          onCheckedChange={() => toggleCategoryVisibility(category.id)}
-                        />
-                        {category.visible ? (
-                          <Eye className="h-4 w-4 text-green-600" />
-                        ) : (
-                          <EyeOff className="h-4 w-4 text-gray-400" />
-                        )}
-                      </div>
-                    </TableCell>
-                    {canEdit && (
-                      <TableCell onClick={(e) => e.stopPropagation()}>
-                        <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    )}
+      </div>
+      
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-auto p-6">
+        <div className="max-w-4xl mx-auto">
+          <Card className="shadow-md border-0">
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    {canEdit && <TableHead className="w-12"></TableHead>}
+                    <TableHead>Mini-image</TableHead>
+                    <TableHead>Nom</TableHead>
+                    <TableHead>Ordre</TableHead>
+                    <TableHead>Visible ?</TableHead>
+                    {canEdit && <TableHead>Actions</TableHead>}
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+                </TableHeader>
+                <TableBody>
+                  {categories.map((category) => (
+                    <TableRow 
+                      key={category.id}
+                      className="cursor-pointer hover:bg-gray-50"
+                      onClick={() => setSelectedCategory(category)}
+                    >
+                      {canEdit && (
+                        <TableCell onClick={(e) => e.stopPropagation()}>
+                          <GripVertical className="h-4 w-4 text-gray-400" />
+                        </TableCell>
+                      )}
+                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        {category.thumbnail_url ? (
+                          <img 
+                            src={category.thumbnail_url} 
+                            alt={category.names.fr}
+                            className="w-10 h-10 rounded object-cover"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
+                            IMG
+                          </div>
+                        )}
+                      </TableCell>
+                      <TableCell className="font-medium">{category.names.fr}</TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">{category.sort}</Badge>
+                      </TableCell>
+                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center gap-2">
+                          <Switch
+                            checked={category.visible}
+                            onCheckedChange={() => toggleCategoryVisibility(category.id)}
+                          />
+                          {category.visible ? (
+                            <Eye className="h-4 w-4 text-green-600" />
+                          ) : (
+                            <EyeOff className="h-4 w-4 text-gray-400" />
+                          )}
+                        </div>
+                      </TableCell>
+                      {canEdit && (
+                        <TableCell onClick={(e) => e.stopPropagation()}>
+                          <div className="flex gap-2">
+                            <Button variant="outline" size="sm">
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button variant="outline" size="sm">
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
