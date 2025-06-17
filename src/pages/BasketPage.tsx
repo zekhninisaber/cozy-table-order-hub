@@ -32,7 +32,7 @@ export function BasketPage() {
           </div>
           
           <div className="text-center py-16">
-            <p className="text-muted-foreground">{t('cart')} vide</p>
+            <p className="text-primary">{t('cart')} vide</p>
             <Button 
               onClick={() => navigate('/menu')} 
               className="mt-4"
