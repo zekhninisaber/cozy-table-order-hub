@@ -1,4 +1,3 @@
-
 import { categories as seedCategories, menuItems as seedMenuItems, builderSteps as seedBuilderSteps, builderOptions as seedBuilderOptions } from '@/data/menuSeed';
 import type { Category, MenuItem, BuilderStep, BuilderOption } from '@/data/menuSeed';
 
@@ -9,6 +8,14 @@ const STORAGE_KEYS = {
   BUILDER_OPTIONS: 'takeabowl_builder_options',
   INITIALIZED: 'takeabowl_db_initialized'
 };
+
+// Custom event for localStorage changes
+const STORAGE_CHANGE_EVENT = 'takeabowl_storage_change';
+
+// Helper function to trigger storage change events
+function triggerStorageChange() {
+  window.dispatchEvent(new CustomEvent(STORAGE_CHANGE_EVENT));
+}
 
 // Initialize database with seed data if not already done
 export function initializeDatabase() {
@@ -36,6 +43,7 @@ export function updateCategory(id: number, updates: Partial<Category>): void {
   if (index !== -1) {
     categories[index] = { ...categories[index], ...updates };
     localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
+    triggerStorageChange();
   }
 }
 
@@ -45,6 +53,7 @@ export function createCategory(category: Omit<Category, 'id'>): Category {
   const newCategory = { ...category, id: newId };
   categories.push(newCategory);
   localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
+  triggerStorageChange();
   return newCategory;
 }
 
@@ -61,6 +70,7 @@ export function updateMenuItem(id: number, updates: Partial<MenuItem>): void {
   if (index !== -1) {
     items[index] = { ...items[index], ...updates };
     localStorage.setItem(STORAGE_KEYS.MENU_ITEMS, JSON.stringify(items));
+    triggerStorageChange();
   }
 }
 
@@ -70,6 +80,7 @@ export function createMenuItem(item: Omit<MenuItem, 'id'>): MenuItem {
   const newItem = { ...item, id: newId };
   items.push(newItem);
   localStorage.setItem(STORAGE_KEYS.MENU_ITEMS, JSON.stringify(items));
+  triggerStorageChange();
   return newItem;
 }
 

@@ -6,45 +6,39 @@ import { CartSummary } from '@/components/layout/CartSummary';
 import { CategoryHeader } from '@/components/category/CategoryHeader';
 import { MenuItemCard } from '@/components/category/MenuItemCard';
 import { PokeBowlTabs } from '@/components/category/PokeBowlTabs';
+import { useMenuItems, useCategories } from '@/hooks/useMenu';
 
 export function CategoryPage() {
   const { id } = useParams<{ id: string }>();
   const { language } = useAppStore();
   const t = useTranslation(language);
   
-  // Mock data for regular categories
-  const categoryItems = [
-    {
-      id: 1,
-      name: 'Sushi Burger Crispy Chicken',
-      price: 12.50,
-      description: 'Delicious sushi burger with crispy chicken',
-      photo_url: '/placeholder.svg',
-      out_of_stock: false
-    },
-    {
-      id: 2,
-      name: 'Sushi Burger Creamy Salmon',
-      price: 14.50,
-      description: 'Fresh salmon sushi burger',
-      photo_url: '/placeholder.svg',
-      out_of_stock: false
-    }
-  ];
+  const categoryId = parseInt(id || '1');
+  const { items: categoryItems, loading: itemsLoading } = useMenuItems(categoryId);
+  const { categories, loading: categoriesLoading } = useCategories();
   
-  const categoryName = getCategoryName(id || '1');
-  const isPokeBowls = id === '3';
-  
-  function getCategoryName(categoryId: string): string {
-    const names: Record<string, string> = {
-      '1': t('sushiBurgerMenu'),
-      '2': t('baoBunMenu'),
-      '3': t('pokeBowls'),
-      '4': t('sides'),
-      '5': t('drinks'),
-      '6': t('desserts')
-    };
-    return names[categoryId] || t('menu');
+  const category = categories.find(cat => cat.id === categoryId);
+  const categoryName = category ? category.names[language] : t('menu');
+  const isPokeBowls = categoryId === 3;
+
+  if (itemsLoading || categoriesLoading) {
+    return (
+      <div className="min-h-screen bg-peach-cream p-4 pb-24">
+        <div className="max-w-md mx-auto">
+          <CategoryHeader categoryName={t('loading')} />
+          <div className="space-y-4">
+            {[1,2,3].map((i) => (
+              <div key={i} className="bg-white rounded-lg p-4 animate-pulse">
+                <div className="w-full h-32 bg-gray-200 rounded mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <CartSummary />
+      </div>
+    );
   }
   
   return (
@@ -56,9 +50,16 @@ export function CategoryPage() {
           <PokeBowlTabs />
         ) : (
           <div className="space-y-4">
-            {categoryItems.map((item) => (
-              <MenuItemCard key={item.id} item={item} />
-            ))}
+            {categoryItems
+              .filter(item => !item.out_of_stock)
+              .map((item) => (
+                <MenuItemCard key={item.id} item={item} />
+              ))}
+            {categoryItems.length === 0 && (
+              <div className="text-center py-8 text-gray-500">
+                {t('noItemsAvailable')}
+              </div>
+            )}
           </div>
         )}
       </div>
