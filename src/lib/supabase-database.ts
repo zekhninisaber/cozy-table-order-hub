@@ -1,6 +1,23 @@
 
 import { supabase } from '@/integrations/supabase/client';
 import type { Category, MenuItem, BuilderStep, BuilderOption } from '@/data/menuSeed';
+import type { Database } from '@/integrations/supabase/types';
+
+// Type helpers for casting Supabase Json to our expected types
+type SupabaseCategory = Database['public']['Tables']['categories']['Row'];
+type SupabaseMenuItem = Database['public']['Tables']['menu_items']['Row'];
+
+// Helper function to safely cast Json to multilingual object
+function castToMultilingual(json: any): { fr: string; en: string; nl: string; } {
+  if (typeof json === 'object' && json !== null) {
+    return {
+      fr: json.fr || '',
+      en: json.en || '',
+      nl: json.nl || ''
+    };
+  }
+  return { fr: '', en: '', nl: '' };
+}
 
 // Categories
 export async function getSupabaseCategories(): Promise<Category[]> {
@@ -14,7 +31,13 @@ export async function getSupabaseCategories(): Promise<Category[]> {
     return [];
   }
   
-  return data || [];
+  return (data || []).map((row: SupabaseCategory): Category => ({
+    id: row.id,
+    names: castToMultilingual(row.names),
+    sort: row.sort,
+    visible: row.visible,
+    thumbnail_url: row.thumbnail_url || undefined
+  }));
 }
 
 export async function createSupabaseCategory(category: Omit<Category, 'id'>): Promise<Category | null> {
@@ -29,7 +52,13 @@ export async function createSupabaseCategory(category: Omit<Category, 'id'>): Pr
     return null;
   }
   
-  return data;
+  return {
+    id: data.id,
+    names: castToMultilingual(data.names),
+    sort: data.sort,
+    visible: data.visible,
+    thumbnail_url: data.thumbnail_url || undefined
+  };
 }
 
 export async function updateSupabaseCategory(id: number, updates: Partial<Category>): Promise<void> {
@@ -60,7 +89,16 @@ export async function getSupabaseMenuItems(categoryId?: number): Promise<MenuIte
     return [];
   }
   
-  return data || [];
+  return (data || []).map((row: SupabaseMenuItem): MenuItem => ({
+    id: row.id,
+    category_id: row.category_id || 0,
+    names: castToMultilingual(row.names),
+    descriptions: castToMultilingual(row.descriptions),
+    price: Number(row.price),
+    photo_url: row.photo_url || undefined,
+    out_of_stock: row.out_of_stock,
+    tags: row.tags || []
+  }));
 }
 
 export async function createSupabaseMenuItem(item: Omit<MenuItem, 'id'>): Promise<MenuItem | null> {
@@ -75,7 +113,16 @@ export async function createSupabaseMenuItem(item: Omit<MenuItem, 'id'>): Promis
     return null;
   }
   
-  return data;
+  return {
+    id: data.id,
+    category_id: data.category_id || 0,
+    names: castToMultilingual(data.names),
+    descriptions: castToMultilingual(data.descriptions),
+    price: Number(data.price),
+    photo_url: data.photo_url || undefined,
+    out_of_stock: data.out_of_stock,
+    tags: data.tags || []
+  };
 }
 
 export async function updateSupabaseMenuItem(id: number, updates: Partial<MenuItem>): Promise<void> {
@@ -121,7 +168,10 @@ export async function getSupabaseBuilderOptions(stepId?: number): Promise<Builde
     return [];
   }
   
-  return data || [];
+  return (data || []).map(row => ({
+    ...row,
+    extra_price: Number(row.extra_price)
+  }));
 }
 
 // Migration function to copy localStorage data to Supabase
