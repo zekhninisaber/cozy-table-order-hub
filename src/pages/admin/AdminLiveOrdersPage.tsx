@@ -83,7 +83,7 @@ export function AdminLiveOrdersPage() {
   return (
     <>
       {/* Print styles - hidden on screen, shown when printing */}
-      <style jsx>{`
+      <style>{`
         @media print {
           body * {
             visibility: hidden;
