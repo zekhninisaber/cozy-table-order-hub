@@ -4,8 +4,13 @@ import { AccountsSettings } from '@/components/admin/settings/AccountsSettings';
 import { ScheduleSettings } from '@/components/admin/settings/ScheduleSettings';
 import { PrinterSettings } from '@/components/admin/settings/PrinterSettings';
 import { ReportsSettings } from '@/components/admin/settings/ReportsSettings';
+import { MenuResetSettings } from '@/components/admin/settings/MenuResetSettings';
 
 export function AdminSettingsPage() {
+  // Mock user role - in real app this would come from auth context
+  const userRole = 'admin'; // or 'staff'
+  const isSuper = userRole === 'admin';
+
   return (
     <div className="p-6">
       <div className="max-w-6xl mx-auto">
@@ -14,11 +19,12 @@ export function AdminSettingsPage() {
         </h1>
         
         <Tabs defaultValue="accounts" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className={`grid w-full ${isSuper ? 'grid-cols-5' : 'grid-cols-4'}`}>
             <TabsTrigger value="accounts">Comptes</TabsTrigger>
             <TabsTrigger value="schedule">Horaires</TabsTrigger>
             <TabsTrigger value="printer">Imprimante</TabsTrigger>
             <TabsTrigger value="reports">Rapports</TabsTrigger>
+            {isSuper && <TabsTrigger value="menu-reset">Reset Menu</TabsTrigger>}
           </TabsList>
           
           <TabsContent value="accounts" className="mt-6">
@@ -36,6 +42,12 @@ export function AdminSettingsPage() {
           <TabsContent value="reports" className="mt-6">
             <ReportsSettings />
           </TabsContent>
+          
+          {isSuper && (
+            <TabsContent value="menu-reset" className="mt-6">
+              <MenuResetSettings />
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </div>
