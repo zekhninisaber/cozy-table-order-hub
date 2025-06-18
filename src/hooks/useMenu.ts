@@ -41,9 +41,10 @@ export function useCategories() {
 
     runMigration();
 
-    // Subscribe to real-time changes
+    // Subscribe to real-time changes with unique channel name
+    const channelName = `categories_changes_${Date.now()}_${Math.random()}`;
     const subscription = supabase
-      .channel('categories_changes')
+      .channel(channelName)
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'categories' },
         () => {
@@ -53,7 +54,7 @@ export function useCategories() {
       .subscribe();
 
     return () => {
-      subscription.unsubscribe();
+      supabase.removeChannel(subscription);
     };
   }, []);
 
@@ -92,9 +93,10 @@ export function useMenuItems(categoryId?: number) {
   useEffect(() => {
     fetchItems();
 
-    // Subscribe to real-time changes
+    // Subscribe to real-time changes with unique channel name
+    const channelName = `menu_items_changes_${Date.now()}_${Math.random()}_${categoryId || 'all'}`;
     const subscription = supabase
-      .channel('menu_items_changes')
+      .channel(channelName)
       .on('postgres_changes', 
         { event: '*', schema: 'public', table: 'menu_items' },
         () => {
@@ -104,7 +106,7 @@ export function useMenuItems(categoryId?: number) {
       .subscribe();
 
     return () => {
-      subscription.unsubscribe();
+      supabase.removeChannel(subscription);
     };
   }, [categoryId]);
 
