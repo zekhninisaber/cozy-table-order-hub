@@ -1,15 +1,44 @@
 
+import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { LogOut, Menu, Settings, Clock, Cog } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { MobileDrawer } from '@/components/admin/MobileDrawer';
+import { HamburgerButton } from '@/components/admin/HamburgerButton';
 
 export function AdminLayout() {
   const navigate = useNavigate();
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   
   const handleLogout = () => {
     localStorage.removeItem('admin-auth');
     navigate('/admin/login');
   };
+
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    if (isMobileDrawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileDrawerOpen]);
+
+  // Close drawer on ESC key
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isMobileDrawerOpen) {
+        setIsMobileDrawerOpen(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileDrawerOpen]);
   
   const navItems = [
     { to: '/admin/menu', label: 'Menu', icon: Menu },
@@ -20,8 +49,17 @@ export function AdminLayout() {
   
   return (
     <div className="min-h-screen flex bg-gray-50">
-      {/* Sidebar */}
-      <div className="w-52 bg-[#283526] text-white flex flex-col">
+      {/* Mobile Hamburger Button */}
+      <HamburgerButton onClick={() => setIsMobileDrawerOpen(true)} />
+      
+      {/* Mobile Drawer */}
+      <MobileDrawer 
+        isOpen={isMobileDrawerOpen}
+        onClose={() => setIsMobileDrawerOpen(false)}
+      />
+
+      {/* Desktop Sidebar - hidden on mobile */}
+      <div className="w-52 bg-[#283526] text-white flex flex-col max-sm:hidden">
         {/* Logo/Title */}
         <div className="p-6 border-b border-gray-600">
           <h1 className="text-xl font-bold">Take A Bowl</h1>
@@ -65,7 +103,7 @@ export function AdminLayout() {
       
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Top Bar */}
+        {/* Top Bar - hide logout button on mobile since it's in drawer */}
         <header className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-semibold text-gray-900">
@@ -75,7 +113,7 @@ export function AdminLayout() {
               onClick={handleLogout}
               variant="outline"
               size="sm"
-              className="text-gray-600 hover:text-gray-900"
+              className="text-gray-600 hover:text-gray-900 max-sm:hidden"
             >
               <LogOut className="h-4 w-4 mr-2" />
               Déconnexion

@@ -1,4 +1,3 @@
-
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -16,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { MenuItemCardMobile } from './MenuItemCardMobile';
 
 interface MenuItem {
   id: number;
@@ -57,207 +57,274 @@ export function ItemList({ items, canEdit, onEditItem, onToggleStock, onDeleteIt
     onReorderItems(updatedItems);
   };
 
-  if (!canEdit || !onReorderItems) {
-    // Non-draggable version for staff users or when reordering is not supported
-    return (
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-gray-100 hover:bg-gray-100 border-b">
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">Photo</TableHead>
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">Nom</TableHead>
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">Prix</TableHead>
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">En stock</TableHead>
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">Tags</TableHead>
-            {canEdit && <TableHead className="bg-gray-100 font-semibold text-gray-700">Actions</TableHead>}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {items.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>
-                {item.photo_url ? (
-                  <img 
-                    src={item.photo_url} 
-                    alt={item.names.fr}
-                    className="w-12 h-12 rounded object-cover"
-                  />
-                ) : (
-                  <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
-                    Photo
-                  </div>
-                )}
-              </TableCell>
-              <TableCell className="font-medium">{item.names.fr}</TableCell>
-              <TableCell>€{item.price.toFixed(2)}</TableCell>
-              <TableCell>
-                <Switch
-                  checked={!item.out_of_stock}
-                  onCheckedChange={() => onToggleStock(item.id)}
-                />
-              </TableCell>
-              <TableCell>
-                <div className="flex gap-1">
-                  {item.tags.map(tag => (
-                    <Badge key={tag} variant="secondary" className="text-xs">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              </TableCell>
-              {canEdit && (
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => onEditItem(item)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    {onDeleteItem && (
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="outline" size="sm">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Supprimer le plat</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Êtes-vous sûr de vouloir supprimer "{item.names.fr}" ? Cette action ne peut pas être annulée.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Annuler</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => onDeleteItem(item.id)}>
-                              Supprimer
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    )}
-                  </div>
-                </TableCell>
-              )}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    );
-  }
-
-  // Draggable version for admin users with reordering support
-  return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-gray-100 hover:bg-gray-100 border-b">
-            <TableHead className="w-12 bg-gray-100 font-semibold text-gray-700"></TableHead>
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">Photo</TableHead>
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">Nom</TableHead>
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">Prix</TableHead>
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">En stock</TableHead>
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">Tags</TableHead>
-            <TableHead className="bg-gray-100 font-semibold text-gray-700">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <Droppable droppableId="menu-items">
-          {(provided) => (
-            <TableBody {...provided.droppableProps} ref={provided.innerRef}>
-              {items.map((item, index) => (
-                <Draggable 
-                  key={item.id.toString()} 
-                  draggableId={item.id.toString()} 
-                  index={index}
-                >
-                  {(provided, snapshot) => (
-                    <TableRow 
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      className={`cursor-pointer hover:bg-gray-50 ${
-                        snapshot.isDragging ? 'bg-blue-50 shadow-lg' : ''
-                      }`}
-                    >
-                      <TableCell 
-                        {...provided.dragHandleProps}
-                        className="cursor-grab active:cursor-grabbing"
+  // Mobile Card Layout (drag-and-drop enabled for admin)
+  const renderMobileCards = () => {
+    if (canEdit && onReorderItems) {
+      return (
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="menu-items-mobile">
+            {(provided) => (
+              <div 
+                {...provided.droppableProps} 
+                ref={provided.innerRef}
+                className="space-y-3"
+              >
+                {items.map((item, index) => (
+                  <Draggable 
+                    key={item.id.toString()} 
+                    draggableId={item.id.toString()} 
+                    index={index}
+                  >
+                    {(provided, snapshot) => (
+                      <div 
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        className={snapshot.isDragging ? 'opacity-50' : ''}
                       >
-                        <GripVertical className="h-4 w-4 text-gray-400" />
-                      </TableCell>
-                      <TableCell>
-                        {item.photo_url ? (
-                          <img 
-                            src={item.photo_url} 
-                            alt={item.names.fr}
-                            className="w-12 h-12 rounded object-cover"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
-                            Photo
-                          </div>
-                        )}
-                      </TableCell>
-                      <TableCell className="font-medium">{item.names.fr}</TableCell>
-                      <TableCell>€{item.price.toFixed(2)}</TableCell>
-                      <TableCell>
-                        <Switch
-                          checked={!item.out_of_stock}
-                          onCheckedChange={() => onToggleStock(item.id)}
+                        <MenuItemCardMobile
+                          item={item}
+                          onEditItem={onEditItem}
+                          onToggleStock={onToggleStock}
+                          onDeleteItem={onDeleteItem}
+                          dragHandleProps={provided.dragHandleProps}
                         />
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex gap-1">
-                          {item.tags.map(tag => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex gap-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => onEditItem(item)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          {onDeleteItem && (
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button variant="outline" size="sm">
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Supprimer le plat</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Êtes-vous sûr de vouloir supprimer "{item.names.fr}" ? Cette action ne peut pas être annulée.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Annuler</AlertDialogCancel>
-                                  <AlertDialogAction onClick={() => onDeleteItem(item.id)}>
-                                    Supprimer
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          )}
-                        </div>
-                      </TableCell>
-                    </TableRow>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      );
+    }
+
+    // Non-draggable mobile cards for staff
+    return (
+      <div className="space-y-3">
+        {items.map((item) => (
+          <MenuItemCardMobile
+            key={item.id}
+            item={item}
+            onEditItem={onEditItem}
+            onToggleStock={onToggleStock}
+            onDeleteItem={onDeleteItem}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {/* Mobile Layout - visible only on small screens */}
+      <div className="sm:hidden p-4">
+        {renderMobileCards()}
+      </div>
+
+      {/* Desktop Table Layout - hidden on small screens */}
+      <div className="hidden sm:block">
+        {!canEdit || !onReorderItems ? (
+          // Non-draggable version for staff users or when reordering is not supported
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-gray-100 hover:bg-gray-100 border-b">
+                <TableHead className="bg-gray-100 font-semibold text-gray-700">Photo</TableHead>
+                <TableHead className="bg-gray-100 font-semibold text-gray-700">Nom</TableHead>
+                <TableHead className="bg-gray-100 font-semibold text-gray-700">Prix</TableHead>
+                <TableHead className="bg-gray-100 font-semibold text-gray-700">En stock</TableHead>
+                <TableHead className="bg-gray-100 font-semibold text-gray-700">Tags</TableHead>
+                {canEdit && <TableHead className="bg-gray-100 font-semibold text-gray-700">Actions</TableHead>}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    {item.photo_url ? (
+                      <img 
+                        src={item.photo_url} 
+                        alt={item.names.fr}
+                        className="w-12 h-12 rounded object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
+                        Photo
+                      </div>
+                    )}
+                  </TableCell>
+                  <TableCell className="font-medium">{item.names.fr}</TableCell>
+                  <TableCell>€{item.price.toFixed(2)}</TableCell>
+                  <TableCell>
+                    <Switch
+                      checked={!item.out_of_stock}
+                      onCheckedChange={() => onToggleStock(item.id)}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex gap-1">
+                      {item.tags.map(tag => (
+                        <Badge key={tag} variant="secondary" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </TableCell>
+                  {canEdit && (
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => onEditItem(item)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        {onDeleteItem && (
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="outline" size="sm">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Supprimer le plat</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Êtes-vous sûr de vouloir supprimer "{item.names.fr}" ? Cette action ne peut pas être annulée.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => onDeleteItem(item.id)}>
+                                  Supprimer
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
+                      </div>
+                    </TableCell>
                   )}
-                </Draggable>
+                </TableRow>
               ))}
-              {provided.placeholder}
             </TableBody>
-          )}
-        </Droppable>
-      </Table>
-    </DragDropContext>
+          </Table>
+        ) : (
+          // Draggable version for admin users with reordering support
+          <DragDropContext onDragEnd={handleDragEnd}>
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gray-100 hover:bg-gray-100 border-b">
+                  <TableHead className="w-12 bg-gray-100 font-semibold text-gray-700"></TableHead>
+                  <TableHead className="bg-gray-100 font-semibold text-gray-700">Photo</TableHead>
+                  <TableHead className="bg-gray-100 font-semibold text-gray-700">Nom</TableHead>
+                  <TableHead className="bg-gray-100 font-semibold text-gray-700">Prix</TableHead>
+                  <TableHead className="bg-gray-100 font-semibold text-gray-700">En stock</TableHead>
+                  <TableHead className="bg-gray-100 font-semibold text-gray-700">Tags</TableHead>
+                  <TableHead className="bg-gray-100 font-semibold text-gray-700">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <Droppable droppableId="menu-items">
+                {(provided) => (
+                  <TableBody {...provided.droppableProps} ref={provided.innerRef}>
+                    {items.map((item, index) => (
+                      <Draggable 
+                        key={item.id.toString()} 
+                        draggableId={item.id.toString()} 
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <TableRow 
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className={`cursor-pointer hover:bg-gray-50 ${
+                              snapshot.isDragging ? 'bg-blue-50 shadow-lg' : ''
+                            }`}
+                          >
+                            <TableCell 
+                              {...provided.dragHandleProps}
+                              className="cursor-grab active:cursor-grabbing"
+                            >
+                              <GripVertical className="h-4 w-4 text-gray-400" />
+                            </TableCell>
+                            <TableCell>
+                              {item.photo_url ? (
+                                <img 
+                                  src={item.photo_url} 
+                                  alt={item.names.fr}
+                                  className="w-12 h-12 rounded object-cover"
+                                />
+                              ) : (
+                                <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center text-gray-400 text-xs">
+                                  Photo
+                                </div>
+                              )}
+                            </TableCell>
+                            <TableCell className="font-medium">{item.names.fr}</TableCell>
+                            <TableCell>€{item.price.toFixed(2)}</TableCell>
+                            <TableCell>
+                              <Switch
+                                checked={!item.out_of_stock}
+                                onCheckedChange={() => onToggleStock(item.id)}
+                              />
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex gap-1">
+                                {item.tags.map(tag => (
+                                  <Badge key={tag} variant="secondary" className="text-xs">
+                                    {tag}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex gap-2">
+                                <Button 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => onEditItem(item)}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                {onDeleteItem && (
+                                  <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                      <Button variant="outline" size="sm">
+                                        <Trash2 className="h-4 w-4" />
+                                      </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle>Supprimer le plat</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                          Êtes-vous sûr de vouloir supprimer "{item.names.fr}" ? Cette action ne peut pas être annulée.
+                                        </AlertDialogDescription>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter>
+                                        <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                        <AlertDialogAction onClick={() => onDeleteItem(item.id)}>
+                                          Supprimer
+                                        </AlertDialogAction>
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </TableBody>
+                )}
+              </Droppable>
+            </Table>
+          </DragDropContext>
+        )}
+      </div>
+    </>
   );
 }
