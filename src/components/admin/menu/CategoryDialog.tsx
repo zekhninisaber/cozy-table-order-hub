@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,11 +17,36 @@ interface Category {
 interface CategoryDialogProps {
   categories: Category[];
   onCreateCategory: (name: string, thumbnail: File | null) => void;
+  editingCategory?: Category | null;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-export function CategoryDialog({ categories, onCreateCategory }: CategoryDialogProps) {
-  const [open, setOpen] = useState(false);
+export function CategoryDialog({ 
+  categories, 
+  onCreateCategory, 
+  editingCategory = null,
+  open: controlledOpen,
+  onOpenChange: controlledOnOpenChange
+}: CategoryDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
   const [newCategory, setNewCategory] = useState({ name: '', thumbnail: null as File | null });
+
+  // Use controlled or internal state for dialog open/close
+  const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
+  const setOpen = controlledOnOpenChange || setInternalOpen;
+
+  // Update form when editing category changes
+  useEffect(() => {
+    if (editingCategory) {
+      setNewCategory({ 
+        name: editingCategory.names.fr, 
+        thumbnail: null 
+      });
+    } else {
+      setNewCategory({ name: '', thumbnail: null });
+    }
+  }, [editingCategory]);
 
   const handleCreate = () => {
     if (!newCategory.name.trim()) return;
@@ -31,17 +56,26 @@ export function CategoryDialog({ categories, onCreateCategory }: CategoryDialogP
     setOpen(false);
   };
 
+  const handleCancel = () => {
+    setNewCategory({ name: '', thumbnail: null });
+    setOpen(false);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="bg-accent hover:bg-accent/90">
-          <Plus className="h-4 w-4 mr-2" />
-          Nouvelle catégorie
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
+      {!controlledOpen && (
+        <DialogTrigger asChild>
+          <Button className="bg-accent hover:bg-accent/90">
+            <Plus className="h-4 w-4 mr-2" />
+            Nouvelle catégorie
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Nouvelle catégorie</DialogTitle>
+          <DialogTitle>
+            {editingCategory ? 'Modifier la catégorie' : 'Nouvelle catégorie'}
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div>
@@ -63,11 +97,11 @@ export function CategoryDialog({ categories, onCreateCategory }: CategoryDialogP
             />
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setOpen(false)}>
+            <Button variant="outline" onClick={handleCancel}>
               Annuler
             </Button>
             <Button onClick={handleCreate}>
-              Créer
+              {editingCategory ? 'Modifier' : 'Créer'}
             </Button>
           </div>
         </div>
