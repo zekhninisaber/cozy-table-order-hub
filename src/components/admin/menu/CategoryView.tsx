@@ -7,6 +7,7 @@ import { ItemList } from './ItemList';
 import { ItemDialog } from './ItemDialog';
 import { useMenuItems } from '@/hooks/useMenu';
 import { createSupabaseMenuItem, updateSupabaseMenuItem } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import type { Category, MenuItem } from '@/data/menuSeed';
 
 interface CategoryViewProps {
@@ -24,6 +25,25 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
   const handleEditItem = (item: MenuItem) => {
     setEditingItem(item);
     setShowItemDialog(true);
+  };
+
+  const handleDeleteItem = async (itemId: number) => {
+    try {
+      const { error } = await supabase
+        .from('menu_items')
+        .delete()
+        .eq('id', itemId);
+      
+      if (error) {
+        console.error('Error deleting item:', error);
+        return;
+      }
+      
+      // Refresh the items list
+      refetchItems();
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
   };
 
   const handleReorderItems = async (reorderedItems: MenuItem[]) => {
@@ -143,6 +163,7 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
                 items={categoryItems}
                 canEdit={canEdit}
                 onEditItem={handleEditItem}
+                onDeleteItem={canEdit ? handleDeleteItem : undefined}
                 onToggleStock={toggleStock}
                 onReorderItems={!isBuilderCategory ? handleReorderItems : undefined}
               />
