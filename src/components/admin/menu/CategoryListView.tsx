@@ -1,9 +1,11 @@
 
+import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { CategoryList } from './CategoryList';
 import { CategoryDialog } from './CategoryDialog';
 import { useCategories } from '@/hooks/useMenu';
 import { createSupabaseCategory, updateSupabaseCategory } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import type { Category } from '@/data/menuSeed';
 
 interface CategoryListViewProps {
@@ -12,6 +14,8 @@ interface CategoryListViewProps {
 }
 
 export function CategoryListView({ canEdit, onSelectCategory }: CategoryListViewProps) {
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [showCategoryDialog, setShowCategoryDialog] = useState(false);
   const { categories, toggleVisibility, refetch: refetchCategories } = useCategories();
 
   const handleCreateCategory = async (name: string, thumbnail: File | null) => {
@@ -31,6 +35,42 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
     }
   };
 
+  const handleEditCategory = (category: Category) => {
+    setEditingCategory(category);
+    setShowCategoryDialog(true);
+  };
+
+  const handleDeleteCategory = async (categoryId: number) => {
+    try {
+      // First delete all menu items in this category
+      const { error: itemsError } = await supabase
+        .from('menu_items')
+        .delete()
+        .eq('category_id', categoryId);
+      
+      if (itemsError) {
+        console.error('Error deleting menu items:', itemsError);
+        return;
+      }
+
+      // Then delete the category
+      const { error: categoryError } = await supabase
+        .from('categories')
+        .delete()
+        .eq('id', categoryId);
+      
+      if (categoryError) {
+        console.error('Error deleting category:', categoryError);
+        return;
+      }
+      
+      // Refresh the categories list
+      refetchCategories();
+    } catch (error) {
+      console.error('Error deleting category:', error);
+    }
+  };
+
   const handleReorderCategories = async (reorderedCategories: Category[]) => {
     // Update all categories with new sort order
     for (const category of reorderedCategories) {
@@ -38,6 +78,34 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
     }
     
     // Refresh the categories list
+    refetchCategories();
+  };
+
+  const handleSaveCategory = async (name: string, thumbnail: File | null) => {
+    if (editingCategory) {
+      // Update existing category
+      await updateSupabaseCategory(editingCategory.id, {
+        names: { 
+          fr: name,
+          en: name, // Would be translated via API
+          nl: name  // Would be translated via API
+        }
+      });
+      
+      // Handle thumbnail upload if provided
+      if (thumbnail) {
+        // In a real app, you would upload the thumbnail to storage
+        const thumbnailUrl = URL.createObjectURL(thumbnail);
+        await updateSupabaseCategory(editingCategory.id, { thumbnail_url: thumbnailUrl });
+      }
+      
+      setEditingCategory(null);
+    } else {
+      // Create new category
+      await handleCreateCategory(name, thumbnail);
+    }
+    
+    setShowCategoryDialog(false);
     refetchCategories();
   };
 
@@ -53,7 +121,10 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
             {canEdit && (
               <CategoryDialog
                 categories={categories}
-                onCreateCategory={handleCreateCategory}
+                onCreateCategory={handleSaveCategory}
+                editingCategory={editingCategory}
+                open={showCategoryDialog}
+                onOpenChange={setShowCategoryDialog}
               />
             )}
           </div>
@@ -71,6 +142,8 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
                 onSelectCategory={onSelectCategory}
                 onToggleVisibility={toggleVisibility}
                 onReorderCategories={handleReorderCategories}
+                onEditCategory={canEdit ? handleEditCategory : undefined}
+                onDeleteCategory={canEdit ? handleDeleteCategory : undefined}
               />
             </CardContent>
           </Card>

@@ -5,6 +5,17 @@ import { Switch } from '@/components/ui/switch';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Edit, Eye, EyeOff, GripVertical, Trash2 } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 interface Category {
   id: number;
@@ -20,6 +31,8 @@ interface CategoryListProps {
   onSelectCategory: (category: Category) => void;
   onToggleVisibility: (id: number) => void;
   onReorderCategories?: (categories: Category[]) => void;
+  onEditCategory?: (category: Category) => void;
+  onDeleteCategory?: (id: number) => void;
 }
 
 export function CategoryList({ 
@@ -27,7 +40,9 @@ export function CategoryList({
   canEdit, 
   onSelectCategory, 
   onToggleVisibility,
-  onReorderCategories 
+  onReorderCategories,
+  onEditCategory,
+  onDeleteCategory
 }: CategoryListProps) {
   
   const handleDragEnd = (result: DropResult) => {
@@ -175,12 +190,36 @@ export function CategoryList({
                       </TableCell>
                       <TableCell onClick={(e) => e.stopPropagation()}>
                         <div className="flex gap-2">
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => onEditCategory && onEditCategory(category)}
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button variant="outline" size="sm">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          {onDeleteCategory && (
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="outline" size="sm">
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Supprimer la catégorie</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Êtes-vous sûr de vouloir supprimer "{category.names.fr}" ? Cette action ne peut pas être annulée et supprimera également tous les plats de cette catégorie.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                  <AlertDialogAction onClick={() => onDeleteCategory(category.id)}>
+                                    Supprimer
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
