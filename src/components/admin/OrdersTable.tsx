@@ -33,14 +33,14 @@ export function OrdersTable({ orders, onPrint }: OrdersTableProps) {
     <div className="print-area">
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Heure</TableHead>
-            <TableHead>Table</TableHead>
-            <TableHead>Client</TableHead>
-            <TableHead>Articles</TableHead>
-            <TableHead>Total</TableHead>
-            <TableHead>Statut</TableHead>
-            <TableHead className="no-print">Actions</TableHead>
+          <TableRow className="bg-gray-100 hover:bg-gray-100 border-b">
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Heure</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Table</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Client</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Articles</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Total</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Statut</TableHead>
+            <TableHead className="no-print bg-gray-100 font-semibold text-gray-700">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

@@ -50,13 +50,13 @@ export function ItemList({ items, canEdit, onEditItem, onToggleStock, onReorderI
     return (
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Photo</TableHead>
-            <TableHead>Nom</TableHead>
-            <TableHead>Prix</TableHead>
-            <TableHead>En stock</TableHead>
-            <TableHead>Tags</TableHead>
-            {canEdit && <TableHead>Actions</TableHead>}
+          <TableRow className="bg-gray-100 hover:bg-gray-100 border-b">
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Photo</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Nom</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Prix</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">En stock</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Tags</TableHead>
+            {canEdit && <TableHead className="bg-gray-100 font-semibold text-gray-700">Actions</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -120,14 +120,14 @@ export function ItemList({ items, canEdit, onEditItem, onToggleStock, onReorderI
     <DragDropContext onDragEnd={handleDragEnd}>
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead className="w-12"></TableHead>
-            <TableHead>Photo</TableHead>
-            <TableHead>Nom</TableHead>
-            <TableHead>Prix</TableHead>
-            <TableHead>En stock</TableHead>
-            <TableHead>Tags</TableHead>
-            <TableHead>Actions</TableHead>
+          <TableRow className="bg-gray-100 hover:bg-gray-100 border-b">
+            <TableHead className="w-12 bg-gray-100 font-semibold text-gray-700"></TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Photo</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Nom</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Prix</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">En stock</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Tags</TableHead>
+            <TableHead className="bg-gray-100 font-semibold text-gray-700">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <Droppable droppableId="menu-items">
