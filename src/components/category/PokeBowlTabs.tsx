@@ -9,8 +9,14 @@ export function PokeBowlTabs() {
   const { items: pokeItems, loading } = useMenuItems(3);
   
   // Filter items by tags to separate signatures from make-your-own
+  // Accept items that either have 'signature' tag OR have no tags (for backwards compatibility)
   const signatureItems = pokeItems
-    .filter(item => item.tags.includes('signature') && !item.out_of_stock)
+    .filter(item => {
+      const hasSignatureTag = item.tags && item.tags.includes('signature');
+      const hasNoTags = !item.tags || item.tags.length === 0;
+      // Include items that are not out of stock and either have signature tag or no tags
+      return !item.out_of_stock && (hasSignatureTag || hasNoTags);
+    })
     .sort((a, b) => (a.sort || 0) - (b.sort || 0))
     .map(item => ({
       id: item.id,
