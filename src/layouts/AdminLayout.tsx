@@ -48,7 +48,7 @@ export function AdminLayout() {
   ];
   
   return (
-    <div className="min-h-screen flex bg-gray-50">
+    <div className="min-h-screen flex bg-gray-50 w-full overflow-x-hidden">
       {/* Mobile Hamburger Button */}
       <HamburgerButton onClick={() => setIsMobileDrawerOpen(true)} />
       
@@ -102,11 +102,11 @@ export function AdminLayout() {
       </div>
       
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full ml-0 sm:ml-52 overflow-x-hidden">
         {/* Top Bar - hide logout button on mobile since it's in drawer */}
         <header className="bg-white border-b border-gray-200 px-6 py-4">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-lg font-semibold text-gray-900 pl-14 sm:pl-0">
               Panneau d'administration
             </h2>
             <Button
@@ -122,7 +122,7 @@ export function AdminLayout() {
         </header>
         
         {/* Page Content */}
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-auto w-full overflow-x-hidden">
           <Outlet />
         </main>
       </div>

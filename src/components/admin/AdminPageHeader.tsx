@@ -10,8 +10,8 @@ interface AdminPageHeaderProps {
 
 export function AdminPageHeader({ onRefresh, onAddMockOrder, isRefreshing }: AdminPageHeaderProps) {
   return (
-    <div className="flex items-center justify-between mb-8">
-      <h1 className="text-3xl font-display font-bold text-primary">
+    <div className="flex items-center justify-between mb-8 w-full overflow-x-hidden">
+      <h1 className="text-3xl font-display font-bold text-primary pl-14 sm:pl-0">
         Commandes en Direct
       </h1>
       

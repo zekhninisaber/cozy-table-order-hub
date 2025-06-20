@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -57,13 +56,38 @@ export function AdminLiveOrdersPage() {
     <>
       <PrintStyles />
 
-      <div className="p-6">
+      <div className="p-6 w-full overflow-x-hidden">
         <div className="max-w-6xl mx-auto">
-          <AdminPageHeader
-            onRefresh={handleRefresh}
-            onAddMockOrder={handleAddMockOrder}
-            isRefreshing={isRefreshing}
-          />
+          <div className="mb-8">
+            <div className="flex items-center justify-between">
+              <h1 className="text-3xl font-display font-bold text-primary pl-14 sm:pl-0">
+                Commandes en Direct
+              </h1>
+              
+              <div className="flex gap-3">
+                <Button
+                  onClick={handleAddMockOrder}
+                  variant="outline"
+                  size="sm"
+                  className="no-print"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Ajouter test
+                </Button>
+                
+                <Button
+                  onClick={handleRefresh}
+                  variant="outline"
+                  size="sm"
+                  disabled={isRefreshing}
+                  className="no-print"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  Actualiser
+                </Button>
+              </div>
+            </div>
+          </div>
           
           <Card className="shadow-md border-0">
             <CardHeader>
