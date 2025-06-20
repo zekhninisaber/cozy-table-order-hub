@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -260,12 +261,12 @@ export function AdminBuilderPage() {
             ) : (
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-8"></TableHead>
-                    <TableHead>Nom</TableHead>
-                    <TableHead className="w-32">Max select</TableHead>
-                    <TableHead className="w-32">Inclus</TableHead>
-                    <TableHead className="w-24">Actions</TableHead>
+                  <TableRow className="bg-gray-100 hover:bg-gray-100 border-b">
+                    <TableHead className="w-8 bg-gray-100 font-semibold text-gray-700"></TableHead>
+                    <TableHead className="bg-gray-100 font-semibold text-gray-700">Nom</TableHead>
+                    <TableHead className="w-32 bg-gray-100 font-semibold text-gray-700">Max select</TableHead>
+                    <TableHead className="w-32 bg-gray-100 font-semibold text-gray-700">Inclus</TableHead>
+                    <TableHead className="w-24 bg-gray-100 font-semibold text-gray-700">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
