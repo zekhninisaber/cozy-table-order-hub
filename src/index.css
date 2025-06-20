@@ -58,10 +58,3 @@
     @apply bg-background text-foreground font-sans;
   }
 }
-
-/* Mobile horizontal scroll prevention */
-@media (max-width: 640px) {
-  html, body {
-    overflow-x: hidden;
-  }
-}

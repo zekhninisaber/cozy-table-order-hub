@@ -67,7 +67,7 @@ export function ItemList({ items, canEdit, onEditItem, onToggleStock, onDeleteIt
               <div 
                 {...provided.droppableProps} 
                 ref={provided.innerRef}
-                className="flex flex-col gap-3 w-full px-4 overflow-x-hidden"
+                className="space-y-3"
               >
                 {items.map((item, index) => (
                   <Draggable 
@@ -102,7 +102,7 @@ export function ItemList({ items, canEdit, onEditItem, onToggleStock, onDeleteIt
 
     // Non-draggable mobile cards for staff
     return (
-      <div className="flex flex-col gap-3 w-full px-4 overflow-x-hidden">
+      <div className="space-y-3">
         {items.map((item) => (
           <MenuItemCardMobile
             key={item.id}
@@ -119,12 +119,12 @@ export function ItemList({ items, canEdit, onEditItem, onToggleStock, onDeleteIt
   return (
     <>
       {/* Mobile Layout - visible only on small screens */}
-      <div className="sm:hidden w-full overflow-x-hidden">
+      <div className="sm:hidden p-4">
         {renderMobileCards()}
       </div>
 
       {/* Desktop Table Layout - hidden on small screens */}
-      <div className="hidden sm:block overflow-x-auto">
+      <div className="hidden sm:block">
         {!canEdit || !onReorderItems ? (
           // Non-draggable version for staff users or when reordering is not supported
           <Table>

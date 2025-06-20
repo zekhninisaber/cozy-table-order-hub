@@ -87,6 +87,7 @@ export function MenuItemCardMobile({
             <Switch
               checked={!item.out_of_stock}
               onCheckedChange={() => onToggleStock(item.id)}
+              size="sm"
             />
           </div>
 
