@@ -110,12 +110,12 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full w-full overflow-x-hidden">
       {/* Fixed Header */}
-      <div className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200 p-6">
-        <div className="max-w-4xl mx-auto">
+      <div className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200 p-4 sm:p-6 w-full">
+        <div className="max-w-4xl mx-auto w-full">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-display font-bold text-primary">
+            <h1 className="text-2xl sm:text-3xl font-display font-bold text-primary pl-14 sm:pl-0">
               Gestion du Menu
             </h1>
             {canEdit && (
@@ -132,10 +132,10 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
       </div>
       
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-auto p-6">
-        <div className="max-w-4xl mx-auto">
-          <Card className="shadow-md border-0">
-            <CardContent className="p-0">
+      <div className="flex-1 overflow-auto p-4 sm:p-6 w-full">
+        <div className="max-w-4xl mx-auto w-full">
+          <Card className="shadow-md border-0 w-full">
+            <CardContent className="p-0 w-full">
               <CategoryList
                 categories={categories}
                 canEdit={canEdit}

@@ -122,10 +122,10 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
                            category.names.fr.toLowerCase().includes('your own');
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full w-full overflow-x-hidden">
       {/* Fixed Header */}
-      <div className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200 p-4 sm:p-6">
-        <div className="max-w-6xl mx-auto">
+      <div className="sticky top-0 z-10 bg-gray-50 border-b border-gray-200 p-4 sm:p-6 w-full">
+        <div className="max-w-6xl mx-auto w-full">
           <div className="flex items-center gap-4">
             <Button 
               variant="outline" 
@@ -136,7 +136,7 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
               <span className="hidden sm:inline">Retour aux catégories</span>
               <span className="sm:hidden">Retour</span>
             </Button>
-            <h1 className="text-2xl sm:text-3xl font-display font-bold text-primary">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-display font-bold text-primary pl-14 sm:pl-0 truncate">
               {category.names.fr}
             </h1>
             {canEdit && (
@@ -145,7 +145,7 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
                   setEditingItem(null);
                   setShowItemDialog(true);
                 }}
-                className="bg-accent hover:bg-accent/90"
+                className="bg-accent hover:bg-accent/90 shrink-0"
                 size="sm"
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -158,10 +158,10 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
       </div>
 
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-auto p-0 sm:p-6">
-        <div className="max-w-6xl mx-auto">
-          <Card className="shadow-md border-0">
-            <CardContent className="p-0">
+      <div className="flex-1 overflow-auto p-0 sm:p-6 w-full">
+        <div className="max-w-6xl mx-auto w-full">
+          <Card className="shadow-md border-0 w-full">
+            <CardContent className="p-0 w-full">
               <ItemList
                 items={categoryItems}
                 canEdit={canEdit}
