@@ -90,7 +90,7 @@ export function AdminBuilderStepPage() {
       
       setStep(stepData);
 
-      // Load options for this step
+      // Load options for this step - FIXED: using correct step ID
       const { data: optionsData, error: optionsError } = await supabase
         .from('builder_options')
         .select('*')
@@ -218,6 +218,11 @@ export function AdminBuilderStepPage() {
     }
   };
 
+  const getMaxSelectLabel = (maxSelect: number) => {
+    if (maxSelect === 0) return "Sélection illimitée";
+    return `Maximum ${maxSelect} sélection${maxSelect > 1 ? 's' : ''}`;
+  };
+
   if (!step) {
     return (
       <div className="p-6">
@@ -260,7 +265,7 @@ export function AdminBuilderStepPage() {
               Options - {step.name}
             </h1>
             <p className="text-muted-foreground">
-              Gérez les options disponibles pour cette étape
+              {getMaxSelectLabel(step.max_select)}
             </p>
           </div>
           
@@ -323,7 +328,7 @@ export function AdminBuilderStepPage() {
           <CardContent>
             {options.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-muted-foreground">Aucune option configurée</p>
+                <p className="text-muted-foreground">Aucune option configurée pour cette étape</p>
               </div>
             ) : (
               <Table>
@@ -360,19 +365,6 @@ export function AdminBuilderStepPage() {
                       </TableCell>
                       <TableCell>
                         <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-8 w-8 p-0"
-                            onClick={() => {
-                              toast({
-                                title: "Info",
-                                description: "Édition d'option à implémenter"
-                              });
-                            }}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button

@@ -12,7 +12,6 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Plus, Pencil, Trash2, GripVertical, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { builderSteps, builderOptions } from '@/data/menuSeed';
 
 interface BuilderStep {
   id: number;
@@ -80,64 +79,6 @@ export function AdminBuilderPage() {
         description: "Impossible de charger les étapes",
         variant: "destructive"
       });
-    }
-  };
-
-  const handleSyncBuilder = async () => {
-    setIsSyncing(true);
-    try {
-      // Upsert steps
-      for (const step of builderSteps) {
-        const { error: stepError } = await supabase
-          .from('builder_steps')
-          .upsert({
-            id: step.id,
-            name: step.name,
-            sort: step.sort,
-            max_select: step.max_select
-          }, {
-            onConflict: 'id'
-          });
-        
-        if (stepError) {
-          console.error('Error upserting step:', stepError);
-        }
-      }
-
-      // Upsert options
-      for (const option of builderOptions) {
-        const { error: optionError } = await supabase
-          .from('builder_options')
-          .upsert({
-            id: option.id,
-            step_id: option.step_id,
-            name: option.name,
-            extra_price: option.extra_price,
-            out_of_stock: option.out_of_stock
-          }, {
-            onConflict: 'id'
-          });
-        
-        if (optionError) {
-          console.error('Error upserting option:', optionError);
-        }
-      }
-
-      await loadSteps();
-      
-      toast({
-        title: "Succès",
-        description: "Synchronisation terminée avec succès"
-      });
-    } catch (error) {
-      console.error('Sync error:', error);
-      toast({
-        title: "Erreur",
-        description: "Erreur lors de la synchronisation",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSyncing(false);
     }
   };
 
@@ -214,6 +155,11 @@ export function AdminBuilderPage() {
     }
   };
 
+  const getMaxSelectLabel = (maxSelect: number) => {
+    if (maxSelect === 0) return "Illimité";
+    return maxSelect.toString();
+  };
+
   return (
     <div className="p-6">
       <div className="max-w-6xl mx-auto">
@@ -228,16 +174,6 @@ export function AdminBuilderPage() {
           </div>
           
           <div className="flex gap-3">
-            <Button
-              onClick={handleSyncBuilder}
-              disabled={isSyncing}
-              variant="outline"
-              className="border-[#F39720] text-[#F39720] hover:bg-[#F39720] hover:text-white"
-            >
-              <RefreshCw className={`h-4 w-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
-              {isSyncing ? 'Synchronisation...' : 'Synchroniser'}
-            </Button>
-            
             <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-[#F39720] hover:bg-[#F39720]/90 text-white">
@@ -260,11 +196,11 @@ export function AdminBuilderPage() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="maxSelect">Sélection maximum</Label>
+                    <Label htmlFor="maxSelect">Sélection maximum (0 = illimité)</Label>
                     <Input
                       id="maxSelect"
                       type="number"
-                      min="1"
+                      min="0"
                       value={newStepMax}
                       onChange={(e) => setNewStepMax(parseInt(e.target.value) || 1)}
                     />
@@ -298,14 +234,6 @@ export function AdminBuilderPage() {
             {steps.length === 0 ? (
               <div className="text-center py-8">
                 <p className="text-muted-foreground mb-4">Aucune étape configurée</p>
-                <Button
-                  onClick={handleSyncBuilder}
-                  disabled={isSyncing}
-                  className="bg-[#F39720] hover:bg-[#F39720]/90"
-                >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
-                  Synchroniser depuis le menu client
-                </Button>
               </div>
             ) : (
               <Table>
@@ -330,7 +258,7 @@ export function AdminBuilderPage() {
                           <div className="font-medium">{step.name}</div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant="secondary">{step.max_select}</Badge>
+                          <Badge variant="secondary">{getMaxSelectLabel(step.max_select)}</Badge>
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">{step.sort}</Badge>
