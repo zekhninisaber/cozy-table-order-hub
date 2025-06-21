@@ -90,11 +90,12 @@ export function AdminBuilderStepPage() {
       
       setStep(stepData);
 
-      // Load options for this step - FIXED: using correct step ID
+      // Load options for this step - using correct step ID
       const { data: optionsData, error: optionsError } = await supabase
         .from('builder_options')
         .select('*')
-        .eq('step_id', parseInt(id));
+        .eq('step_id', parseInt(id))
+        .order('name', { ascending: true });
       
       if (optionsError) {
         console.error('Error loading options:', optionsError);
@@ -266,6 +267,7 @@ export function AdminBuilderStepPage() {
             </h1>
             <p className="text-muted-foreground">
               {getMaxSelectLabel(step.max_select)}
+              {options.length > 0 && ` • ${options.length} option${options.length > 1 ? 's' : ''} configurée${options.length > 1 ? 's' : ''}`}
             </p>
           </div>
           

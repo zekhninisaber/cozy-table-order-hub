@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Plus, Pencil, Trash2, GripVertical, RefreshCw } from 'lucide-react';
+import { Plus, Pencil, Trash2, GripVertical } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -27,7 +27,6 @@ export function AdminBuilderPage() {
   const [newStepName, setNewStepName] = useState('');
   const [newStepMax, setNewStepMax] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSyncing, setIsSyncing] = useState(false);
   const { toast } = useToast();
 
   // Check if user is staff (staff role has no access)
@@ -131,6 +130,13 @@ export function AdminBuilderPage() {
 
   const handleDeleteStep = async (stepId: number) => {
     try {
+      // First delete all options for this step
+      await supabase
+        .from('builder_options')
+        .delete()
+        .eq('step_id', stepId);
+
+      // Then delete the step
       const { error } = await supabase
         .from('builder_steps')
         .delete()
@@ -288,7 +294,7 @@ export function AdminBuilderPage() {
                                   <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
                                   <AlertDialogDescription>
                                     Êtes-vous sûr de vouloir supprimer l'étape "{step.name}" ? 
-                                    Cette action est irréversible.
+                                    Cette action supprimera aussi toutes ses options et est irréversible.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>
