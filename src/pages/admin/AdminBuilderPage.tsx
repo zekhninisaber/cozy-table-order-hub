@@ -9,19 +9,16 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Plus, Pencil, Trash2, GripVertical } from 'lucide-react';
+import { Plus, Pencil, Trash2, GripVertical, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { builderSteps, builderOptions } from '@/data/menuSeed';
 
 interface BuilderStep {
-  id: string;
-  names: {
-    fr: string;
-    en: string;
-    nl: string;
-  };
+  id: number;
+  name: string;
+  sort: number;
   max_select: number;
-  included_count: number;
-  sort_order: number;
 }
 
 export function AdminBuilderPage() {
@@ -30,8 +27,8 @@ export function AdminBuilderPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newStepName, setNewStepName] = useState('');
   const [newStepMax, setNewStepMax] = useState(1);
-  const [newStepIncluded, setNewStepIncluded] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
   const { toast } = useToast();
 
   // Check if user is staff (staff role has no access)
@@ -59,58 +56,89 @@ export function AdminBuilderPage() {
   }, []);
 
   const loadSteps = async () => {
-    // Mock data - replace with actual API call
-    const mockSteps: BuilderStep[] = [
-      {
-        id: '1',
-        names: { fr: 'Base', en: 'Base', nl: 'Basis' },
-        max_select: 1,
-        included_count: 1,
-        sort_order: 1
-      },
-      {
-        id: '2',
-        names: { fr: 'Sauce', en: 'Sauce', nl: 'Saus' },
-        max_select: 2,
-        included_count: 1,
-        sort_order: 2
-      },
-      {
-        id: '3',
-        names: { fr: 'Garnitures', en: 'Vegetables', nl: 'Groenten' },
-        max_select: 5,
-        included_count: 3,
-        sort_order: 3
-      },
-      {
-        id: '4',
-        names: { fr: 'Protéine', en: 'Protein', nl: 'Proteïne' },
-        max_select: 1,
-        included_count: 1,
-        sort_order: 4
-      },
-      {
-        id: '5',
-        names: { fr: 'Toppings', en: 'Toppings', nl: 'Toppings' },
-        max_select: 2,
-        included_count: 0,
-        sort_order: 5
+    try {
+      const { data, error } = await supabase
+        .from('builder_steps')
+        .select('*')
+        .order('sort', { ascending: true });
+      
+      if (error) {
+        console.error('Error loading steps:', error);
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger les étapes",
+          variant: "destructive"
+        });
+        return;
       }
-    ];
-    setSteps(mockSteps);
+      
+      setSteps(data || []);
+    } catch (error) {
+      console.error('Error loading steps:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de charger les étapes",
+        variant: "destructive"
+      });
+    }
   };
 
-  const autoTranslate = (frenchName: string) => {
-    // Simple mock translation - replace with actual translation service
-    const translations: { [key: string]: { en: string; nl: string } } = {
-      'Base': { en: 'Base', nl: 'Basis' },
-      'Sauce': { en: 'Sauce', nl: 'Saus' },
-      'Garnitures': { en: 'Vegetables', nl: 'Groenten' },
-      'Protéine': { en: 'Protein', nl: 'Proteïne' },
-      'Toppings': { en: 'Toppings', nl: 'Toppings' }
-    };
-    
-    return translations[frenchName] || { en: frenchName, nl: frenchName };
+  const handleSyncBuilder = async () => {
+    setIsSyncing(true);
+    try {
+      // Upsert steps
+      for (const step of builderSteps) {
+        const { error: stepError } = await supabase
+          .from('builder_steps')
+          .upsert({
+            id: step.id,
+            name: step.name,
+            sort: step.sort,
+            max_select: step.max_select
+          }, {
+            onConflict: 'id'
+          });
+        
+        if (stepError) {
+          console.error('Error upserting step:', stepError);
+        }
+      }
+
+      // Upsert options
+      for (const option of builderOptions) {
+        const { error: optionError } = await supabase
+          .from('builder_options')
+          .upsert({
+            id: option.id,
+            step_id: option.step_id,
+            name: option.name,
+            extra_price: option.extra_price,
+            out_of_stock: option.out_of_stock
+          }, {
+            onConflict: 'id'
+          });
+        
+        if (optionError) {
+          console.error('Error upserting option:', optionError);
+        }
+      }
+
+      await loadSteps();
+      
+      toast({
+        title: "Succès",
+        description: "Synchronisation terminée avec succès"
+      });
+    } catch (error) {
+      console.error('Sync error:', error);
+      toast({
+        title: "Erreur",
+        description: "Erreur lors de la synchronisation",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const handleAddStep = async () => {
@@ -125,30 +153,31 @@ export function AdminBuilderPage() {
 
     setIsLoading(true);
     try {
-      const translations = autoTranslate(newStepName);
-      const newStep: BuilderStep = {
-        id: Date.now().toString(),
-        names: {
-          fr: newStepName,
-          en: translations.en,
-          nl: translations.nl
-        },
-        max_select: newStepMax,
-        included_count: newStepIncluded,
-        sort_order: steps.length + 1
-      };
+      const maxSort = Math.max(...steps.map(s => s.sort), 0);
+      
+      const { error } = await supabase
+        .from('builder_steps')
+        .insert({
+          name: newStepName,
+          sort: maxSort + 1,
+          max_select: newStepMax
+        });
 
-      setSteps([...steps, newStep]);
+      if (error) {
+        throw error;
+      }
+
+      await loadSteps();
       setIsAddDialogOpen(false);
       setNewStepName('');
       setNewStepMax(1);
-      setNewStepIncluded(0);
 
       toast({
         title: "Succès",
         description: "Étape ajoutée avec succès"
       });
     } catch (error) {
+      console.error('Error adding step:', error);
       toast({
         title: "Erreur",
         description: "Impossible d'ajouter l'étape",
@@ -159,14 +188,24 @@ export function AdminBuilderPage() {
     }
   };
 
-  const handleDeleteStep = async (stepId: string) => {
+  const handleDeleteStep = async (stepId: number) => {
     try {
-      setSteps(steps.filter(step => step.id !== stepId));
+      const { error } = await supabase
+        .from('builder_steps')
+        .delete()
+        .eq('id', stepId);
+
+      if (error) {
+        throw error;
+      }
+
+      await loadSteps();
       toast({
         title: "Succès",
         description: "Étape supprimée avec succès"
       });
     } catch (error) {
+      console.error('Error deleting step:', error);
       toast({
         title: "Erreur",
         description: "Impossible de supprimer l'étape",
@@ -188,65 +227,67 @@ export function AdminBuilderPage() {
             </p>
           </div>
           
-          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-[#F39720] hover:bg-[#F39720]/90 text-white">
-                <Plus className="h-4 w-4 mr-2" />
-                Nouvelle étape
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Ajouter une nouvelle étape</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="stepName">Nom (Français)</Label>
-                  <Input
-                    id="stepName"
-                    value={newStepName}
-                    onChange={(e) => setNewStepName(e.target.value)}
-                    placeholder="Ex: Garnitures"
-                  />
+          <div className="flex gap-3">
+            <Button
+              onClick={handleSyncBuilder}
+              disabled={isSyncing}
+              variant="outline"
+              className="border-[#F39720] text-[#F39720] hover:bg-[#F39720] hover:text-white"
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
+              {isSyncing ? 'Synchronisation...' : 'Synchroniser'}
+            </Button>
+            
+            <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+              <DialogTrigger asChild>
+                <Button className="bg-[#F39720] hover:bg-[#F39720]/90 text-white">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Nouvelle étape
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Ajouter une nouvelle étape</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="stepName">Nom</Label>
+                    <Input
+                      id="stepName"
+                      value={newStepName}
+                      onChange={(e) => setNewStepName(e.target.value)}
+                      placeholder="Ex: Garnitures"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="maxSelect">Sélection maximum</Label>
+                    <Input
+                      id="maxSelect"
+                      type="number"
+                      min="1"
+                      value={newStepMax}
+                      onChange={(e) => setNewStepMax(parseInt(e.target.value) || 1)}
+                    />
+                  </div>
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsAddDialogOpen(false)}
+                    >
+                      Annuler
+                    </Button>
+                    <Button
+                      onClick={handleAddStep}
+                      disabled={isLoading}
+                      className="bg-[#F39720] hover:bg-[#F39720]/90"
+                    >
+                      {isLoading ? 'Ajout...' : 'Ajouter'}
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <Label htmlFor="maxSelect">Sélection maximum</Label>
-                  <Input
-                    id="maxSelect"
-                    type="number"
-                    min="1"
-                    value={newStepMax}
-                    onChange={(e) => setNewStepMax(parseInt(e.target.value) || 1)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="includedCount">Quantité incluse</Label>
-                  <Input
-                    id="includedCount"
-                    type="number"
-                    min="0"
-                    value={newStepIncluded}
-                    onChange={(e) => setNewStepIncluded(parseInt(e.target.value) || 0)}
-                  />
-                </div>
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsAddDialogOpen(false)}
-                  >
-                    Annuler
-                  </Button>
-                  <Button
-                    onClick={handleAddStep}
-                    disabled={isLoading}
-                    className="bg-[#F39720] hover:bg-[#F39720]/90"
-                  >
-                    {isLoading ? 'Ajout...' : 'Ajouter'}
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
         <Card className="shadow-md border-0">
@@ -256,7 +297,15 @@ export function AdminBuilderPage() {
           <CardContent>
             {steps.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-muted-foreground">Aucune étape configurée</p>
+                <p className="text-muted-foreground mb-4">Aucune étape configurée</p>
+                <Button
+                  onClick={handleSyncBuilder}
+                  disabled={isSyncing}
+                  className="bg-[#F39720] hover:bg-[#F39720]/90"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
+                  Synchroniser depuis le menu client
+                </Button>
               </div>
             ) : (
               <Table>
@@ -265,31 +314,26 @@ export function AdminBuilderPage() {
                     <TableHead className="w-8 bg-gray-100 font-semibold text-gray-700"></TableHead>
                     <TableHead className="bg-gray-100 font-semibold text-gray-700">Nom</TableHead>
                     <TableHead className="w-32 bg-gray-100 font-semibold text-gray-700">Max select</TableHead>
-                    <TableHead className="w-32 bg-gray-100 font-semibold text-gray-700">Inclus</TableHead>
+                    <TableHead className="w-32 bg-gray-100 font-semibold text-gray-700">Ordre</TableHead>
                     <TableHead className="w-24 bg-gray-100 font-semibold text-gray-700">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {steps
-                    .sort((a, b) => a.sort_order - b.sort_order)
+                    .sort((a, b) => a.sort - b.sort)
                     .map((step) => (
                       <TableRow key={step.id} className="hover:bg-muted/50">
                         <TableCell>
                           <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
                         </TableCell>
                         <TableCell>
-                          <div>
-                            <div className="font-medium">{step.names.fr}</div>
-                            <div className="text-sm text-muted-foreground">
-                              EN: {step.names.en} | NL: {step.names.nl}
-                            </div>
-                          </div>
+                          <div className="font-medium">{step.name}</div>
                         </TableCell>
                         <TableCell>
                           <Badge variant="secondary">{step.max_select}</Badge>
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline">{step.included_count}</Badge>
+                          <Badge variant="outline">{step.sort}</Badge>
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
@@ -315,7 +359,7 @@ export function AdminBuilderPage() {
                                 <AlertDialogHeader>
                                   <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
                                   <AlertDialogDescription>
-                                    Êtes-vous sûr de vouloir supprimer l'étape "{step.names.fr}" ? 
+                                    Êtes-vous sûr de vouloir supprimer l'étape "{step.name}" ? 
                                     Cette action est irréversible.
                                   </AlertDialogDescription>
                                 </AlertDialogHeader>

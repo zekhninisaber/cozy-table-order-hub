@@ -13,29 +13,21 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { Plus, Pencil, Trash2, GripVertical, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface BuilderOption {
-  id: string;
-  names: {
-    fr: string;
-    en: string;
-    nl: string;
-  };
+  id: number;
+  step_id: number;
+  name: string;
   extra_price: number;
-  photo_url: string;
-  is_visible: boolean;
-  sort_order: number;
+  out_of_stock: boolean;
 }
 
 interface BuilderStep {
-  id: string;
-  names: {
-    fr: string;
-    en: string;
-    nl: string;
-  };
+  id: number;
+  name: string;
   max_select: number;
-  included_count: number;
+  sort: number;
 }
 
 export function AdminBuilderStepPage() {
@@ -46,7 +38,6 @@ export function AdminBuilderStepPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [newOptionName, setNewOptionName] = useState('');
   const [newOptionPrice, setNewOptionPrice] = useState(0);
-  const [newOptionPhoto, setNewOptionPhoto] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -71,64 +62,63 @@ export function AdminBuilderStepPage() {
   }
 
   useEffect(() => {
-    loadStepAndOptions();
+    if (id) {
+      loadStepAndOptions();
+    }
   }, [id]);
 
   const loadStepAndOptions = async () => {
-    // Mock data - replace with actual API call
-    const mockStep: BuilderStep = {
-      id: id || '1',
-      names: { fr: 'Base', en: 'Base', nl: 'Basis' },
-      max_select: 1,
-      included_count: 1
-    };
-
-    const mockOptions: BuilderOption[] = [
-      {
-        id: '1',
-        names: { fr: 'Riz blanc', en: 'White rice', nl: 'Witte rijst' },
-        extra_price: 0,
-        photo_url: '/placeholder.svg',
-        is_visible: true,
-        sort_order: 1
-      },
-      {
-        id: '2',
-        names: { fr: 'Riz complet', en: 'Brown rice', nl: 'Bruine rijst' },
-        extra_price: 1.50,
-        photo_url: '/placeholder.svg',
-        is_visible: true,
-        sort_order: 2
-      },
-      {
-        id: '3',
-        names: { fr: 'Quinoa', en: 'Quinoa', nl: 'Quinoa' },
-        extra_price: 2.00,
-        photo_url: '/placeholder.svg',
-        is_visible: false,
-        sort_order: 3
-      }
-    ];
-
-    setStep(mockStep);
-    setOptions(mockOptions);
-  };
-
-  const autoTranslate = (frenchName: string) => {
-    // Simple mock translation - replace with actual translation service
-    const translations: { [key: string]: { en: string; nl: string } } = {
-      'Riz blanc': { en: 'White rice', nl: 'Witte rijst' },
-      'Riz complet': { en: 'Brown rice', nl: 'Bruine rijst' },
-      'Quinoa': { en: 'Quinoa', nl: 'Quinoa' },
-      'Avocat': { en: 'Avocado', nl: 'Avocado' },
-      'Concombre': { en: 'Cucumber', nl: 'Komkommer' }
-    };
+    if (!id) return;
     
-    return translations[frenchName] || { en: frenchName, nl: frenchName };
+    try {
+      // Load step details
+      const { data: stepData, error: stepError } = await supabase
+        .from('builder_steps')
+        .select('*')
+        .eq('id', parseInt(id))
+        .single();
+      
+      if (stepError) {
+        console.error('Error loading step:', stepError);
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger l'étape",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      setStep(stepData);
+
+      // Load options for this step
+      const { data: optionsData, error: optionsError } = await supabase
+        .from('builder_options')
+        .select('*')
+        .eq('step_id', parseInt(id));
+      
+      if (optionsError) {
+        console.error('Error loading options:', optionsError);
+        toast({
+          title: "Erreur",
+          description: "Impossible de charger les options",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      setOptions(optionsData || []);
+    } catch (error) {
+      console.error('Error loading step and options:', error);
+      toast({
+        title: "Erreur",
+        description: "Erreur lors du chargement",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleAddOption = async () => {
-    if (!newOptionName.trim()) {
+    if (!newOptionName.trim() || !id) {
       toast({
         title: "Erreur",
         description: "Le nom de l'option est requis",
@@ -139,31 +129,30 @@ export function AdminBuilderStepPage() {
 
     setIsLoading(true);
     try {
-      const translations = autoTranslate(newOptionName);
-      const newOption: BuilderOption = {
-        id: Date.now().toString(),
-        names: {
-          fr: newOptionName,
-          en: translations.en,
-          nl: translations.nl
-        },
-        extra_price: newOptionPrice,
-        photo_url: newOptionPhoto || '/placeholder.svg',
-        is_visible: true,
-        sort_order: options.length + 1
-      };
+      const { error } = await supabase
+        .from('builder_options')
+        .insert({
+          step_id: parseInt(id),
+          name: newOptionName,
+          extra_price: newOptionPrice,
+          out_of_stock: false
+        });
 
-      setOptions([...options, newOption]);
+      if (error) {
+        throw error;
+      }
+
+      await loadStepAndOptions();
       setIsAddDialogOpen(false);
       setNewOptionName('');
       setNewOptionPrice(0);
-      setNewOptionPhoto('');
 
       toast({
         title: "Succès",
         description: "Option ajoutée avec succès"
       });
     } catch (error) {
+      console.error('Error adding option:', error);
       toast({
         title: "Erreur",
         description: "Impossible d'ajouter l'option",
@@ -174,35 +163,53 @@ export function AdminBuilderStepPage() {
     }
   };
 
-  const handleToggleVisible = async (optionId: string) => {
+  const handleToggleStock = async (optionId: number) => {
     try {
-      setOptions(options.map(option => 
-        option.id === optionId 
-          ? { ...option, is_visible: !option.is_visible }
-          : option
-      ));
-      
+      const option = options.find(o => o.id === optionId);
+      if (!option) return;
+
+      const { error } = await supabase
+        .from('builder_options')
+        .update({ out_of_stock: !option.out_of_stock })
+        .eq('id', optionId);
+
+      if (error) {
+        throw error;
+      }
+
+      await loadStepAndOptions();
       toast({
         title: "Succès",
-        description: "Visibilité mise à jour"
+        description: "Stock mis à jour"
       });
     } catch (error) {
+      console.error('Error updating stock:', error);
       toast({
         title: "Erreur",
-        description: "Impossible de mettre à jour la visibilité",
+        description: "Impossible de mettre à jour le stock",
         variant: "destructive"
       });
     }
   };
 
-  const handleDeleteOption = async (optionId: string) => {
+  const handleDeleteOption = async (optionId: number) => {
     try {
-      setOptions(options.filter(option => option.id !== optionId));
+      const { error } = await supabase
+        .from('builder_options')
+        .delete()
+        .eq('id', optionId);
+
+      if (error) {
+        throw error;
+      }
+
+      await loadStepAndOptions();
       toast({
         title: "Succès",
         description: "Option supprimée avec succès"
       });
     } catch (error) {
+      console.error('Error deleting option:', error);
       toast({
         title: "Erreur",
         description: "Impossible de supprimer l'option",
@@ -240,7 +247,7 @@ export function AdminBuilderStepPage() {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbPage className="font-medium">
-                  {step.names.fr}
+                  {step.name}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -250,7 +257,7 @@ export function AdminBuilderStepPage() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-display font-bold text-primary mb-2">
-              Options - {step.names.fr}
+              Options - {step.name}
             </h1>
             <p className="text-muted-foreground">
               Gérez les options disponibles pour cette étape
@@ -270,7 +277,7 @@ export function AdminBuilderStepPage() {
               </DialogHeader>
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="optionName">Nom (Français)</Label>
+                  <Label htmlFor="optionName">Nom</Label>
                   <Input
                     id="optionName"
                     value={newOptionName}
@@ -287,15 +294,6 @@ export function AdminBuilderStepPage() {
                     step="0.50"
                     value={newOptionPrice}
                     onChange={(e) => setNewOptionPrice(parseFloat(e.target.value) || 0)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="thumbnail">URL de l'image</Label>
-                  <Input
-                    id="thumbnail"
-                    value={newOptionPhoto}
-                    onChange={(e) => setNewOptionPhoto(e.target.value)}
-                    placeholder="https://example.com/image.jpg"
                   />
                 </div>
                 <div className="flex justify-end gap-2">
@@ -330,99 +328,84 @@ export function AdminBuilderStepPage() {
             ) : (
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-8"></TableHead>
-                    <TableHead className="w-16">Image</TableHead>
-                    <TableHead>Nom</TableHead>
-                    <TableHead className="w-32">Prix extra</TableHead>
-                    <TableHead className="w-24">Visible</TableHead>
-                    <TableHead className="w-24">Actions</TableHead>
+                  <TableRow className="bg-gray-100 hover:bg-gray-100 border-b">
+                    <TableHead className="w-8 bg-gray-100 font-semibold text-gray-700"></TableHead>
+                    <TableHead className="bg-gray-100 font-semibold text-gray-700">Nom</TableHead>
+                    <TableHead className="w-32 bg-gray-100 font-semibold text-gray-700">Prix extra</TableHead>
+                    <TableHead className="w-24 bg-gray-100 font-semibold text-gray-700">Disponible</TableHead>
+                    <TableHead className="w-24 bg-gray-100 font-semibold text-gray-700">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {options
-                    .sort((a, b) => a.sort_order - b.sort_order)
-                    .map((option) => (
-                      <TableRow key={option.id} className="hover:bg-muted/50">
-                        <TableCell>
-                          <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
-                        </TableCell>
-                        <TableCell>
-                          <img
-                            src={option.photo_url}
-                            alt={option.names.fr}
-                            className="w-10 h-10 object-cover rounded"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <div>
-                            <div className="font-medium">{option.names.fr}</div>
-                            <div className="text-sm text-muted-foreground">
-                              EN: {option.names.en} | NL: {option.names.nl}
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {option.extra_price > 0 ? (
-                            <Badge variant="secondary">+{option.extra_price.toFixed(2)}€</Badge>
-                          ) : (
-                            <Badge variant="outline">Inclus</Badge>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          <Switch
-                            checked={option.is_visible}
-                            onCheckedChange={() => handleToggleVisible(option.id)}
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="h-8 w-8 p-0"
-                              onClick={() => {
-                                toast({
-                                  title: "Info",
-                                  description: "Édition d'option à implémenter"
-                                });
-                              }}
-                            >
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                  {options.map((option) => (
+                    <TableRow key={option.id} className="hover:bg-muted/50">
+                      <TableCell>
+                        <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
+                      </TableCell>
+                      <TableCell>
+                        <div className="font-medium">{option.name}</div>
+                      </TableCell>
+                      <TableCell>
+                        {option.extra_price > 0 ? (
+                          <Badge variant="secondary">+{option.extra_price.toFixed(2)}€</Badge>
+                        ) : (
+                          <Badge variant="outline">Inclus</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Switch
+                          checked={!option.out_of_stock}
+                          onCheckedChange={() => handleToggleStock(option.id)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 w-8 p-0"
+                            onClick={() => {
+                              toast({
+                                title: "Info",
+                                description: "Édition d'option à implémenter"
+                              });
+                            }}
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Êtes-vous sûr de vouloir supprimer l'option "{option.name}" ? 
+                                  Cette action est irréversible.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => handleDeleteOption(option.id)}
+                                  className="bg-red-600 hover:bg-red-700"
                                 >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Confirmer la suppression</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Êtes-vous sûr de vouloir supprimer l'option "{option.names.fr}" ? 
-                                    Cette action est irréversible.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Annuler</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => handleDeleteOption(option.id)}
-                                    className="bg-red-600 hover:bg-red-700"
-                                  >
-                                    Supprimer
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                                  Supprimer
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             )}
