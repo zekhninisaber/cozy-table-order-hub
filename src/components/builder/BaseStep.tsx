@@ -2,11 +2,23 @@
 import { Button } from '@/components/ui/button';
 import { usePokeBuilder } from '@/contexts/PokeBuilderContext';
 import { BuilderStep } from './BuilderStep';
+import { useBuilderOptions } from '@/hooks/useMenu';
 
 export function BaseStep() {
   const { state, dispatch } = usePokeBuilder();
+  const { options: baseOptions, loading } = useBuilderOptions(2); // step_id = 2 for Base
 
-  const baseOptions = ['Riz blanc', 'Riz sushi', 'Quinoa', 'Salade'];
+  if (loading) {
+    return (
+      <BuilderStep title="Base" subtitle="choose max 2">
+        <div className="grid grid-cols-2 gap-3">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-12 bg-gray-200 animate-pulse rounded"></div>
+          ))}
+        </div>
+      </BuilderStep>
+    );
+  }
 
   const handleBaseToggle = (base: string) => {
     if (state.base.includes(base)) {
@@ -19,23 +31,23 @@ export function BaseStep() {
   return (
     <BuilderStep title="Base" subtitle="choose max 2">
       <div className="grid grid-cols-2 gap-3">
-        {baseOptions.map((base) => (
+        {baseOptions.map((option) => (
           <Button
-            key={base}
-            variant={state.base.includes(base) ? "default" : "outline"}
+            key={option.id}
+            variant={state.base.includes(option.name) ? "default" : "outline"}
             className={`h-auto py-3 px-4 ${
-              state.base.includes(base)
+              state.base.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
             } ${
-              state.base.length >= 2 && !state.base.includes(base)
+              state.base.length >= 2 && !state.base.includes(option.name)
                 ? 'opacity-50 cursor-not-allowed'
                 : ''
             }`}
-            onClick={() => handleBaseToggle(base)}
-            disabled={state.base.length >= 2 && !state.base.includes(base)}
+            onClick={() => handleBaseToggle(option.name)}
+            disabled={option.out_of_stock || (state.base.length >= 2 && !state.base.includes(option.name))}
           >
-            {base}
+            {option.name}
           </Button>
         ))}
       </div>

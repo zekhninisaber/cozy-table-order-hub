@@ -2,11 +2,23 @@
 import { Button } from '@/components/ui/button';
 import { usePokeBuilder } from '@/contexts/PokeBuilderContext';
 import { BuilderStep } from './BuilderStep';
+import { useBuilderOptions } from '@/hooks/useMenu';
 
 export function ExtraProteinStep() {
   const { state, dispatch } = usePokeBuilder();
+  const { options: extraProteinOptions, loading } = useBuilderOptions(9); // step_id = 9 for Extra Protein
 
-  const proteinOptions = ['Saumon', 'Thon', 'Poulet', 'Crevettes', 'Tofu', 'Tempeh'];
+  if (loading) {
+    return (
+      <BuilderStep title="Extra Protein" subtitle="+€2 each">
+        <div className="grid grid-cols-2 gap-3">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="h-12 bg-gray-200 animate-pulse rounded"></div>
+          ))}
+        </div>
+      </BuilderStep>
+    );
+  }
 
   const handleExtraProteinToggle = (protein: string) => {
     if (state.extraProtein.includes(protein)) {
@@ -19,18 +31,19 @@ export function ExtraProteinStep() {
   return (
     <BuilderStep title="Extra Protein" subtitle="+€2 each">
       <div className="grid grid-cols-2 gap-3">
-        {proteinOptions.map((protein) => (
+        {extraProteinOptions.map((option) => (
           <Button
-            key={protein}
-            variant={state.extraProtein.includes(protein) ? "default" : "outline"}
+            key={option.id}
+            variant={state.extraProtein.includes(option.name) ? "default" : "outline"}
             className={`h-auto py-3 px-4 ${
-              state.extraProtein.includes(protein)
+              state.extraProtein.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
             }`}
-            onClick={() => handleExtraProteinToggle(protein)}
+            onClick={() => handleExtraProteinToggle(option.name)}
+            disabled={option.out_of_stock}
           >
-            {protein}
+            {option.name}
           </Button>
         ))}
       </div>

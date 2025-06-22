@@ -32,6 +32,7 @@ export function SizeStep() {
                 : 'hover:bg-accent/10'
             }`}
             onClick={() => dispatch({ type: 'SET_SIZE', payload: option.name })}
+            disabled={option.out_of_stock}
           >
             <span className="font-medium">{option.name}</span>
             <span className="text-sm opacity-80">
