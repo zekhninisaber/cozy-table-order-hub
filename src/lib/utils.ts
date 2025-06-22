@@ -23,12 +23,6 @@ interface WeekSchedule {
 }
 
 export function checkOpeningHours(): boolean {
-  // Development mode override - set this to true when working on the app
-  const isDevelopmentMode = localStorage.getItem('dev-mode-override') === 'true';
-  if (isDevelopmentMode) {
-    return true;
-  }
-
   try {
     // Load saved schedule
     const saved = localStorage.getItem('opening_hours');
