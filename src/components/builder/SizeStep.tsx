@@ -19,6 +19,13 @@ export function SizeStep() {
     );
   }
 
+  const handleSizeSelect = (sizeName: string) => {
+    // Type guard to ensure we only accept valid size values
+    if (sizeName === 'Regular' || sizeName === 'Large') {
+      dispatch({ type: 'SET_SIZE', payload: sizeName });
+    }
+  };
+
   return (
     <BuilderStep title="Taille" subtitle="choisir 1">
       <div className="grid grid-cols-2 gap-3">
@@ -31,7 +38,7 @@ export function SizeStep() {
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground' 
                 : 'hover:bg-accent/10'
             }`}
-            onClick={() => dispatch({ type: 'SET_SIZE', payload: option.name })}
+            onClick={() => handleSizeSelect(option.name)}
           >
             <span className="font-medium">{option.name}</span>
             <span className="text-sm opacity-80">
