@@ -12,8 +12,8 @@ export function SizeStep() {
     return (
       <BuilderStep title="Taille" subtitle="choisir 1">
         <div className="grid grid-cols-2 gap-3">
-          <div className="h-16 bg-gray-200 animate-pulse rounded"></div>
-          <div className="h-16 bg-gray-200 animate-pulse rounded"></div>
+          <div className="h-12 bg-gray-200 animate-pulse rounded"></div>
+          <div className="h-12 bg-gray-200 animate-pulse rounded"></div>
         </div>
       </BuilderStep>
     );
@@ -30,7 +30,7 @@ export function SizeStep() {
           <Button
             key={option.id}
             variant={state.size === option.name ? "default" : "outline"}
-            className={`h-16 py-3 px-4 ${
+            className={`h-12 py-3 px-4 ${
               state.size === option.name 
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground' 
                 : 'hover:bg-accent/10'
@@ -40,9 +40,11 @@ export function SizeStep() {
           >
             <div className="flex items-center justify-between w-full">
               <span className="font-medium">{option.name}</span>
-              <span className="text-sm opacity-80">
-                {option.extra_price > 0 ? `€${(12.90 + option.extra_price).toFixed(2)}` : '€12,90'}
-              </span>
+              {option.extra_price > 0 ? (
+                <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
+              ) : (
+                <span className="text-xs opacity-80">€12,90</span>
+              )}
             </div>
           </Button>
         ))}

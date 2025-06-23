@@ -206,13 +206,13 @@ export function PokeBuilderProvider({ children }: { children: ReactNode }) {
   const getTotalPrice = () => {
     if (!state.size) return 0;
     
-    // Find the size option to get the actual base price
+    // Find the size option to get the correct pricing
     const sizeOption = Object.values(state.selectedOptions).find(option => option.stepId === 1);
-    let total = sizeOption ? sizeOption.extraPrice : 12.90; // Fallback to 12.90 if no size option found
     
-    // If the size has no extra price, it means it's the base price (12.90)
-    if (sizeOption && sizeOption.extraPrice === 0) {
-      total = 12.90;
+    // Base price is 12.90, and size can have extra price
+    let total = 12.90;
+    if (sizeOption && sizeOption.extraPrice > 0) {
+      total += sizeOption.extraPrice;
     }
     
     // Add extra pricing from all other selected options (excluding size)
