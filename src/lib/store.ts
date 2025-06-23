@@ -9,7 +9,7 @@ interface CartItem {
   price: number;
   quantity: number;
   builderData?: {
-    size?: 'Regular' | 'Large';
+    size?: string;
     components?: Record<string, any>;
     [key: string]: any;
   };
