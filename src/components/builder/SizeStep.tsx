@@ -19,8 +19,8 @@ export function SizeStep() {
     );
   }
 
-  const handleSizeSelect = (optionName: string) => {
-    dispatch({ type: 'SET_SIZE', payload: optionName });
+  const handleSizeSelect = (optionName: string, extraPrice: number) => {
+    dispatch({ type: 'SET_SIZE', payload: optionName, extraPrice });
   };
 
   return (
@@ -30,18 +30,20 @@ export function SizeStep() {
           <Button
             key={option.id}
             variant={state.size === option.name ? "default" : "outline"}
-            className={`flex flex-col h-auto py-3 px-4 ${
+            className={`h-16 py-3 px-4 ${
               state.size === option.name 
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground' 
                 : 'hover:bg-accent/10'
             }`}
-            onClick={() => handleSizeSelect(option.name)}
+            onClick={() => handleSizeSelect(option.name, option.extra_price)}
             disabled={option.out_of_stock}
           >
-            <span className="font-medium">{option.name}</span>
-            <span className="text-sm opacity-80">
-              {option.extra_price > 0 ? `+€${option.extra_price.toFixed(2)}` : '€12,90'}
-            </span>
+            <div className="flex items-center justify-between w-full">
+              <span className="font-medium">{option.name}</span>
+              <span className="text-sm opacity-80">
+                {option.extra_price > 0 ? `€${(12.90 + option.extra_price).toFixed(2)}` : '€12,90'}
+              </span>
+            </div>
           </Button>
         ))}
       </div>

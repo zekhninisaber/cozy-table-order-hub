@@ -35,7 +35,7 @@ export function ToppingsStep() {
           <Button
             key={option.id}
             variant={state.toppings.includes(option.name) ? "default" : "outline"}
-            className={`h-auto py-3 px-4 text-sm flex flex-col ${
+            className={`h-12 py-3 px-4 ${
               state.toppings.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
@@ -47,10 +47,12 @@ export function ToppingsStep() {
             onClick={() => handleToppingToggle(option)}
             disabled={option.out_of_stock || (state.toppings.length >= 2 && !state.toppings.includes(option.name))}
           >
-            <span className="font-medium">{option.name}</span>
-            {option.extra_price > 0 && (
-              <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
-            )}
+            <div className="flex items-center justify-between w-full">
+              <span className="font-medium">{option.name}</span>
+              {option.extra_price > 0 && (
+                <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
+              )}
+            </div>
           </Button>
         ))}
       </div>

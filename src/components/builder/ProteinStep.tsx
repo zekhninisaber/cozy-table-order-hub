@@ -35,7 +35,7 @@ export function ProteinStep() {
           <Button
             key={option.id}
             variant={state.protein === option.name ? "default" : "outline"}
-            className={`h-auto py-3 px-4 flex flex-col ${
+            className={`h-12 py-3 px-4 ${
               state.protein === option.name
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
@@ -43,10 +43,12 @@ export function ProteinStep() {
             onClick={() => handleProteinSelect(option)}
             disabled={option.out_of_stock}
           >
-            <span className="font-medium">{option.name}</span>
-            {option.extra_price > 0 && (
-              <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
-            )}
+            <div className="flex items-center justify-between w-full">
+              <span className="font-medium">{option.name}</span>
+              {option.extra_price > 0 && (
+                <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
+              )}
+            </div>
           </Button>
         ))}
       </div>
