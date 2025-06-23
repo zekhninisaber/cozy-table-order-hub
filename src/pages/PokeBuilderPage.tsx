@@ -37,7 +37,7 @@ function PokeBuilderContent() {
       name: "Poke perso",
       price: totalPrice,
       builderData: {
-        size: state.size,
+        size: state.size || '',
         components: {
           base: state.base,
           sauce: state.sauce,
