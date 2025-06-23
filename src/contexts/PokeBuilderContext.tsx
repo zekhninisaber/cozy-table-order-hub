@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 
 interface PokeBuilderState {
-  size: 'Regular' | 'Large' | null;
+  size: string | null;
   base: string[];
   sauce: string[];
   garnitures: string[];
@@ -11,19 +11,20 @@ interface PokeBuilderState {
   extraSauce: string[];
   extraGarniture: string[];
   extraProtein: string[];
+  selectedOptions: Record<string, { name: string; extraPrice: number; stepId: number }>;
 }
 
 type PokeBuilderAction = 
-  | { type: 'SET_SIZE'; payload: 'Regular' | 'Large' }
-  | { type: 'ADD_BASE'; payload: string }
+  | { type: 'SET_SIZE'; payload: string; extraPrice?: number }
+  | { type: 'ADD_BASE'; payload: string; extraPrice?: number }
   | { type: 'REMOVE_BASE'; payload: string }
-  | { type: 'ADD_SAUCE'; payload: string }
+  | { type: 'ADD_SAUCE'; payload: string; extraPrice?: number }
   | { type: 'REMOVE_SAUCE'; payload: string }
-  | { type: 'ADD_GARNITURE'; payload: string }
+  | { type: 'ADD_GARNITURE'; payload: string; extraPrice?: number }
   | { type: 'REMOVE_GARNITURE'; payload: string }
-  | { type: 'SET_PROTEIN'; payload: string }
+  | { type: 'SET_PROTEIN'; payload: string; extraPrice?: number }
   | { type: 'REMOVE_PROTEIN' }
-  | { type: 'ADD_TOPPING'; payload: string }
+  | { type: 'ADD_TOPPING'; payload: string; extraPrice?: number }
   | { type: 'REMOVE_TOPPING'; payload: string }
   | { type: 'ADD_EXTRA_SAUCE'; payload: string }
   | { type: 'REMOVE_EXTRA_SAUCE'; payload: string }
@@ -42,45 +43,124 @@ const initialState: PokeBuilderState = {
   toppings: [],
   extraSauce: [],
   extraGarniture: [],
-  extraProtein: []
+  extraProtein: [],
+  selectedOptions: {}
 };
 
 function pokeBuilderReducer(state: PokeBuilderState, action: PokeBuilderAction): PokeBuilderState {
   switch (action.type) {
     case 'SET_SIZE':
-      return { ...state, size: action.payload };
+      const sizeKey = `size_${action.payload}`;
+      return { 
+        ...state, 
+        size: action.payload,
+        selectedOptions: {
+          ...state.selectedOptions,
+          [sizeKey]: { name: action.payload, extraPrice: action.extraPrice || 0, stepId: 1 }
+        }
+      };
     case 'ADD_BASE':
       if (state.base.length < 2 && !state.base.includes(action.payload)) {
-        return { ...state, base: [...state.base, action.payload] };
+        const baseKey = `base_${action.payload}`;
+        return { 
+          ...state, 
+          base: [...state.base, action.payload],
+          selectedOptions: {
+            ...state.selectedOptions,
+            [baseKey]: { name: action.payload, extraPrice: action.extraPrice || 0, stepId: 2 }
+          }
+        };
       }
       return state;
     case 'REMOVE_BASE':
-      return { ...state, base: state.base.filter(item => item !== action.payload) };
+      const baseKeyToRemove = `base_${action.payload}`;
+      const { [baseKeyToRemove]: removedBase, ...restOptionsBase } = state.selectedOptions;
+      return { 
+        ...state, 
+        base: state.base.filter(item => item !== action.payload),
+        selectedOptions: restOptionsBase
+      };
     case 'ADD_SAUCE':
       if (state.sauce.length < 2 && !state.sauce.includes(action.payload)) {
-        return { ...state, sauce: [...state.sauce, action.payload] };
+        const sauceKey = `sauce_${action.payload}`;
+        return { 
+          ...state, 
+          sauce: [...state.sauce, action.payload],
+          selectedOptions: {
+            ...state.selectedOptions,
+            [sauceKey]: { name: action.payload, extraPrice: action.extraPrice || 0, stepId: 3 }
+          }
+        };
       }
       return state;
     case 'REMOVE_SAUCE':
-      return { ...state, sauce: state.sauce.filter(item => item !== action.payload) };
+      const sauceKeyToRemove = `sauce_${action.payload}`;
+      const { [sauceKeyToRemove]: removedSauce, ...restOptionsSauce } = state.selectedOptions;
+      return { 
+        ...state, 
+        sauce: state.sauce.filter(item => item !== action.payload),
+        selectedOptions: restOptionsSauce
+      };
     case 'ADD_GARNITURE':
       if (state.garnitures.length < 5 && !state.garnitures.includes(action.payload)) {
-        return { ...state, garnitures: [...state.garnitures, action.payload] };
+        const garnitureKey = `garniture_${action.payload}`;
+        return { 
+          ...state, 
+          garnitures: [...state.garnitures, action.payload],
+          selectedOptions: {
+            ...state.selectedOptions,
+            [garnitureKey]: { name: action.payload, extraPrice: action.extraPrice || 0, stepId: 4 }
+          }
+        };
       }
       return state;
     case 'REMOVE_GARNITURE':
-      return { ...state, garnitures: state.garnitures.filter(item => item !== action.payload) };
+      const garnitureKeyToRemove = `garniture_${action.payload}`;
+      const { [garnitureKeyToRemove]: removedGarniture, ...restOptionsGarniture } = state.selectedOptions;
+      return { 
+        ...state, 
+        garnitures: state.garnitures.filter(item => item !== action.payload),
+        selectedOptions: restOptionsGarniture
+      };
     case 'SET_PROTEIN':
-      return { ...state, protein: action.payload };
+      const proteinKey = `protein_${action.payload}`;
+      return { 
+        ...state, 
+        protein: action.payload,
+        selectedOptions: {
+          ...state.selectedOptions,
+          [proteinKey]: { name: action.payload, extraPrice: action.extraPrice || 0, stepId: 5 }
+        }
+      };
     case 'REMOVE_PROTEIN':
-      return { ...state, protein: null };
+      const proteinKeyToRemove = state.protein ? `protein_${state.protein}` : '';
+      const { [proteinKeyToRemove]: removedProtein, ...restOptionsProtein } = state.selectedOptions;
+      return { 
+        ...state, 
+        protein: null,
+        selectedOptions: restOptionsProtein
+      };
     case 'ADD_TOPPING':
       if (state.toppings.length < 2 && !state.toppings.includes(action.payload)) {
-        return { ...state, toppings: [...state.toppings, action.payload] };
+        const toppingKey = `topping_${action.payload}`;
+        return { 
+          ...state, 
+          toppings: [...state.toppings, action.payload],
+          selectedOptions: {
+            ...state.selectedOptions,
+            [toppingKey]: { name: action.payload, extraPrice: action.extraPrice || 0, stepId: 6 }
+          }
+        };
       }
       return state;
     case 'REMOVE_TOPPING':
-      return { ...state, toppings: state.toppings.filter(item => item !== action.payload) };
+      const toppingKeyToRemove = `topping_${action.payload}`;
+      const { [toppingKeyToRemove]: removedTopping, ...restOptionsTopping } = state.selectedOptions;
+      return { 
+        ...state, 
+        toppings: state.toppings.filter(item => item !== action.payload),
+        selectedOptions: restOptionsTopping
+      };
     case 'ADD_EXTRA_SAUCE':
       if (!state.extraSauce.includes(action.payload)) {
         return { ...state, extraSauce: [...state.extraSauce, action.payload] };
@@ -126,10 +206,15 @@ export function PokeBuilderProvider({ children }: { children: ReactNode }) {
   const getTotalPrice = () => {
     if (!state.size) return 0;
     
-    // Base price
-    let total = state.size === 'Regular' ? 12.90 : 14.90;
+    // Base price (Regular = 12.90, Large = 14.90, or use extra_price from database)
+    let total = 12.90; // Default base price
     
-    // Extra pricing
+    // Add extra pricing from all selected options
+    Object.values(state.selectedOptions).forEach(option => {
+      total += option.extraPrice;
+    });
+    
+    // Extra steps pricing (still hardcoded as these are always +1€ or +2€)
     total += state.extraSauce.length * 1; // +€1 each
     total += state.extraGarniture.length * 1; // +€1 each
     total += state.extraProtein.length * 2; // +€2 each

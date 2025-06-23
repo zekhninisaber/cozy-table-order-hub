@@ -20,11 +20,11 @@ export function GarnituresStep() {
     );
   }
 
-  const handleGarnitureToggle = (garniture: string) => {
-    if (state.garnitures.includes(garniture)) {
-      dispatch({ type: 'REMOVE_GARNITURE', payload: garniture });
+  const handleGarnitureToggle = (option: any) => {
+    if (state.garnitures.includes(option.name)) {
+      dispatch({ type: 'REMOVE_GARNITURE', payload: option.name });
     } else {
-      dispatch({ type: 'ADD_GARNITURE', payload: garniture });
+      dispatch({ type: 'ADD_GARNITURE', payload: option.name, extraPrice: option.extra_price });
     }
   };
 
@@ -35,7 +35,7 @@ export function GarnituresStep() {
           <Button
             key={option.id}
             variant={state.garnitures.includes(option.name) ? "default" : "outline"}
-            className={`h-auto py-3 px-4 text-sm ${
+            className={`h-auto py-3 px-4 text-sm flex flex-col ${
               state.garnitures.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
@@ -44,10 +44,13 @@ export function GarnituresStep() {
                 ? 'opacity-50 cursor-not-allowed'
                 : ''
             }`}
-            onClick={() => handleGarnitureToggle(option.name)}
+            onClick={() => handleGarnitureToggle(option)}
             disabled={option.out_of_stock || (state.garnitures.length >= 5 && !state.garnitures.includes(option.name))}
           >
-            {option.name}
+            <span className="font-medium">{option.name}</span>
+            {option.extra_price > 0 && (
+              <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
+            )}
           </Button>
         ))}
       </div>

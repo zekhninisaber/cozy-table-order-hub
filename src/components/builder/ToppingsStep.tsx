@@ -20,11 +20,11 @@ export function ToppingsStep() {
     );
   }
 
-  const handleToppingToggle = (topping: string) => {
-    if (state.toppings.includes(topping)) {
-      dispatch({ type: 'REMOVE_TOPPING', payload: topping });
+  const handleToppingToggle = (option: any) => {
+    if (state.toppings.includes(option.name)) {
+      dispatch({ type: 'REMOVE_TOPPING', payload: option.name });
     } else {
-      dispatch({ type: 'ADD_TOPPING', payload: topping });
+      dispatch({ type: 'ADD_TOPPING', payload: option.name, extraPrice: option.extra_price });
     }
   };
 
@@ -35,7 +35,7 @@ export function ToppingsStep() {
           <Button
             key={option.id}
             variant={state.toppings.includes(option.name) ? "default" : "outline"}
-            className={`h-auto py-3 px-4 text-sm ${
+            className={`h-auto py-3 px-4 text-sm flex flex-col ${
               state.toppings.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
@@ -44,10 +44,13 @@ export function ToppingsStep() {
                 ? 'opacity-50 cursor-not-allowed'
                 : ''
             }`}
-            onClick={() => handleToppingToggle(option.name)}
+            onClick={() => handleToppingToggle(option)}
             disabled={option.out_of_stock || (state.toppings.length >= 2 && !state.toppings.includes(option.name))}
           >
-            {option.name}
+            <span className="font-medium">{option.name}</span>
+            {option.extra_price > 0 && (
+              <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
+            )}
           </Button>
         ))}
       </div>

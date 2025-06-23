@@ -20,11 +20,11 @@ export function BaseStep() {
     );
   }
 
-  const handleBaseToggle = (base: string) => {
-    if (state.base.includes(base)) {
-      dispatch({ type: 'REMOVE_BASE', payload: base });
+  const handleBaseToggle = (option: any) => {
+    if (state.base.includes(option.name)) {
+      dispatch({ type: 'REMOVE_BASE', payload: option.name });
     } else {
-      dispatch({ type: 'ADD_BASE', payload: base });
+      dispatch({ type: 'ADD_BASE', payload: option.name, extraPrice: option.extra_price });
     }
   };
 
@@ -35,7 +35,7 @@ export function BaseStep() {
           <Button
             key={option.id}
             variant={state.base.includes(option.name) ? "default" : "outline"}
-            className={`h-auto py-3 px-4 ${
+            className={`h-auto py-3 px-4 flex flex-col ${
               state.base.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
@@ -44,10 +44,13 @@ export function BaseStep() {
                 ? 'opacity-50 cursor-not-allowed'
                 : ''
             }`}
-            onClick={() => handleBaseToggle(option.name)}
+            onClick={() => handleBaseToggle(option)}
             disabled={option.out_of_stock || (state.base.length >= 2 && !state.base.includes(option.name))}
           >
-            {option.name}
+            <span className="font-medium">{option.name}</span>
+            {option.extra_price > 0 && (
+              <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
+            )}
           </Button>
         ))}
       </div>

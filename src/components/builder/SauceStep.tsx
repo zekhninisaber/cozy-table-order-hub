@@ -20,11 +20,11 @@ export function SauceStep() {
     );
   }
 
-  const handleSauceToggle = (sauce: string) => {
-    if (state.sauce.includes(sauce)) {
-      dispatch({ type: 'REMOVE_SAUCE', payload: sauce });
+  const handleSauceToggle = (option: any) => {
+    if (state.sauce.includes(option.name)) {
+      dispatch({ type: 'REMOVE_SAUCE', payload: option.name });
     } else {
-      dispatch({ type: 'ADD_SAUCE', payload: sauce });
+      dispatch({ type: 'ADD_SAUCE', payload: option.name, extraPrice: option.extra_price });
     }
   };
 
@@ -35,7 +35,7 @@ export function SauceStep() {
           <Button
             key={option.id}
             variant={state.sauce.includes(option.name) ? "default" : "outline"}
-            className={`h-auto py-3 px-4 ${
+            className={`h-auto py-3 px-4 flex flex-col ${
               state.sauce.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
@@ -44,10 +44,13 @@ export function SauceStep() {
                 ? 'opacity-50 cursor-not-allowed'
                 : ''
             }`}
-            onClick={() => handleSauceToggle(option.name)}
+            onClick={() => handleSauceToggle(option)}
             disabled={option.out_of_stock || (state.sauce.length >= 2 && !state.sauce.includes(option.name))}
           >
-            {option.name}
+            <span className="font-medium">{option.name}</span>
+            {option.extra_price > 0 && (
+              <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
+            )}
           </Button>
         ))}
       </div>

@@ -20,11 +20,11 @@ export function ProteinStep() {
     );
   }
 
-  const handleProteinSelect = (protein: string) => {
-    if (state.protein === protein) {
+  const handleProteinSelect = (option: any) => {
+    if (state.protein === option.name) {
       dispatch({ type: 'REMOVE_PROTEIN' });
     } else {
-      dispatch({ type: 'SET_PROTEIN', payload: protein });
+      dispatch({ type: 'SET_PROTEIN', payload: option.name, extraPrice: option.extra_price });
     }
   };
 
@@ -35,15 +35,18 @@ export function ProteinStep() {
           <Button
             key={option.id}
             variant={state.protein === option.name ? "default" : "outline"}
-            className={`h-auto py-3 px-4 ${
+            className={`h-auto py-3 px-4 flex flex-col ${
               state.protein === option.name
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
             }`}
-            onClick={() => handleProteinSelect(option.name)}
+            onClick={() => handleProteinSelect(option)}
             disabled={option.out_of_stock}
           >
-            {option.name}
+            <span className="font-medium">{option.name}</span>
+            {option.extra_price > 0 && (
+              <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
+            )}
           </Button>
         ))}
       </div>

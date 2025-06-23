@@ -20,10 +20,7 @@ export function SizeStep() {
   }
 
   const handleSizeSelect = (optionName: string) => {
-    // Type guard to ensure the option name is a valid size
-    if (optionName === 'Regular' || optionName === 'Large') {
-      dispatch({ type: 'SET_SIZE', payload: optionName });
-    }
+    dispatch({ type: 'SET_SIZE', payload: optionName });
   };
 
   return (
