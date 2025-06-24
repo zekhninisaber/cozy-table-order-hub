@@ -1,6 +1,6 @@
 
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { AddButton } from '@/components/ui/add-button';
 import { Card, CardContent } from '@/components/ui/card';
 
 export function MakeYourOwnCard() {
@@ -20,15 +20,14 @@ export function MakeYourOwnCard() {
           <p className="text-sm text-primary opacity-80">
             Choose your base, protein, vegetables, sauce and toppings
           </p>
-          <Button 
-            className="bg-accent hover:bg-accent/90 text-accent-foreground w-full"
+          <AddButton 
             onClick={(e) => {
               e.stopPropagation();
               handleMakeYourOwn();
             }}
           >
             Start Building
-          </Button>
+          </AddButton>
         </div>
       </CardContent>
     </Card>

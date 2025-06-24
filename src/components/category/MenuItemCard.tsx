@@ -1,5 +1,5 @@
 
-import { Button } from '@/components/ui/button';
+import { AddButton } from '@/components/ui/add-button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAppStore } from '@/lib/store';
@@ -55,13 +55,12 @@ export function MenuItemCard({ item }: MenuItemCardProps) {
                   {t('outOfStock')}
                 </Badge>
               ) : (
-                <Button
+                <AddButton
                   onClick={handleAddToCart}
-                  size="sm"
-                  className="bg-accent hover:bg-accent/90 text-accent-foreground text-xs sm:text-sm px-2 sm:px-3"
+                  className="text-xs sm:text-sm px-2 sm:px-3 py-1"
                 >
                   {t('addToCart')}
-                </Button>
+                </AddButton>
               )}
             </div>
           </div>

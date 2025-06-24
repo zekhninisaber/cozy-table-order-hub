@@ -1,5 +1,6 @@
 
 import { Button } from '@/components/ui/button';
+import { AddButton } from '@/components/ui/add-button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { usePokeBuilder } from '@/contexts/PokeBuilderContext';
@@ -97,13 +98,13 @@ export function ReviewBowlModal({ isOpen, onClose, onConfirm }: ReviewBowlModalP
           <ArrowLeft className="w-4 h-4 mr-2" />
           Modifier
         </Button>
-        <Button
+        <AddButton
           onClick={onConfirm}
-          className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground"
+          className="flex-1"
         >
           <Check className="w-4 h-4 mr-2" />
           Add to cart
-        </Button>
+        </AddButton>
       </div>
     </div>
   );

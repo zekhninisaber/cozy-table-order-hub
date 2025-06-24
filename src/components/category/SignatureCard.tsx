@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { AddButton } from '@/components/ui/add-button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAppStore } from '@/lib/store';
@@ -113,14 +113,11 @@ export function SignatureCard({ item }: SignatureCardProps) {
                 {t('outOfStock')}
               </Badge>
             ) : (
-              <Button
+              <AddButton
                 onClick={handleAddToCart}
                 disabled={!selectedSize}
-                size="sm"
-                className={`w-full text-base sm:text-lg py-2 px-4 mt-3 font-medium ${
-                  !selectedSize 
-                    ? 'opacity-50 cursor-not-allowed' 
-                    : 'bg-accent hover:bg-accent/90 text-accent-foreground'
+                className={`text-base sm:text-lg py-2 px-4 mt-3 ${
+                  !selectedSize ? 'cursor-not-allowed' : ''
                 }`}
                 title={!selectedSize ? 'Choisissez une taille' : ''}
               >
@@ -132,7 +129,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
                     </span>
                   )}
                 </div>
-              </Button>
+              </AddButton>
             )}
           </div>
         </div>
