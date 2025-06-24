@@ -63,7 +63,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
         </h3>
         
         {/* Content - full width layout */}
-        <div className="flex flex-col justify-start mt-20 sm:mt-0">
+        <div className="flex flex-col justify-start mt-16 sm:mt-0">
           {/* Size Choice Label */}
           <div className="text-sm font-medium text-primary mb-1 sm:text-center">
             {t('sizeChoice')}
