@@ -37,7 +37,7 @@ export function BaseStep() {
             variant={state.base.includes(option.name) ? "default" : "outline"}
             className={`
               min-w-[5.5rem] px-3 text-sm whitespace-normal
-              flex items-center justify-center
+              flex items-center justify-center text-center
               max-sm:flex-col max-sm:py-1
               sm:flex-row sm:py-2 sm:gap-1
               ${state.base.includes(option.name)
@@ -54,7 +54,7 @@ export function BaseStep() {
           >
             <span className="whitespace-normal leading-tight text-center">{option.name}</span>
             {option.extra_price > 0 && (
-              <span className="font-medium text-xs text-gray-600 max-sm:mt-0.5 sm:ml-1">
+              <span className="font-medium text-xs text-gray-600 leading-tight max-sm:mt-0 sm:ml-1">
                 +€{option.extra_price.toFixed(2)}
               </span>
             )}

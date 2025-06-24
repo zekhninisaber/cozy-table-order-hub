@@ -37,7 +37,7 @@ export function ExtraSauceStep() {
             variant={state.extraSauce.includes(option.name) ? "default" : "outline"}
             className={`
               min-w-[5.5rem] px-3 text-sm whitespace-normal
-              flex items-center justify-center
+              flex items-center justify-center text-center
               max-sm:flex-col max-sm:py-1
               sm:flex-row sm:py-2 sm:gap-1
               ${state.extraSauce.includes(option.name)
