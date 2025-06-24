@@ -96,8 +96,8 @@ export function SignatureCard({ item }: SignatureCardProps) {
             )}
           </div>
           
-          {/* Description from database */}
-          <p className="text-xs text-primary whitespace-normal break-words mb-3 mt-3 sm:text-center">
+          {/* Description from database - with more top margin on mobile */}
+          <p className="text-xs text-primary whitespace-normal break-words mb-3 mt-6 sm:mt-3 sm:text-center">
             {item.description}
           </p>
           
