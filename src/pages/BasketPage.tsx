@@ -66,8 +66,13 @@ export function BasketPage() {
         
         <div className="space-y-4 mb-8">
           {cart.map((item, index) => {
+            console.log(`Cart item ${index}:`, item);
+            console.log(`Cart item builderData:`, item.builderData);
+            
             const sizeLabel = item.builderData?.size ? ` (${item.builderData.size})` : '';
             const bowlLines = item.builderData ? renderBowlLines(item.builderData) : [];
+            
+            console.log(`Bowl lines for item ${index}:`, bowlLines);
             
             return (
               <Card key={`${item.id}-${index}`} className="shadow-md border-0">

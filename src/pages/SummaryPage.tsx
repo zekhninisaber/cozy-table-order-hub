@@ -84,8 +84,13 @@ export function SummaryPage() {
               <h2 className="font-semibold text-primary mb-4">Votre commande</h2>
               <div className="space-y-3">
                 {cart.map((item, index) => {
+                  console.log(`Summary item ${index}:`, item);
+                  console.log(`Summary item builderData:`, item.builderData);
+                  
                   const sizeLabel = item.builderData?.size ? ` (${item.builderData.size})` : '';
                   const bowlLines = item.builderData ? renderBowlLines(item.builderData) : [];
+                  
+                  console.log(`Summary bowl lines for item ${index}:`, bowlLines);
                   
                   return (
                     <div key={`${item.id}-${index}`} className="space-y-1">
