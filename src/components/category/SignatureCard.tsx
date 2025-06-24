@@ -79,7 +79,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
           />
         </div>
         
-        {/* Title - positioned absolutely on mobile to align with image top-left */}
+        {/* Title - positioned absolutely on mobile, normal flow on desktop */}
         <h3 className="absolute top-2 left-3 font-semibold text-primary text-xl leading-tight max-w-[calc(100%-11rem)] sm:static sm:text-lg sm:max-w-none sm:truncate sm:whitespace-nowrap sm:overflow-hidden min-w-0 flex-1 z-10">
           {item.name}
         </h3>
