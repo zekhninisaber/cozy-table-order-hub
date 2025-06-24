@@ -69,8 +69,8 @@ export function SignatureCard({ item }: SignatureCardProps) {
 
   return (
     <Card className="shadow-md border-0 w-full">
-      <CardContent className="p-3 sm:p-4 relative flex flex-col sm:flex-row gap-3 sm:gap-4 pt-44 sm:pt-3">
-        {/* Image - repositioned to top-right on mobile, left on desktop */}
+      <CardContent className="p-3 sm:p-4 relative flex flex-col sm:flex-row gap-3 sm:gap-4 pt-3">
+        {/* Image - positioned absolutely on mobile, static on desktop */}
         <div className="absolute top-2 right-2 sm:static sm:flex sm:justify-start">
           <img
             src={item.photo_url}
@@ -79,16 +79,15 @@ export function SignatureCard({ item }: SignatureCardProps) {
           />
         </div>
         
+        {/* Title - positioned absolutely on mobile to align with image top-left */}
+        <h3 className="absolute top-2 left-3 font-semibold text-primary text-xl leading-tight max-w-[calc(100%-11rem)] sm:static sm:text-lg sm:max-w-none sm:truncate sm:whitespace-nowrap sm:overflow-hidden min-w-0 flex-1 z-10">
+          {item.name}
+        </h3>
+        
         {/* Content - right column on desktop, full width on mobile */}
-        <div className="flex-1 flex flex-col justify-start">
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold text-primary text-xl leading-tight pr-40 -mt-10 sm:mt-0 sm:text-lg sm:pr-2 sm:truncate sm:whitespace-nowrap sm:overflow-hidden min-w-0 flex-1">
-              {item.name}
-            </h3>
-          </div>
-          
-          {/* Size Selector - moved up on mobile to align with bottom of image */}
-          <div className="flex gap-3 -mt-16 sm:mt-2 text-base sm:text-lg">
+        <div className="flex-1 flex flex-col justify-start mt-12 sm:mt-0">
+          {/* Size Selector - positioned below title on mobile */}
+          <div className="flex gap-3 mt-4 sm:mt-2 text-base sm:text-lg">
             <button
               type="button"
               onClick={() => setSelectedSize('Regular')}
