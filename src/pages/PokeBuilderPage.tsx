@@ -34,23 +34,21 @@ function PokeBuilderContent() {
   };
 
   const handleConfirmAddToCart = () => {
-    // Add the custom poke bowl to cart
+    // Add the custom poke bowl to cart with flat builder data structure
     addToCart({
       id: Date.now(), // Temporary ID for custom bowls
       name: "Poke perso",
       price: totalPrice,
       builderData: {
         size: state.size || '',
-        components: {
-          base: state.base,
-          sauce: state.sauce,
-          garnitures: state.garnitures,
-          protein: state.protein,
-          toppings: state.toppings,
-          extraSauce: state.extraSauce,
-          extraGarniture: state.extraGarniture,
-          extraProtein: state.extraProtein
-        }
+        base: state.base,
+        sauce: state.sauce,
+        garnitures: state.garnitures,
+        protein: state.protein,
+        toppings: state.toppings,
+        extraSauce: state.extraSauce,
+        extraGarniture: state.extraGarniture,
+        extraProtein: state.extraProtein
       }
     });
     

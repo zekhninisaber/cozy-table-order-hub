@@ -10,7 +10,14 @@ interface CartItem {
   quantity: number;
   builderData?: {
     size?: string;
-    components?: Record<string, any>;
+    base?: string[];
+    sauce?: string[];
+    garnitures?: string[];
+    protein?: string | null;
+    toppings?: string[];
+    extraSauce?: string[];
+    extraGarniture?: string[];
+    extraProtein?: string[];
     [key: string]: any;
   };
 }
