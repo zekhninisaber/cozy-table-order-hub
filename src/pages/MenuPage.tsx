@@ -19,8 +19,9 @@ export function MenuPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-peach-cream p-4 pb-24">
-        <div className="max-w-md mx-auto">
+      <div className="min-h-screen bg-peach-cream">
+        <CartSummary />
+        <div className="max-w-md mx-auto p-4">
           <div className="text-center mb-8 pt-4">
             <h1 className="text-3xl font-display font-bold text-primary mb-2">
               {t('menu')}
@@ -37,14 +38,14 @@ export function MenuPage() {
             ))}
           </div>
         </div>
-        <CartSummary />
       </div>
     );
   }
   
   return (
-    <div className="min-h-screen bg-peach-cream p-4 pb-24">
-      <div className="max-w-md mx-auto">
+    <div className="min-h-screen bg-peach-cream">
+      <CartSummary />
+      <div className="max-w-md mx-auto p-4">
         <div className="text-center mb-8 pt-4">
           <h1 className="text-3xl font-display font-bold text-primary mb-2">
             {t('menu')}
@@ -80,8 +81,6 @@ export function MenuPage() {
           ))}
         </div>
       </div>
-      
-      <CartSummary />
     </div>
   );
 }

@@ -14,6 +14,7 @@ import { ExtraSauceStep } from '@/components/builder/ExtraSauceStep';
 import { ExtraGarnitureStep } from '@/components/builder/ExtraGarnitureStep';
 import { ExtraProteinStep } from '@/components/builder/ExtraProteinStep';
 import { ReviewBowlModal } from '@/components/builder/ReviewBowlModal';
+import { CartSummary } from '@/components/layout/CartSummary';
 import { useAppStore } from '@/lib/store';
 import { formatPrice } from '@/lib/utils';
 
@@ -61,8 +62,10 @@ function PokeBuilderContent() {
 
   return (
     <div className="min-h-screen bg-peach-cream">
+      <CartSummary />
+      
       {/* Header */}
-      <div className="sticky top-0 bg-peach-cream z-40 border-b border-primary/10">
+      <div className="sticky top-0 bg-peach-cream z-30 border-b border-primary/10">
         <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <Button

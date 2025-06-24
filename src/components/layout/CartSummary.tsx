@@ -17,20 +17,22 @@ export function CartSummary() {
   if (itemCount === 0) return null;
   
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50">
-      <Button
-        onClick={() => navigate('/basket')}
-        className="w-full bg-accent hover:bg-accent/90 text-accent-foreground py-4 shadow-lg"
-        size="lg"
-      >
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center gap-2">
-            <ShoppingCart className="h-5 w-5" />
-            <span>{itemCount} {t('items')}</span>
+    <div className="sticky top-0 left-0 right-0 z-40 bg-peach-cream border-b border-primary/10 shadow-md">
+      <div className="max-w-md mx-auto px-4 py-3">
+        <Button
+          onClick={() => navigate('/basket')}
+          className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-12 sm:h-14 shadow-sm"
+          size="lg"
+        >
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-2">
+              <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="text-sm sm:text-base">{itemCount} {t('items')}</span>
+            </div>
+            <span className="font-semibold text-sm sm:text-base">{formatPrice(total)}</span>
           </div>
-          <span className="font-semibold">{formatPrice(total)}</span>
-        </div>
-      </Button>
+        </Button>
+      </div>
     </div>
   );
 }

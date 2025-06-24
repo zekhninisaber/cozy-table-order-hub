@@ -23,8 +23,9 @@ export function CategoryPage() {
 
   if (itemsLoading || categoriesLoading) {
     return (
-      <div className="min-h-screen bg-peach-cream p-4 pb-24">
-        <div className="max-w-md mx-auto">
+      <div className="min-h-screen bg-peach-cream">
+        <CartSummary />
+        <div className="max-w-md mx-auto p-4">
           <CategoryHeader categoryName={t('loading')} />
           <div className="space-y-4">
             {[1,2,3].map((i) => (
@@ -36,14 +37,14 @@ export function CategoryPage() {
             ))}
           </div>
         </div>
-        <CartSummary />
       </div>
     );
   }
   
   return (
-    <div className="min-h-screen bg-peach-cream p-4 pb-24">
-      <div className="max-w-md mx-auto">
+    <div className="min-h-screen bg-peach-cream">
+      <CartSummary />
+      <div className="max-w-md mx-auto p-4">
         <CategoryHeader categoryName={categoryName} />
         
         {isPokeBowls ? (
@@ -66,8 +67,6 @@ export function CategoryPage() {
           </div>
         )}
       </div>
-      
-      <CartSummary />
     </div>
   );
 }
