@@ -69,25 +69,25 @@ export function SignatureCard({ item }: SignatureCardProps) {
 
   return (
     <Card className="shadow-md border-0 w-full">
-      <CardContent className="p-3 sm:p-4 relative flex flex-col sm:flex-row gap-3 sm:gap-4 pt-3">
+      <CardContent className="p-3 sm:p-4 relative flex flex-col gap-3 sm:gap-4 pt-3">
         {/* Image - positioned absolutely on mobile, static on desktop */}
-        <div className="absolute top-2 right-2 sm:static sm:flex sm:justify-start">
+        <div className="absolute top-2 right-2 sm:static sm:flex sm:justify-center">
           <img
             src={item.photo_url}
             alt={item.name}
-            className="w-36 h-36 sm:w-28 sm:h-28 rounded-xl shadow sm:shadow-none object-cover bg-gray-200 shrink-0"
+            className="w-36 h-36 sm:w-40 sm:h-40 rounded-xl shadow sm:shadow-none object-cover bg-gray-200 shrink-0"
           />
         </div>
         
         {/* Title - positioned absolutely on mobile, normal flow on desktop */}
-        <h3 className="absolute top-2 left-3 font-semibold text-primary text-xl leading-tight max-w-[calc(100%-11rem)] sm:static sm:text-lg sm:max-w-none sm:truncate sm:whitespace-nowrap sm:overflow-hidden min-w-0 flex-1 z-10">
+        <h3 className="absolute top-2 left-3 font-semibold text-primary text-xl leading-tight max-w-[calc(100%-11rem)] sm:static sm:text-center sm:text-xl sm:max-w-none min-w-0 z-10">
           {item.name}
         </h3>
         
-        {/* Content - right column on desktop, full width on mobile */}
-        <div className="flex-1 flex flex-col justify-start mt-12 sm:mt-0">
-          {/* Size Selector - positioned below title on mobile */}
-          <div className="flex gap-3 mt-4 sm:mt-2 text-base sm:text-lg">
+        {/* Content - full width layout */}
+        <div className="flex flex-col justify-start mt-12 sm:mt-0">
+          {/* Size Selector */}
+          <div className="flex gap-3 mt-4 sm:mt-2 sm:justify-center text-base sm:text-lg">
             <button
               type="button"
               onClick={() => setSelectedSize('Regular')}
@@ -112,7 +112,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
             </button>
             {/* Price inline on desktop only */}
             {selectedSize && (
-              <span className="ml-auto font-semibold text-[#F39720] text-base sm:text-lg hidden sm:block">
+              <span className="ml-auto sm:ml-0 font-semibold text-[#F39720] text-base sm:text-lg hidden sm:block">
                 {formatPrice(BOWL_PRICES[selectedSize])}
               </span>
             )}
@@ -120,7 +120,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
           
           {/* Components List */}
           {item.components ? (
-            <div className="space-y-0.5 mb-3 mt-3">
+            <div className="space-y-0.5 mb-3 mt-3 sm:text-center">
               {renderComponentLine(t('componentsBase'), item.components.base)}
               {renderComponentLine(t('componentsSauce'), item.components.sauce)}
               {renderComponentLine(t('componentsGarnitures'), item.components.garnitures)}
@@ -128,7 +128,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
               {renderComponentLine(t('componentsToppings'), item.components.toppings)}
             </div>
           ) : (
-            <p className="text-xs text-primary whitespace-normal break-words mb-3 mt-3">
+            <p className="text-xs text-primary whitespace-normal break-words mb-3 mt-3 sm:text-center">
               {item.description}
             </p>
           )}
