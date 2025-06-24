@@ -35,15 +35,20 @@ export function ExtraGarnitureStep() {
           <Button
             key={option.id}
             variant={state.extraGarniture.includes(option.name) ? "default" : "outline"}
-            className={`h-auto py-3 px-4 text-sm ${
-              state.extraGarniture.includes(option.name)
+            className={`
+              min-w-[5.5rem] py-3 px-3 whitespace-normal text-sm
+              flex items-center justify-center
+              max-sm:flex-col max-sm:space-y-0.5 max-sm:h-auto max-sm:min-h-[3rem]
+              sm:flex-row sm:gap-1 sm:h-12
+              ${state.extraGarniture.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
-            }`}
+              }
+            `}
             onClick={() => handleExtraGarnitureToggle(option.name)}
             disabled={option.out_of_stock}
           >
-            {option.name}
+            <span className="font-medium text-center max-sm:text-xs">{option.name}</span>
           </Button>
         ))}
       </div>

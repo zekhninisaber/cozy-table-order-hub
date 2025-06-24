@@ -35,24 +35,29 @@ export function BaseStep() {
           <Button
             key={option.id}
             variant={state.base.includes(option.name) ? "default" : "outline"}
-            className={`h-12 py-3 px-4 ${
-              state.base.includes(option.name)
+            className={`
+              min-w-[5.5rem] py-3 px-3 whitespace-normal text-sm
+              flex items-center justify-center
+              max-sm:flex-col max-sm:space-y-0.5 max-sm:h-auto max-sm:min-h-[3rem]
+              sm:flex-row sm:gap-1 sm:h-12
+              ${state.base.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
-            } ${
-              state.base.length >= 2 && !state.base.includes(option.name)
-                ? 'opacity-50 cursor-not-allowed'
-                : ''
-            }`}
+              } ${
+                state.base.length >= 2 && !state.base.includes(option.name)
+                  ? 'opacity-50 cursor-not-allowed'
+                  : ''
+              }
+            `}
             onClick={() => handleBaseToggle(option)}
             disabled={option.out_of_stock || (state.base.length >= 2 && !state.base.includes(option.name))}
           >
-            <div className="flex items-center justify-between w-full">
-              <span className="font-medium">{option.name}</span>
-              {option.extra_price > 0 && (
-                <span className="text-xs opacity-80">+€{option.extra_price.toFixed(2)}</span>
-              )}
-            </div>
+            <span className="font-medium text-center max-sm:text-xs">{option.name}</span>
+            {option.extra_price > 0 && (
+              <span className="font-semibold text-xs max-sm:text-[11px] text-accent">
+                +€{option.extra_price.toFixed(2)}
+              </span>
+            )}
           </Button>
         ))}
       </div>
