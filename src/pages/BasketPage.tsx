@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Minus, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -64,57 +63,61 @@ export function BasketPage() {
         </div>
         
         <div className="space-y-4 mb-8">
-          {cart.map((item, index) => (
-            <Card key={`${item.id}-${index}`} className="shadow-md border-0">
-              <CardContent className="p-4">
-                <div className="flex justify-between items-start mb-3">
-                  <div className="flex-1 pr-2">
-                    <h3 className="font-semibold text-primary text-sm leading-tight">
-                      {item.name}
-                    </h3>
-                    {item.builderData?.size && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        · Taille : {t(item.builderData.size === 'Regular' ? 'sizeRegular' : 'sizeLarge')}
-                      </p>
-                    )}
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeFromCart(item.id)}
-                    className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-                
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
+          {cart.map((item, index) => {
+            const sizeLabel = item.builderData?.size ? ` (${item.builderData.size})` : '';
+            
+            return (
+              <Card key={`${item.id}-${index}`} className="shadow-md border-0">
+                <CardContent className="p-4">
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex-1 pr-2">
+                      <h3 className="font-semibold text-primary text-sm leading-tight">
+                        {item.name}{sizeLabel}
+                      </h3>
+                      {item.builderData?.size && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          · Taille : {t(item.builderData.size === 'Regular' ? 'sizeRegular' : 'sizeLarge')}
+                        </p>
+                      )}
+                    </div>
                     <Button
-                      variant="outline"
+                      variant="ghost"
                       size="icon"
-                      onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
-                      className="h-8 w-8"
+                      onClick={() => removeFromCart(item.id)}
+                      className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
                     >
-                      <Minus className="h-3 w-3" />
-                    </Button>
-                    <span className="w-8 text-center font-medium">{item.quantity}</span>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
-                      className="h-8 w-8"
-                    >
-                      <Plus className="h-3 w-3" />
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
-                  <span className="font-bold text-accent">
-                    {formatPrice(item.price * item.quantity)}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                  
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => updateCartQuantity(item.id, item.quantity - 1)}
+                        className="h-8 w-8"
+                      >
+                        <Minus className="h-3 w-3" />
+                      </Button>
+                      <span className="w-8 text-center font-medium">{item.quantity}</span>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => updateCartQuantity(item.id, item.quantity + 1)}
+                        className="h-8 w-8"
+                      >
+                        <Plus className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <span className="font-bold text-accent">
+                      {formatPrice(item.price * item.quantity)}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
         
         <Card className="shadow-xl border-0 bg-primary text-peach-cream">

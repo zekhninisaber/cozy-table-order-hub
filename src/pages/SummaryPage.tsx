@@ -82,19 +82,23 @@ export function SummaryPage() {
             <CardContent className="p-4">
               <h2 className="font-semibold text-primary mb-4">Votre commande</h2>
               <div className="space-y-3">
-                {cart.map((item, index) => (
-                  <div key={`${item.id}-${index}`} className="space-y-1">
-                    <div className="flex justify-between items-center text-sm">
-                      <span>{item.quantity}x {item.name}</span>
-                      <span className="font-medium">{formatPrice(item.price * item.quantity)}</span>
-                    </div>
-                    {item.builderData?.size && (
-                      <div className="text-xs text-muted-foreground pl-4">
-                        · Taille : {t(item.builderData.size === 'Regular' ? 'sizeRegular' : 'sizeLarge')}
+                {cart.map((item, index) => {
+                  const sizeLabel = item.builderData?.size ? ` (${item.builderData.size})` : '';
+                  
+                  return (
+                    <div key={`${item.id}-${index}`} className="space-y-1">
+                      <div className="flex justify-between items-center text-sm">
+                        <span>{item.quantity}x {item.name}{sizeLabel}</span>
+                        <span className="font-medium">{formatPrice(item.price * item.quantity)}</span>
                       </div>
-                    )}
-                  </div>
-                ))}
+                      {item.builderData?.size && (
+                        <div className="text-xs text-muted-foreground pl-4">
+                          · Taille : {t(item.builderData.size === 'Regular' ? 'sizeRegular' : 'sizeLarge')}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
                 <div className="border-t pt-3 flex justify-between items-center font-bold">
                   <span>{t('total')}</span>
                   <span className="text-accent">{formatPrice(total)}</span>
