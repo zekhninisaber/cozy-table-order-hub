@@ -7,10 +7,13 @@ import { CartSummary } from '@/components/layout/CartSummary';
 import { useCategories } from '@/hooks/useMenu';
 
 export function MenuPage() {
-  const { language } = useAppStore();
+  const { language, getCartItemCount } = useAppStore();
   const t = useTranslation(language);
   const navigate = useNavigate();
   const { categories, loading } = useCategories();
+  
+  const itemCount = getCartItemCount();
+  const hasCartItems = itemCount > 0;
   
   // Filter only visible categories and sort by sort order
   const visibleCategories = categories
@@ -21,7 +24,7 @@ export function MenuPage() {
     return (
       <div className="min-h-screen bg-peach-cream">
         <CartSummary />
-        <div className="max-w-md mx-auto p-4 pt-20">
+        <div className={`max-w-md mx-auto p-4 ${hasCartItems ? 'pt-20' : ''}`}>
           <div className="text-center mb-8">
             <h1 className="text-3xl font-display font-bold text-primary mb-2">
               {t('menu')}
@@ -45,7 +48,7 @@ export function MenuPage() {
   return (
     <div className="min-h-screen bg-peach-cream">
       <CartSummary />
-      <div className="max-w-md mx-auto p-4 pt-20">
+      <div className={`max-w-md mx-auto p-4 ${hasCartItems ? 'pt-20' : ''}`}>
         <div className="text-center mb-8">
           <h1 className="text-3xl font-display font-bold text-primary mb-2">
             {t('menu')}

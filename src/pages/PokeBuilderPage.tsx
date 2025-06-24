@@ -21,9 +21,11 @@ import { formatPrice } from '@/lib/utils';
 function PokeBuilderContent() {
   const navigate = useNavigate();
   const { state, isValidForCart, getTotalPrice } = usePokeBuilder();
-  const { addToCart } = useAppStore();
+  const { addToCart, getCartItemCount } = useAppStore();
   const [showReviewModal, setShowReviewModal] = useState(false);
 
+  const itemCount = getCartItemCount();
+  const hasCartItems = itemCount > 0;
   const totalPrice = getTotalPrice();
 
   const handleReviewBowl = () => {
@@ -65,7 +67,7 @@ function PokeBuilderContent() {
       <CartSummary />
       
       {/* Header */}
-      <div className="sticky top-16 bg-peach-cream z-30 border-b border-primary/10">
+      <div className={`sticky bg-peach-cream z-30 border-b border-primary/10 ${hasCartItems ? 'top-16' : 'top-0'}`}>
         <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <Button

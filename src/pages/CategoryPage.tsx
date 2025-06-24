@@ -10,8 +10,11 @@ import { useMenuItems, useCategories } from '@/hooks/useMenu';
 
 export function CategoryPage() {
   const { id } = useParams<{ id: string }>();
-  const { language } = useAppStore();
+  const { language, getCartItemCount } = useAppStore();
   const t = useTranslation(language);
+  
+  const itemCount = getCartItemCount();
+  const hasCartItems = itemCount > 0;
   
   const categoryId = parseInt(id || '1');
   const { items: categoryItems, loading: itemsLoading } = useMenuItems(categoryId);
@@ -25,7 +28,7 @@ export function CategoryPage() {
     return (
       <div className="min-h-screen bg-peach-cream">
         <CartSummary />
-        <div className="max-w-md mx-auto p-4 pt-20">
+        <div className={`max-w-md mx-auto p-4 ${hasCartItems ? 'pt-20' : ''}`}>
           <CategoryHeader categoryName={t('loading')} />
           <div className="space-y-4">
             {[1,2,3].map((i) => (
@@ -44,7 +47,7 @@ export function CategoryPage() {
   return (
     <div className="min-h-screen bg-peach-cream">
       <CartSummary />
-      <div className="max-w-md mx-auto p-4 pt-20">
+      <div className={`max-w-md mx-auto p-4 ${hasCartItems ? 'pt-20' : ''}`}>
         <CategoryHeader categoryName={categoryName} />
         
         {isPokeBowls ? (

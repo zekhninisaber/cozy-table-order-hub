@@ -14,10 +14,12 @@ import { useToast } from '@/hooks/use-toast';
 export function SummaryPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { language, cart, customerName, setCustomerName, getCartTotal, clearCart } = useAppStore();
+  const { language, cart, customerName, setCustomerName, getCartTotal, clearCart, getCartItemCount } = useAppStore();
   const t = useTranslation(language);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  const itemCount = getCartItemCount();
+  const hasCartItems = itemCount > 0;
   const total = getCartTotal();
   
   const handleConfirm = async () => {
@@ -61,7 +63,7 @@ export function SummaryPage() {
   
   return (
     <div className="min-h-screen bg-peach-cream p-4">
-      <div className="max-w-md mx-auto pt-20 pb-8">
+      <div className={`max-w-md mx-auto pb-8 ${hasCartItems ? 'pt-20' : 'pt-8'}`}>
         <div className="flex items-center gap-3 mb-8">
           <Button
             variant="ghost"
