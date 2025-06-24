@@ -5,6 +5,7 @@ import { CategoryList } from './CategoryList';
 import { CategoryDialog } from './CategoryDialog';
 import { useCategories } from '@/hooks/useMenu';
 import { createSupabaseCategory, updateSupabaseCategory } from '@/lib/supabase';
+import { uploadCategoryThumbnail } from '@/lib/storage';
 import { supabase } from '@/integrations/supabase/client';
 import type { Category } from '@/data/menuSeed';
 
@@ -19,6 +20,7 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
   const { categories, toggleVisibility, refetch: refetchCategories } = useCategories();
 
   const handleCreateCategory = async (name: string, thumbnail: File | null) => {
+    // First create the category without thumbnail
     const newCat = await createSupabaseCategory({
       names: { 
         fr: name,
@@ -26,9 +28,16 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
         nl: name  // Would be translated via API
       },
       sort: categories.length + 1,
-      visible: true,
-      thumbnail_url: thumbnail ? URL.createObjectURL(thumbnail) : undefined
+      visible: true
     });
+    
+    if (newCat && thumbnail) {
+      // Upload thumbnail and update category with URL
+      const thumbnailUrl = await uploadCategoryThumbnail(thumbnail, newCat.id);
+      if (thumbnailUrl) {
+        await updateSupabaseCategory(newCat.id, { thumbnail_url: thumbnailUrl });
+      }
+    }
     
     if (newCat) {
       refetchCategories();
@@ -94,9 +103,10 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
       
       // Handle thumbnail upload if provided
       if (thumbnail) {
-        // In a real app, you would upload the thumbnail to storage
-        const thumbnailUrl = URL.createObjectURL(thumbnail);
-        await updateSupabaseCategory(editingCategory.id, { thumbnail_url: thumbnailUrl });
+        const thumbnailUrl = await uploadCategoryThumbnail(thumbnail, editingCategory.id);
+        if (thumbnailUrl) {
+          await updateSupabaseCategory(editingCategory.id, { thumbnail_url: thumbnailUrl });
+        }
       }
       
       setEditingCategory(null);
