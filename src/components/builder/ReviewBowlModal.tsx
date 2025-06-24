@@ -1,6 +1,5 @@
 
 import { Button } from '@/components/ui/button';
-import { AddButton } from '@/components/ui/add-button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { usePokeBuilder } from '@/contexts/PokeBuilderContext';
@@ -89,22 +88,22 @@ export function ReviewBowlModal({ isOpen, onClose, onConfirm }: ReviewBowlModalP
       </div>
 
       {/* Action Buttons */}
-      <div className="flex gap-3 pt-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:gap-3 mt-4">
         <Button
           variant="outline"
           onClick={onClose}
-          className="flex-1 border-primary/20 hover:bg-primary/5"
+          className="w-full sm:flex-1 min-w-0 border-primary/20 hover:bg-primary/5"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Modifier
         </Button>
-        <AddButton
+        <Button
           onClick={onConfirm}
-          className="flex-1"
+          className="w-full sm:flex-1 min-w-0 bg-[#F39720] text-white hover:bg-[#E07E29] disabled:opacity-50"
         >
           <Check className="w-4 h-4 mr-2" />
-          Add to cart
-        </AddButton>
+          Ajouter au panier
+        </Button>
       </div>
     </div>
   );
