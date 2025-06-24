@@ -65,7 +65,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
         {/* Content - full width layout */}
         <div className="flex flex-col justify-start mt-20 sm:mt-0">
           {/* Size Selector */}
-          <div className="flex gap-3 mt-4 sm:mt-2 sm:justify-center text-base sm:text-lg">
+          <div className="flex gap-3 mt-2 sm:mt-2 sm:justify-center text-base sm:text-lg">
             <button
               type="button"
               onClick={() => setSelectedSize('Regular')}
