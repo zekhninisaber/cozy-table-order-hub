@@ -10,6 +10,7 @@ import { useAppStore } from '@/lib/store';
 import { useTranslation } from '@/lib/i18n';
 import { formatPrice, checkWiFiConnection } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { renderBowlLines } from '@/utils/renderBowlLines';
 
 export function SummaryPage() {
   const navigate = useNavigate();
@@ -84,6 +85,7 @@ export function SummaryPage() {
               <div className="space-y-3">
                 {cart.map((item, index) => {
                   const sizeLabel = item.builderData?.size ? ` (${item.builderData.size})` : '';
+                  const bowlLines = item.builderData ? renderBowlLines(item.builderData) : [];
                   
                   return (
                     <div key={`${item.id}-${index}`} className="space-y-1">
@@ -91,7 +93,16 @@ export function SummaryPage() {
                         <span>{item.quantity}x {item.name}{sizeLabel}</span>
                         <span className="font-medium">{formatPrice(item.price * item.quantity)}</span>
                       </div>
-                      {item.builderData?.size && (
+                      {bowlLines.length > 0 && (
+                        <div className="pl-4 space-y-0.5">
+                          {bowlLines.map((line, lineIndex) => (
+                            <div key={lineIndex} className="text-xs text-muted-foreground">
+                              · {line}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      {item.builderData?.size && bowlLines.length === 0 && (
                         <div className="text-xs text-muted-foreground pl-4">
                           · Taille : {t(item.builderData.size === 'Regular' ? 'sizeRegular' : 'sizeLarge')}
                         </div>

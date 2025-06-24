@@ -1,3 +1,4 @@
+
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Minus, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useAppStore } from '@/lib/store';
 import { useTranslation } from '@/lib/i18n';
 import { formatPrice } from '@/lib/utils';
+import { renderBowlLines } from '@/utils/renderBowlLines';
 
 export function BasketPage() {
   const navigate = useNavigate();
@@ -65,6 +67,7 @@ export function BasketPage() {
         <div className="space-y-4 mb-8">
           {cart.map((item, index) => {
             const sizeLabel = item.builderData?.size ? ` (${item.builderData.size})` : '';
+            const bowlLines = item.builderData ? renderBowlLines(item.builderData) : [];
             
             return (
               <Card key={`${item.id}-${index}`} className="shadow-md border-0">
@@ -74,7 +77,16 @@ export function BasketPage() {
                       <h3 className="font-semibold text-primary text-sm leading-tight">
                         {item.name}{sizeLabel}
                       </h3>
-                      {item.builderData?.size && (
+                      {bowlLines.length > 0 && (
+                        <div className="mt-1 space-y-0.5">
+                          {bowlLines.map((line, lineIndex) => (
+                            <p key={lineIndex} className="text-xs text-muted-foreground leading-tight">
+                              {line}
+                            </p>
+                          ))}
+                        </div>
+                      )}
+                      {item.builderData?.size && bowlLines.length === 0 && (
                         <p className="text-xs text-muted-foreground mt-1">
                           · Taille : {t(item.builderData.size === 'Regular' ? 'sizeRegular' : 'sizeLarge')}
                         </p>
