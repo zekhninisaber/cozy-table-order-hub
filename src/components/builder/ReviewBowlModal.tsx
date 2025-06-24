@@ -17,6 +17,18 @@ export function ReviewBowlModal({ isOpen, onClose, onConfirm }: ReviewBowlModalP
   const { state, getTotalPrice } = usePokeBuilder();
   const isMobile = useIsMobile();
 
+  // Helper to format duplicates as "x2"
+  const formatWithCounts = (arr: string[]) => {
+    const counts = arr.reduce((map, item) => {
+      map[item] = (map[item] || 0) + 1;
+      return map;
+    }, {} as Record<string, number>);
+    
+    return Object.entries(counts)
+      .map(([name, count]) => count > 1 ? `${name} x${count}` : name)
+      .join(', ');
+  };
+
   const getSummaryItems = () => {
     const items: Array<{ label: string; value: string }> = [];
 
@@ -44,20 +56,17 @@ export function ReviewBowlModal({ isOpen, onClose, onConfirm }: ReviewBowlModalP
       items.push({ label: 'Toppings', value: state.toppings.join(', ') });
     }
 
-    // Combine extras into one line
-    const extras: string[] = [];
+    // Add extra items separately
     if (state.extraSauce.length > 0) {
-      extras.push(`Extra sauce ×${state.extraSauce.length}`);
-    }
-    if (state.extraGarniture.length > 0) {
-      extras.push(`Extra garniture ×${state.extraGarniture.length}`);
-    }
-    if (state.extraProtein.length > 0) {
-      extras.push(`Extra protéine ×${state.extraProtein.length}`);
+      items.push({ label: 'Extras sauce', value: formatWithCounts(state.extraSauce) });
     }
 
-    if (extras.length > 0) {
-      items.push({ label: 'Extras', value: extras.join(', ') });
+    if (state.extraGarniture.length > 0) {
+      items.push({ label: 'Extras garniture', value: formatWithCounts(state.extraGarniture) });
+    }
+
+    if (state.extraProtein.length > 0) {
+      items.push({ label: 'Extras protéine', value: formatWithCounts(state.extraProtein) });
     }
 
     return items;
