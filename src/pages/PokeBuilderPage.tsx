@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -23,8 +24,6 @@ function PokeBuilderContent() {
   const [showReviewModal, setShowReviewModal] = useState(false);
 
   const totalPrice = getTotalPrice();
-  console.log('🔧 PokeBuilderContent - totalPrice calculated:', totalPrice);
-  console.log('🔧 PokeBuilderContent - current state:', state);
 
   const handleReviewBowl = () => {
     if (!isValidForCart) return;
