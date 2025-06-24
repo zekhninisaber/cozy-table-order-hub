@@ -20,8 +20,12 @@ export function SizeStep() {
   }
 
   const handleSizeSelect = (optionName: string, extraPrice: number) => {
+    console.log('🔧 SizeStep - handleSizeSelect called:', { optionName, extraPrice });
     dispatch({ type: 'SET_SIZE', payload: optionName, extraPrice });
   };
+
+  console.log('🔧 SizeStep - current state.size:', state.size);
+  console.log('🔧 SizeStep - available sizeOptions:', sizeOptions);
 
   return (
     <BuilderStep title="Taille" subtitle="choisir 1">

@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
 
 interface PokeBuilderState {
@@ -48,10 +47,12 @@ const initialState: PokeBuilderState = {
 };
 
 function pokeBuilderReducer(state: PokeBuilderState, action: PokeBuilderAction): PokeBuilderState {
+  console.log('🔧 PokeBuilderReducer - action dispatched:', action);
+  
   switch (action.type) {
     case 'SET_SIZE':
       const sizeKey = `size_${action.payload}`;
-      return { 
+      const newState = { 
         ...state, 
         size: action.payload,
         selectedOptions: {
@@ -59,6 +60,9 @@ function pokeBuilderReducer(state: PokeBuilderState, action: PokeBuilderAction):
           [sizeKey]: { name: action.payload, extraPrice: action.extraPrice || 0, stepId: 1 }
         }
       };
+      console.log('🔧 PokeBuilderReducer - SET_SIZE new state:', newState);
+      console.log('🔧 PokeBuilderReducer - selectedOptions after SET_SIZE:', newState.selectedOptions);
+      return newState;
     case 'ADD_BASE':
       if (state.base.length < 2 && !state.base.includes(action.payload)) {
         const baseKey = `base_${action.payload}`;
@@ -204,21 +208,31 @@ export function PokeBuilderProvider({ children }: { children: ReactNode }) {
   const isValidForCart = state.size !== null && state.base.length >= 1;
 
   const getTotalPrice = () => {
-    if (!state.size) return 0;
+    console.log('🔧 getTotalPrice - called with state:', state);
+    
+    if (!state.size) {
+      console.log('🔧 getTotalPrice - no size selected, returning 0');
+      return 0;
+    }
     
     // Find the size option to get the correct pricing
     const sizeOption = Object.values(state.selectedOptions).find(option => option.stepId === 1);
+    console.log('🔧 getTotalPrice - sizeOption found:', sizeOption);
     
     // Base price is 12.90, and size can have extra price
     let total = 12.90;
     if (sizeOption && sizeOption.extraPrice > 0) {
       total += sizeOption.extraPrice;
+      console.log('🔧 getTotalPrice - added extra price from size:', sizeOption.extraPrice);
     }
+    
+    console.log('🔧 getTotalPrice - total after size:', total);
     
     // Add extra pricing from all other selected options (excluding size)
     Object.values(state.selectedOptions).forEach(option => {
       if (option.stepId !== 1) { // Skip size step since we already handled it
         total += option.extraPrice;
+        console.log('🔧 getTotalPrice - added extra price from option:', option);
       }
     });
     
@@ -227,6 +241,7 @@ export function PokeBuilderProvider({ children }: { children: ReactNode }) {
     total += state.extraGarniture.length * 1; // +€1 each
     total += state.extraProtein.length * 2; // +€2 each
     
+    console.log('🔧 getTotalPrice - final total:', total);
     return total;
   };
 
