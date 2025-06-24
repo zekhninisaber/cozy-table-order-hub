@@ -36,10 +36,10 @@ export function ExtraProteinStep() {
             key={option.id}
             variant={state.extraProtein.includes(option.name) ? "default" : "outline"}
             className={`
-              min-w-[5.5rem] py-3 px-3 whitespace-normal text-sm
+              min-w-[5.5rem] px-3 text-sm whitespace-normal
               flex items-center justify-center
-              max-sm:flex-col max-sm:space-y-0.5 max-sm:h-auto max-sm:min-h-[3rem]
-              sm:flex-row sm:gap-1 sm:h-12
+              max-sm:flex-col max-sm:py-1
+              sm:flex-row sm:py-2 sm:gap-1
               ${state.extraProtein.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
@@ -48,7 +48,7 @@ export function ExtraProteinStep() {
             onClick={() => handleExtraProteinToggle(option.name)}
             disabled={option.out_of_stock}
           >
-            <span className="font-medium text-center max-sm:text-xs">{option.name}</span>
+            <span className="whitespace-normal leading-tight text-center">{option.name}</span>
           </Button>
         ))}
       </div>

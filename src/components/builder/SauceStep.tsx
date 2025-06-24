@@ -36,10 +36,10 @@ export function SauceStep() {
             key={option.id}
             variant={state.sauce.includes(option.name) ? "default" : "outline"}
             className={`
-              min-w-[5.5rem] py-3 px-3 whitespace-normal text-sm
+              min-w-[5.5rem] px-3 text-sm whitespace-normal
               flex items-center justify-center
-              max-sm:flex-col max-sm:space-y-0.5 max-sm:h-auto max-sm:min-h-[3rem]
-              sm:flex-row sm:gap-1 sm:h-12
+              max-sm:flex-col max-sm:py-1
+              sm:flex-row sm:py-2 sm:gap-1
               ${state.sauce.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
                 : 'hover:bg-accent/10'
@@ -52,9 +52,9 @@ export function SauceStep() {
             onClick={() => handleSauceToggle(option)}
             disabled={option.out_of_stock || (state.sauce.length >= 2 && !state.sauce.includes(option.name))}
           >
-            <span className="font-medium text-center max-sm:text-xs">{option.name}</span>
+            <span className="whitespace-normal leading-tight text-center">{option.name}</span>
             {option.extra_price > 0 && (
-              <span className="font-semibold text-xs max-sm:text-[11px] text-accent">
+              <span className="font-medium text-xs text-gray-600 max-sm:mt-0.5 sm:ml-1">
                 +€{option.extra_price.toFixed(2)}
               </span>
             )}
