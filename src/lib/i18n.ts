@@ -1,3 +1,4 @@
+
 export type Language = 'fr' | 'en' | 'nl';
 
 interface TranslationKeys {
@@ -65,6 +66,7 @@ interface TranslationKeys {
   // Sizes
   sizeRegular: string;
   sizeLarge: string;
+  sizeChoice: string;
   
   // Errors
   closedMessage: string;
@@ -127,6 +129,7 @@ const translations: Record<Language, TranslationKeys> = {
     
     sizeRegular: 'Regular',
     sizeLarge: 'Large',
+    sizeChoice: 'Choix de la taille :',
     
     closedMessage: 'Nous sommes fermés. Horaires : Lundi-Samedi 11h-22h, Dimanche fermé.',
     wifiRequired: 'Veuillez vous connecter au Wi-Fi TakeABowl-WiFi pour confirmer votre commande.'
@@ -186,6 +189,7 @@ const translations: Record<Language, TranslationKeys> = {
     
     sizeRegular: 'Regular',
     sizeLarge: 'Large',
+    sizeChoice: 'Size choice:',
     
     closedMessage: 'We are closed. Hours: Monday-Saturday 11am-10pm, Sunday closed.',
     wifiRequired: 'Please connect to TakeABowl-WiFi to confirm your order.'
@@ -245,6 +249,7 @@ const translations: Record<Language, TranslationKeys> = {
     
     sizeRegular: 'Regular',
     sizeLarge: 'Large',
+    sizeChoice: 'Keuze van grootte:',
     
     closedMessage: 'We zijn gesloten. Openingstijden: Maandag-Zaterdag 11u-22u, Zondag gesloten.',
     wifiRequired: 'Verbind met TakeABowl-WiFi om je bestelling te bevestigen.'

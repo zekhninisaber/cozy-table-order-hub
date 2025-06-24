@@ -64,6 +64,11 @@ export function SignatureCard({ item }: SignatureCardProps) {
         
         {/* Content - full width layout */}
         <div className="flex flex-col justify-start mt-20 sm:mt-0">
+          {/* Size Choice Label */}
+          <div className="text-sm font-medium text-primary mb-1 sm:text-center">
+            {t('sizeChoice')}
+          </div>
+          
           {/* Size Selector */}
           <div className="flex gap-3 mt-2 sm:mt-2 sm:justify-center text-base sm:text-lg">
             <button
