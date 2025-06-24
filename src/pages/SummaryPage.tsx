@@ -101,14 +101,14 @@ export function SummaryPage() {
                       {bowlLines.length > 0 && (
                         <div className="pl-4 space-y-0.5">
                           {bowlLines.map((line, lineIndex) => (
-                            <div key={lineIndex} className="text-xs text-muted-foreground">
+                            <div key={lineIndex} className="text-xs text-primary/70">
                               · {line}
                             </div>
                           ))}
                         </div>
                       )}
                       {item.builderData?.size && bowlLines.length === 0 && (
-                        <div className="text-xs text-muted-foreground pl-4">
+                        <div className="text-xs text-primary/70 pl-4">
                           · Taille : {t(item.builderData.size === 'Regular' ? 'sizeRegular' : 'sizeLarge')}
                         </div>
                       )}

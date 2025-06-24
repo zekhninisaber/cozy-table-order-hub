@@ -85,14 +85,14 @@ export function BasketPage() {
                       {bowlLines.length > 0 && (
                         <div className="mt-1 space-y-0.5">
                           {bowlLines.map((line, lineIndex) => (
-                            <p key={lineIndex} className="text-xs text-muted-foreground leading-tight">
+                            <p key={lineIndex} className="text-xs text-primary/70 leading-tight">
                               {line}
                             </p>
                           ))}
                         </div>
                       )}
                       {item.builderData?.size && bowlLines.length === 0 && (
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-primary/70 mt-1">
                           · Taille : {t(item.builderData.size === 'Regular' ? 'sizeRegular' : 'sizeLarge')}
                         </p>
                       )}
