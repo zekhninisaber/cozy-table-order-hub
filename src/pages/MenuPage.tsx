@@ -21,8 +21,8 @@ export function MenuPage() {
     return (
       <div className="min-h-screen bg-peach-cream">
         <CartSummary />
-        <div className="max-w-md mx-auto p-4">
-          <div className="text-center mb-8 pt-4">
+        <div className="max-w-md mx-auto p-4 pt-20">
+          <div className="text-center mb-8">
             <h1 className="text-3xl font-display font-bold text-primary mb-2">
               {t('menu')}
             </h1>
@@ -45,8 +45,8 @@ export function MenuPage() {
   return (
     <div className="min-h-screen bg-peach-cream">
       <CartSummary />
-      <div className="max-w-md mx-auto p-4">
-        <div className="text-center mb-8 pt-4">
+      <div className="max-w-md mx-auto p-4 pt-20">
+        <div className="text-center mb-8">
           <h1 className="text-3xl font-display font-bold text-primary mb-2">
             {t('menu')}
           </h1>

@@ -17,7 +17,7 @@ export function BasketPage() {
   if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-peach-cream p-4">
-        <div className="max-w-md mx-auto pt-8">
+        <div className="max-w-md mx-auto pt-20">
           <div className="flex items-center gap-3 mb-8">
             <Button
               variant="ghost"
@@ -47,7 +47,7 @@ export function BasketPage() {
   
   return (
     <div className="min-h-screen bg-peach-cream p-4">
-      <div className="max-w-md mx-auto pt-8 pb-8">
+      <div className="max-w-md mx-auto pt-20 pb-8">
         <div className="flex items-center gap-3 mb-8">
           <Button
             variant="ghost"

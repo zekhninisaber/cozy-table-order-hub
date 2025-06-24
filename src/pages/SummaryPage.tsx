@@ -61,7 +61,7 @@ export function SummaryPage() {
   
   return (
     <div className="min-h-screen bg-peach-cream p-4">
-      <div className="max-w-md mx-auto pt-8 pb-8">
+      <div className="max-w-md mx-auto pt-20 pb-8">
         <div className="flex items-center gap-3 mb-8">
           <Button
             variant="ghost"

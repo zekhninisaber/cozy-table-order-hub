@@ -65,7 +65,7 @@ function PokeBuilderContent() {
       <CartSummary />
       
       {/* Header */}
-      <div className="sticky top-0 bg-peach-cream z-30 border-b border-primary/10">
+      <div className="sticky top-16 bg-peach-cream z-30 border-b border-primary/10">
         <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <Button

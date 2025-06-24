@@ -25,7 +25,7 @@ export function CategoryPage() {
     return (
       <div className="min-h-screen bg-peach-cream">
         <CartSummary />
-        <div className="max-w-md mx-auto p-4">
+        <div className="max-w-md mx-auto p-4 pt-20">
           <CategoryHeader categoryName={t('loading')} />
           <div className="space-y-4">
             {[1,2,3].map((i) => (
@@ -44,7 +44,7 @@ export function CategoryPage() {
   return (
     <div className="min-h-screen bg-peach-cream">
       <CartSummary />
-      <div className="max-w-md mx-auto p-4">
+      <div className="max-w-md mx-auto p-4 pt-20">
         <CategoryHeader categoryName={categoryName} />
         
         {isPokeBowls ? (
