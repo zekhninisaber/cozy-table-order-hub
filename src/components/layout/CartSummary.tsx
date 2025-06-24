@@ -17,7 +17,7 @@ export function CartSummary() {
   if (itemCount === 0) return null;
   
   return (
-    <div className="sticky top-0 left-0 right-0 z-40 bg-peach-cream border-b border-primary/10 shadow-md">
+    <div className="fixed top-0 left-0 right-0 z-40 bg-peach-cream border-b border-primary/10 shadow-md">
       <div className="max-w-md mx-auto px-4 py-3">
         <Button
           onClick={() => navigate('/basket')}
