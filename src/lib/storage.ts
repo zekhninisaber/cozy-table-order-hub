@@ -63,16 +63,38 @@ export async function uploadCategoryThumbnail(file: File, categoryId: number): P
   }
 }
 
-export async function deleteMenuItemPhoto(photoUrl: string): Promise<void> {
+export async function deleteImageFromUrl(imageUrl: string): Promise<void> {
   try {
-    // Extract filename from URL
-    const fileName = photoUrl.split('/').pop();
-    if (!fileName) return;
+    if (!imageUrl) return;
     
-    await supabase.storage
+    // Extract filename from Supabase Storage URL
+    // URL format: https://project.supabase.co/storage/v1/object/public/bucket/filename
+    const urlParts = imageUrl.split('/');
+    const fileName = urlParts[urlParts.length - 1];
+    
+    if (!fileName) {
+      console.warn('Could not extract filename from URL:', imageUrl);
+      return;
+    }
+    
+    const { error } = await supabase.storage
       .from('menu-photos')
       .remove([fileName]);
+    
+    if (error) {
+      console.error('Error deleting image:', error);
+    } else {
+      console.log('Successfully deleted image:', fileName);
+    }
   } catch (error) {
-    console.error('Error deleting photo:', error);
+    console.error('Error in deleteImageFromUrl:', error);
   }
+}
+
+export async function deleteMenuItemPhoto(photoUrl: string): Promise<void> {
+  await deleteImageFromUrl(photoUrl);
+}
+
+export async function deleteCategoryThumbnail(thumbnailUrl: string): Promise<void> {
+  await deleteImageFromUrl(thumbnailUrl);
 }

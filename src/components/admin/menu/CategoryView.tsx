@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ArrowLeft, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -29,15 +28,9 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
 
   const handleDeleteItem = async (itemId: number) => {
     try {
-      const { error } = await supabase
-        .from('menu_items')
-        .delete()
-        .eq('id', itemId);
-      
-      if (error) {
-        console.error('Error deleting item:', error);
-        return;
-      }
+      // Use the new delete function that handles photo cleanup
+      const { deleteSupabaseMenuItem } = await import('@/lib/supabase');
+      await deleteSupabaseMenuItem(itemId);
       
       // Refresh the items list
       refetchItems();
@@ -83,33 +76,14 @@ export function CategoryView({ category, canEdit, onBack }: CategoryViewProps) {
       sort: editingItem?.sort || categoryItems.length + 1
     };
     
-    let photoUrl = editingItem?.photo_url;
-    
     if (editingItem) {
-      // Update existing item
-      await updateSupabaseMenuItem(editingItem.id, newItemData);
-      
-      // Handle photo upload for existing item
-      if (itemData.photo) {
-        const { uploadMenuItemPhoto } = await import('@/lib/storage');
-        const uploadedUrl = await uploadMenuItemPhoto(itemData.photo, editingItem.id);
-        if (uploadedUrl) {
-          photoUrl = uploadedUrl;
-          await updateSupabaseMenuItem(editingItem.id, { photo_url: photoUrl });
-        }
-      }
+      // Update existing item using the new photo handling function
+      const { updateSupabaseMenuItemWithPhoto } = await import('@/lib/supabase');
+      await updateSupabaseMenuItemWithPhoto(editingItem.id, newItemData, itemData.photo);
     } else {
-      // Create new item
-      const createdItem = await createSupabaseMenuItem(newItemData);
-      
-      // Handle photo upload for new item
-      if (createdItem && itemData.photo) {
-        const { uploadMenuItemPhoto } = await import('@/lib/storage');
-        const uploadedUrl = await uploadMenuItemPhoto(itemData.photo, createdItem.id);
-        if (uploadedUrl) {
-          await updateSupabaseMenuItem(createdItem.id, { photo_url: uploadedUrl });
-        }
-      }
+      // Create new item using the existing photo handling function
+      const { createSupabaseMenuItemWithPhoto } = await import('@/lib/supabase');
+      await createSupabaseMenuItemWithPhoto(newItemData, itemData.photo);
     }
     
     setShowItemDialog(false);

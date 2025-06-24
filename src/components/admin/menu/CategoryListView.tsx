@@ -4,8 +4,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { CategoryList } from './CategoryList';
 import { CategoryDialog } from './CategoryDialog';
 import { useCategories } from '@/hooks/useMenu';
-import { createSupabaseCategory, updateSupabaseCategory } from '@/lib/supabase';
-import { uploadCategoryThumbnail } from '@/lib/storage';
+import { createSupabaseCategory, updateSupabaseCategory, getSupabaseCategories } from '@/lib/supabase';
+import { uploadCategoryThumbnail, deleteCategoryThumbnail } from '@/lib/storage';
 import { supabase } from '@/integrations/supabase/client';
 import type { Category } from '@/data/menuSeed';
 
@@ -51,6 +51,9 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
 
   const handleDeleteCategory = async (categoryId: number) => {
     try {
+      // Get the category to delete its thumbnail
+      const categoryToDelete = categories.find(c => c.id === categoryId);
+      
       // First delete all menu items in this category
       const { error: itemsError } = await supabase
         .from('menu_items')
@@ -60,6 +63,11 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
       if (itemsError) {
         console.error('Error deleting menu items:', itemsError);
         return;
+      }
+
+      // Delete the category thumbnail if it exists
+      if (categoryToDelete?.thumbnail_url) {
+        await deleteCategoryThumbnail(categoryToDelete.thumbnail_url);
       }
 
       // Then delete the category
@@ -103,6 +111,12 @@ export function CategoryListView({ canEdit, onSelectCategory }: CategoryListView
       
       // Handle thumbnail upload if provided
       if (thumbnail) {
+        // Delete old thumbnail if it exists
+        if (editingCategory.thumbnail_url) {
+          await deleteCategoryThumbnail(editingCategory.thumbnail_url);
+        }
+        
+        // Upload new thumbnail
         const thumbnailUrl = await uploadCategoryThumbnail(thumbnail, editingCategory.id);
         if (thumbnailUrl) {
           await updateSupabaseCategory(editingCategory.id, { thumbnail_url: thumbnailUrl });

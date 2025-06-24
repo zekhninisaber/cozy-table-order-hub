@@ -1,6 +1,6 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { uploadMenuItemPhoto } from '@/lib/storage';
+import { uploadMenuItemPhoto, deleteMenuItemPhoto } from '@/lib/storage';
 import type { MenuItem } from '@/data/menuSeed';
 import { castToMultilingual, type SupabaseMenuItem } from './types';
 
@@ -94,14 +94,54 @@ export async function updateSupabaseMenuItemWithPhoto(
   updates: Partial<MenuItem>, 
   photo: File | null
 ): Promise<void> {
-  // First update the basic item data
-  await updateSupabaseMenuItem(id, updates);
-  
-  // If photo is provided, upload it and update the photo_url
+  // Get current item data to access existing photo URL
   if (photo) {
+    const { data: currentItem } = await supabase
+      .from('menu_items')
+      .select('photo_url')
+      .eq('id', id)
+      .single();
+    
+    // Delete old photo if it exists
+    if (currentItem?.photo_url) {
+      await deleteMenuItemPhoto(currentItem.photo_url);
+    }
+    
+    // Upload new photo
     const photoUrl = await uploadMenuItemPhoto(photo, id);
     if (photoUrl) {
-      await updateSupabaseMenuItem(id, { photo_url: photoUrl });
+      updates.photo_url = photoUrl;
     }
+  }
+  
+  // Update the item with all changes
+  await updateSupabaseMenuItem(id, updates);
+}
+
+export async function deleteSupabaseMenuItem(id: number): Promise<void> {
+  try {
+    // Get the item to delete its photo
+    const { data: item } = await supabase
+      .from('menu_items')
+      .select('photo_url')
+      .eq('id', id)
+      .single();
+    
+    // Delete the photo if it exists
+    if (item?.photo_url) {
+      await deleteMenuItemPhoto(item.photo_url);
+    }
+    
+    // Delete the item from database
+    const { error } = await supabase
+      .from('menu_items')
+      .delete()
+      .eq('id', id);
+    
+    if (error) {
+      console.error('Error deleting menu item:', error);
+    }
+  } catch (error) {
+    console.error('Error in deleteSupabaseMenuItem:', error);
   }
 }
