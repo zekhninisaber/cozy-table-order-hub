@@ -3,8 +3,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SignatureCard } from './SignatureCard';
 import { MakeYourOwnCard } from './MakeYourOwnCard';
 import { useMenuItems } from '@/hooks/useMenu';
+import { useAppStore } from '@/lib/store';
 
 export function PokeBowlTabs() {
+  const { language } = useAppStore();
+  
   // Fetch real menu items for the Poke Bowls category (ID 3)
   const { items: pokeItems, loading } = useMenuItems(3);
   
@@ -20,14 +23,12 @@ export function PokeBowlTabs() {
     .sort((a, b) => (a.sort || 0) - (b.sort || 0))
     .map(item => ({
       id: item.id,
-      name: item.names.fr, // Using French names for consistency
+      name: item.names[language] || item.names.fr, // Use current language, fallback to French
       price: item.price,
-      description: item.descriptions.fr,
+      description: item.descriptions[language] || item.descriptions.fr, // Use database description
       photo_url: item.photo_url || '/placeholder.svg',
-      out_of_stock: item.out_of_stock,
-      // For now, we'll use mock components data since the database doesn't store component details
-      // This could be enhanced later to store component details in the database
-      components: getDefaultComponents(item.id)
+      out_of_stock: item.out_of_stock
+      // Removed the hardcoded components - now using database descriptions
     }));
 
   if (loading) {
@@ -68,68 +69,4 @@ export function PokeBowlTabs() {
       </TabsContent>
     </Tabs>
   );
-}
-
-// Helper function to provide default components for existing signatures
-// This maintains the existing component data while using real database items
-function getDefaultComponents(itemId: number) {
-  const componentMap: Record<number, any> = {
-    100: {
-      base: ['Riz blanc', 'Salade'],
-      sauce: ['Sauce soja', 'Mayo épicée'],
-      garnitures: ['Avocat', 'Concombre', 'Edamame'],
-      protein: ['Saumon'],
-      toppings: ['Graines de sésame']
-    },
-    101: {
-      base: ['Riz brun'],
-      sauce: ['Sauce teriyaki'],
-      garnitures: ['Mangue', 'Carottes', 'Chou rouge'],
-      protein: ['Thon'],
-      toppings: ['Algues nori', 'Gingembre']
-    },
-    102: {
-      base: ['Quinoa'],
-      sauce: ['Sauce ponzu'],
-      garnitures: ['Radis', 'Pousses de bambou'],
-      protein: ['Tofu grillé'],
-      toppings: ['Noix de coco râpée']
-    },
-    103: {
-      base: ['Riz blanc', 'Nouilles soba'],
-      sauce: ['Sauce sriracha mayo'],
-      garnitures: ['Avocat', 'Ananas', 'Poivrons'],
-      protein: ['Crevettes tempura'],
-      toppings: ['Oignons frits']
-    },
-    104: {
-      base: ['Salade mixte'],
-      sauce: ['Vinaigrette sésame'],
-      garnitures: ['Tomates cerises', 'Concombre'],
-      protein: ['Poulet teriyaki'],
-      toppings: ['Amandes effilées']
-    },
-    105: {
-      base: ['Riz noir'],
-      sauce: ['Sauce yuzu'],
-      garnitures: ['Avocat', 'Wakame'],
-      protein: ['Saumon fumé'],
-      toppings: ['Caviar de poisson volant']
-    },
-    106: {
-      base: ['Riz blanc', 'Vermicelles'],
-      sauce: ['Sauce chimichurri', 'Mayo citron'],
-      garnitures: ['Maïs', 'Haricots noirs', 'Jalapeños'],
-      protein: ['Bœuf grillé'],
-      toppings: ['Coriandre fraîche']
-    }
-  };
-
-  return componentMap[itemId] || {
-    base: ['Riz blanc'],
-    sauce: ['Sauce soja'],
-    garnitures: ['Avocat', 'Concombre'],
-    protein: ['Saumon'],
-    toppings: ['Graines de sésame']
-  };
 }

@@ -3,19 +3,9 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
 import { useAppStore } from '@/lib/store';
 import { useTranslation } from '@/lib/i18n';
 import { formatPrice } from '@/lib/utils';
-
-interface Components {
-  base?: string[];
-  sauce?: string[];
-  garnitures?: string[];
-  protein?: string[];
-  toppings?: string[];
-}
 
 interface SignatureItem {
   id: number;
@@ -24,7 +14,6 @@ interface SignatureItem {
   description: string;
   photo_url: string;
   out_of_stock: boolean;
-  components?: Components;
 }
 
 interface SignatureCardProps {
@@ -51,20 +40,9 @@ export function SignatureCard({ item }: SignatureCardProps) {
       name: item.name,
       price: BOWL_PRICES[selectedSize],
       builderData: {
-        size: selectedSize,
-        components: item.components
+        size: selectedSize
       }
     });
-  };
-
-  const renderComponentLine = (label: string, items?: string[]) => {
-    if (!items || items.length === 0) return null;
-    
-    return (
-      <div className="text-xs text-primary leading-tight whitespace-normal break-words">
-        <span className="font-medium">{label}:&nbsp;</span>{items.join(', ')}
-      </div>
-    );
   };
 
   return (
@@ -118,20 +96,10 @@ export function SignatureCard({ item }: SignatureCardProps) {
             )}
           </div>
           
-          {/* Components List */}
-          {item.components ? (
-            <div className="space-y-0.5 mb-3 mt-3 sm:text-center">
-              {renderComponentLine(t('componentsBase'), item.components.base)}
-              {renderComponentLine(t('componentsSauce'), item.components.sauce)}
-              {renderComponentLine(t('componentsGarnitures'), item.components.garnitures)}
-              {renderComponentLine(t('componentsProtein'), item.components.protein)}
-              {renderComponentLine(t('componentsToppings'), item.components.toppings)}
-            </div>
-          ) : (
-            <p className="text-xs text-primary whitespace-normal break-words mb-3 mt-3 sm:text-center">
-              {item.description}
-            </p>
-          )}
+          {/* Description from database */}
+          <p className="text-xs text-primary whitespace-normal break-words mb-3 mt-3 sm:text-center">
+            {item.description}
+          </p>
           
           {/* Add to Cart Button */}
           <div className="mt-auto">
