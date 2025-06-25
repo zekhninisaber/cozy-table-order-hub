@@ -1,4 +1,3 @@
-
 import { useNavigate } from 'react-router-dom';
 import { PokeBuilderProvider, usePokeBuilder } from '@/contexts/PokeBuilderContext';
 import { SizeStep } from '@/components/builder/SizeStep';
@@ -29,7 +28,8 @@ function PokeBuilderContent() {
 
   const handleBack = () => {
     if (state.currentStep === 1) {
-      navigate(-1);
+      // Navigate back to Poke Bowl category page (category ID 3)
+      navigate('/category/3');
     } else {
       dispatch({ type: 'PREV_STEP' });
     }
