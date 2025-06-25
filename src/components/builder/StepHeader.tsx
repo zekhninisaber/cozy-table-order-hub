@@ -11,7 +11,7 @@ export function StepHeader({ onBack }: StepHeaderProps) {
   const { state, getStepTitle } = usePokeBuilder();
 
   return (
-    <div className="flex items-center justify-between gap-3 mb-4">
+    <div className="flex items-center justify-between gap-3 mb-4 scroll-mt-[var(--cart-bar-h)]">
       <Button
         variant="ghost"
         size="sm"

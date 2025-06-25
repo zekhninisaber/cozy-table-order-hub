@@ -1,5 +1,4 @@
 
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
@@ -47,6 +46,15 @@
     --sidebar-accent-foreground: 45 11% 97%;
     --sidebar-border: 65 14% 35%;
     --sidebar-ring: 31 89% 54%;
+
+    /* Cart bar height variables */
+    --cart-bar-h: 56px; /* mobile h-14 */
+  }
+  
+  @media (min-width: 640px) {
+    :root {
+      --cart-bar-h: 64px; /* desktop h-16 */
+    }
   }
 }
 
@@ -67,4 +75,3 @@
     }
   }
 }
-

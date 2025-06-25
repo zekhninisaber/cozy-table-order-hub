@@ -21,7 +21,7 @@ export function CartSummary() {
       <div className="max-w-md mx-auto px-4 py-3">
         <Button
           onClick={() => navigate('/basket')}
-          className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-12 sm:h-14 shadow-sm"
+          className="w-full bg-accent hover:bg-accent/90 text-accent-foreground h-14 sm:h-16 shadow-sm"
           size="lg"
         >
           <div className="flex items-center justify-between w-full">
