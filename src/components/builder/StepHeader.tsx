@@ -15,7 +15,7 @@ export function StepHeader({ onBack }: StepHeaderProps) {
   const hasCartItems = getCartItemCount() > 0;
 
   return (
-    <div className="sticky top-0 z-50 bg-peach-cream border-b border-primary/10">
+    <div className={`sticky ${hasCartItems ? 'top-[var(--cart-bar-h)]' : 'top-0'} z-40 bg-peach-cream border-b border-primary/10`}>
       <div className="flex items-center justify-between gap-3 px-4 py-4">
         <Button
           variant="ghost"
