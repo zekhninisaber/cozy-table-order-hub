@@ -99,13 +99,6 @@ export function SignatureCard({ item }: SignatureCardProps) {
         
         {/* Content - full width layout */}
         <div className="flex flex-col justify-start mt-16 sm:mt-0">
-          {/* Price badge - show Regular price */}
-          <div className="text-center mb-2 sm:mb-3">
-            <span className="text-lg sm:text-xl font-bold text-[#F39720]">
-              {t('from')} {formatPrice(regularPrice)}
-            </span>
-          </div>
-          
           {/* Size Choice Label */}
           <div className="text-sm font-medium text-primary mb-1 sm:text-center">
             {t('sizeChoice')}
