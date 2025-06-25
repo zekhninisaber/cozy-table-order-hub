@@ -1,265 +1,159 @@
-
 export type Language = 'fr' | 'en' | 'nl';
 
-interface TranslationKeys {
-  // Common
-  loading: string;
-  error: string;
-  back: string;
-  next: string;
-  confirm: string;
-  cancel: string;
-  
-  // Splash
-  welcome: string;
-  
-  // Home/Language
-  selectLanguage: string;
-  french: string;
-  english: string;
-  dutch: string;
-  
-  // Menu
+interface Translations {
+  home: string;
   menu: string;
-  outOfStock: string;
+  cart: string;
+  total: string;
   addToCart: string;
-  noItemsAvailable: string;
-  
-  // Categories
-  sushiBurgerMenu: string;
-  baoBunMenu: string;
+  outOfStock: string;
+  customerName: string;
+  validateOrder: string;
+  confirmOrder: string;
+  orderComplete: string;
+  orderCompleteMessage: string;
+  newOrder: string;
+  backToMenu: string;
+  wifiRequired: string;
+  error: string;
+  loading: string;
   pokeBowls: string;
   signatures: string;
   makeYourOwn: string;
-  sides: string;
-  drinks: string;
-  desserts: string;
-  
-  // Cart
-  cart: string;
-  items: string;
-  total: string;
-  validateOrder: string;
-  
-  // Order
-  customerName: string;
-  confirmOrder: string;
-  orderComplete: string;
-  thankYou: string;
-  alreadyOrdered: string;
-  createNewOrder: string;
-  
-  // Admin
-  login: string;
-  password: string;
-  admin: string;
-  liveOrders: string;
-  orderHistory: string;
-  
-  // Components
-  componentsBase: string;
-  componentsSauce: string;
-  componentsGarnitures: string;
-  componentsProtein: string;
-  componentsToppings: string;
-  
-  // Sizes
+  sizeChoice: string;
   sizeRegular: string;
   sizeLarge: string;
-  sizeChoice: string;
-  
-  // Errors
-  closedMessage: string;
-  wifiRequired: string;
+  base: string;
+  sauce: string;
+  garnitures: string;
+  protein: string;
+  toppings: string;
+  extraSauce: string;
+  extraGarniture: string;
+  extraProtein: string;
+  next: string;
+  previous: string;
+  reviewOrder: string;
+  modifyBowl: string;
+  from: string;
 }
 
-const translations: Record<Language, TranslationKeys> = {
+const translations: Record<Language, Translations> = {
   fr: {
-    loading: 'Chargement...',
-    error: 'Erreur',
-    back: 'Retour',
-    next: 'Suivant',
-    confirm: 'Confirmer',
-    cancel: 'Annuler',
-    
-    welcome: 'Bienvenue chez Take A Bowl',
-    
-    selectLanguage: 'Choisissez votre langue',
-    french: 'Français',
-    english: 'English',
-    dutch: 'Nederlands',
-    
+    home: 'Accueil',
     menu: 'Menu',
-    outOfStock: 'Rupture de stock',
-    addToCart: 'Ajouter au panier',
-    noItemsAvailable: 'Aucun article disponible',
-    
-    sushiBurgerMenu: 'Menu Sushi Burger',
-    baoBunMenu: 'Menu Bao Bun',
-    pokeBowls: 'Poke Bowls',
-    signatures: 'Signatures',
-    makeYourOwn: 'Créez le vôtre',
-    sides: 'Accompagnements',
-    drinks: 'Boissons',
-    desserts: 'Desserts',
-    
     cart: 'Panier',
-    items: 'articles',
     total: 'Total',
-    validateOrder: 'Valider la commande',
-    
+    addToCart: 'Ajouter au panier',
+    outOfStock: 'Rupture de stock',
     customerName: 'Nom du client',
+    validateOrder: 'Valider la commande',
     confirmOrder: 'Confirmer la commande',
     orderComplete: 'Commande terminée',
-    thankYou: 'Merci pour votre commande !',
-    alreadyOrdered: 'Commande déjà passée pour cette table',
-    createNewOrder: 'Créer une nouvelle commande ?',
-    
-    login: 'Connexion',
-    password: 'Mot de passe',
-    admin: 'Administration',
-    liveOrders: 'Commandes en cours',
-    orderHistory: 'Historique des commandes',
-    
-    componentsBase: 'Base',
-    componentsSauce: 'Sauce',
-    componentsGarnitures: 'Garnitures',
-    componentsProtein: 'Protéine',
-    componentsToppings: 'Toppings',
-    
+    orderCompleteMessage: 'Votre commande a été envoyée en cuisine !',
+    newOrder: 'Nouvelle commande',
+    backToMenu: 'Retour au menu',
+    wifiRequired: 'Connexion WiFi requise',
+    error: 'Erreur',
+    loading: 'Chargement...',
+    pokeBowls: 'Poke Bowls',
+    signatures: 'Signatures',
+    makeYourOwn: 'Compose ton bowl',
+    sizeChoice: 'Choix de la taille',
     sizeRegular: 'Regular',
     sizeLarge: 'Large',
-    sizeChoice: 'Choix de la taille :',
-    
-    closedMessage: 'Nous sommes fermés. Horaires : Lundi-Samedi 11h-22h, Dimanche fermé.',
-    wifiRequired: 'Veuillez vous connecter au Wi-Fi TakeABowl-WiFi pour confirmer votre commande.'
+    base: 'Base',
+    sauce: 'Sauce',
+    garnitures: 'Garnitures',
+    protein: 'Protéine',
+    toppings: 'Toppings',
+    extraSauce: 'Sauce supplémentaire',
+    extraGarniture: 'Garniture supplémentaire',
+    extraProtein: 'Protéine supplémentaire',
+    next: 'Suivant',
+    previous: 'Précédent',
+    reviewOrder: 'Voir ma commande',
+    modifyBowl: 'Modifier',
+    from: 'À partir de'
   },
   en: {
-    loading: 'Loading...',
-    error: 'Error',
-    back: 'Back',
-    next: 'Next',
-    confirm: 'Confirm',
-    cancel: 'Cancel',
-    
-    welcome: 'Welcome to Take A Bowl',
-    
-    selectLanguage: 'Choose your language',
-    french: 'Français',
-    english: 'English',
-    dutch: 'Nederlands',
-    
+    home: 'Home',
     menu: 'Menu',
-    outOfStock: 'Out of stock',
-    addToCart: 'Add to cart',
-    noItemsAvailable: 'No items available',
-    
-    sushiBurgerMenu: 'Sushi Burger Menu',
-    baoBunMenu: 'Bao Bun Menu',
+    cart: 'Cart',
+    total: 'Total',
+    addToCart: 'Add to Cart',
+    outOfStock: 'Out of Stock',
+    customerName: 'Customer Name',
+    validateOrder: 'Validate Order',
+    confirmOrder: 'Confirm Order',
+    orderComplete: 'Order Complete',
+    orderCompleteMessage: 'Your order has been sent to the kitchen!',
+    newOrder: 'New Order',
+    backToMenu: 'Back to Menu',
+    wifiRequired: 'WiFi Connection Required',
+    error: 'Error',
+    loading: 'Loading...',
     pokeBowls: 'Poke Bowls',
     signatures: 'Signatures',
     makeYourOwn: 'Make Your Own',
-    sides: 'Sides',
-    drinks: 'Drinks',
-    desserts: 'Desserts',
-    
-    cart: 'Cart',
-    items: 'items',
-    total: 'Total',
-    validateOrder: 'Validate order',
-    
-    customerName: 'Customer name',
-    confirmOrder: 'Confirm order',
-    orderComplete: 'Order complete',
-    thankYou: 'Thank you for your order!',
-    alreadyOrdered: 'Order already placed for this table',
-    createNewOrder: 'Create new order?',
-    
-    login: 'Login',
-    password: 'Password',
-    admin: 'Administration',
-    liveOrders: 'Live Orders',
-    orderHistory: 'Order History',
-    
-    componentsBase: 'Base',
-    componentsSauce: 'Sauce',
-    componentsGarnitures: 'Vegetables',
-    componentsProtein: 'Protein',
-    componentsToppings: 'Toppings',
-    
+    sizeChoice: 'Size Choice',
     sizeRegular: 'Regular',
     sizeLarge: 'Large',
-    sizeChoice: 'Size choice:',
-    
-    closedMessage: 'We are closed. Hours: Monday-Saturday 11am-10pm, Sunday closed.',
-    wifiRequired: 'Please connect to TakeABowl-WiFi to confirm your order.'
+    base: 'Base',
+    sauce: 'Sauce',
+    garnitures: 'Toppings',
+    protein: 'Protein',
+    toppings: 'Toppings',
+    extraSauce: 'Extra Sauce',
+    extraGarniture: 'Extra Topping',
+    extraProtein: 'Extra Protein',
+    next: 'Next',
+    previous: 'Previous',
+    reviewOrder: 'Review Order',
+    modifyBowl: 'Modify',
+    from: 'From'
   },
   nl: {
-    loading: 'Laden...',
-    error: 'Fout',
-    back: 'Terug',
-    next: 'Volgende',
-    confirm: 'Bevestigen',
-    cancel: 'Annuleren',
-    
-    welcome: 'Welkom bij Take A Bowl',
-    
-    selectLanguage: 'Kies je taal',
-    french: 'Français',
-    english: 'English',
-    dutch: 'Nederlands',
-    
+    home: 'Home',
     menu: 'Menu',
+    cart: 'Winkelwagen',
+    total: 'Totaal',
+    addToCart: 'Toevoegen',
     outOfStock: 'Uitverkocht',
-    addToCart: 'Toevoegen aan winkelwagen',
-    noItemsAvailable: 'Geen items beschikbaar',
-    
-    sushiBurgerMenu: 'Sushi Burger Menu',
-    baoBunMenu: 'Bao Bun Menu',
+    customerName: 'Klantnaam',
+    validateOrder: 'Bestelling Valideren',
+    confirmOrder: 'Bestelling Bevestigen',
+    orderComplete: 'Bestelling Voltooid',
+    orderCompleteMessage: 'Uw bestelling is naar de keuken gestuurd!',
+    newOrder: 'Nieuwe Bestelling',
+    backToMenu: 'Terug naar Menu',
+    wifiRequired: 'WiFi Verbinding Vereist',
+    error: 'Fout',
+    loading: 'Laden...',
     pokeBowls: 'Poke Bowls',
     signatures: 'Signatures',
-    makeYourOwn: 'Maak je eigen',
-    sides: 'Bijgerechten',
-    drinks: 'Drankjes',
-    desserts: 'Desserts',
-    
-    cart: 'Winkelwagen',
-    items: 'items',
-    total: 'Totaal',
-    validateOrder: 'Bestelling valideren',
-    
-    customerName: 'Klantnaam',
-    confirmOrder: 'Bestelling bevestigen',
-    orderComplete: 'Bestelling voltooid',
-    thankYou: 'Bedankt voor je bestelling!',
-    alreadyOrdered: 'Bestelling al geplaatst voor deze tafel',
-    createNewOrder: 'Nieuwe bestelling maken?',
-    
-    login: 'Inloggen',
-    password: 'Wachtwoord',
-    admin: 'Beheer',
-    liveOrders: 'Live bestellingen',
-    orderHistory: 'Bestelgeschiedenis',
-    
-    componentsBase: 'Basis',
-    componentsSauce: 'Saus',
-    componentsGarnitures: 'Groenten',
-    componentsProtein: 'Proteïne',
-    componentsToppings: 'Toppings',
-    
+    makeYourOwn: 'Maak Je Eigen',
+    sizeChoice: 'Keuze van Grootte',
     sizeRegular: 'Regular',
     sizeLarge: 'Large',
-    sizeChoice: 'Keuze van grootte:',
-    
-    closedMessage: 'We zijn gesloten. Openingstijden: Maandag-Zaterdag 11u-22u, Zondag gesloten.',
-    wifiRequired: 'Verbind met TakeABowl-WiFi om je bestelling te bevestigen.'
+    base: 'Basis',
+    sauce: 'Saus',
+    garnitures: 'Garnituur',
+    protein: 'Proteïne',
+    toppings: 'Toppings',
+    extraSauce: 'Extra Saus',
+    extraGarniture: 'Extra Garnituur',
+    extraProtein: 'Extra Proteïne',
+    next: 'Volgende',
+    previous: 'Vorige',
+    reviewOrder: 'Bestelling Bekijken',
+    modifyBowl: 'Wijzigen',
+    from: 'Vanaf'
   }
 };
 
-export const useTranslation = (language: Language) => {
-  return (key: keyof TranslationKeys): string => {
-    return translations[language][key] || translations.fr[key];
+export function useTranslation(language: Language) {
+  return (key: keyof Translations): string => {
+    return translations[language][key] || key;
   };
-};
-
-export const getDefaultLanguage = (): Language => 'fr';
+}

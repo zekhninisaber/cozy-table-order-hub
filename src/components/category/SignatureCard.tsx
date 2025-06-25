@@ -1,11 +1,12 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AddButton } from '@/components/ui/add-button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAppStore } from '@/lib/store';
 import { useTranslation } from '@/lib/i18n';
 import { formatPrice } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 
 interface SignatureItem {
   id: number;
@@ -22,23 +23,57 @@ interface SignatureCardProps {
 
 type BowlSize = 'Regular' | 'Large';
 
-const BOWL_PRICES = {
-  Regular: 12.90,
-  Large: 14.90
-};
-
 export function SignatureCard({ item }: SignatureCardProps) {
   const { language, addToCart } = useAppStore();
   const t = useTranslation(language);
   const [selectedSize, setSelectedSize] = useState<BowlSize | ''>('');
+  const [currentItem, setCurrentItem] = useState(item);
+
+  // Real-time price updates
+  useEffect(() => {
+    setCurrentItem(item);
+    
+    // Subscribe to real-time changes for this specific item
+    const channel = supabase
+      .channel(`menu_item_${item.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'menu_items',
+          filter: `id=eq.${item.id}`
+        },
+        (payload) => {
+          if (payload.new) {
+            setCurrentItem(prev => ({
+              ...prev,
+              price: Number(payload.new.price),
+              out_of_stock: payload.new.out_of_stock
+            }));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [item]);
+
+  // Calculate prices based on database price
+  const regularPrice = currentItem.price;
+  const largePrice = regularPrice + 2;
 
   const handleAddToCart = () => {
     if (!selectedSize) return;
     
+    const finalPrice = selectedSize === 'Large' ? largePrice : regularPrice;
+    
     addToCart({
-      id: item.id,
-      name: item.name,
-      price: BOWL_PRICES[selectedSize],
+      id: currentItem.id,
+      name: currentItem.name,
+      price: finalPrice,
       builderData: {
         size: selectedSize
       }
@@ -51,64 +86,67 @@ export function SignatureCard({ item }: SignatureCardProps) {
         {/* Image - positioned absolutely on mobile, static on desktop */}
         <div className="absolute top-2 right-2 sm:static sm:flex sm:justify-center">
           <img
-            src={item.photo_url}
-            alt={item.name}
+            src={currentItem.photo_url}
+            alt={currentItem.name}
             className="w-36 h-36 sm:w-40 sm:h-40 rounded-xl shadow sm:shadow-none object-cover bg-gray-200 shrink-0"
           />
         </div>
         
         {/* Title - positioned absolutely on mobile, normal flow on desktop */}
         <h3 className="absolute top-2 left-3 font-semibold text-primary text-xl leading-tight max-w-[calc(100%-11rem)] sm:static sm:text-center sm:text-xl sm:max-w-none min-w-0 z-10">
-          {item.name}
+          {currentItem.name}
         </h3>
         
         {/* Content - full width layout */}
         <div className="flex flex-col justify-start mt-16 sm:mt-0">
+          {/* Price badge - show Regular price */}
+          <div className="text-center mb-2 sm:mb-3">
+            <span className="text-lg sm:text-xl font-bold text-[#F39720]">
+              {t('from')} {formatPrice(regularPrice)}
+            </span>
+          </div>
+          
           {/* Size Choice Label */}
           <div className="text-sm font-medium text-primary mb-1 sm:text-center">
             {t('sizeChoice')}
           </div>
           
-          {/* Size Selector */}
+          {/* Size Selector with prices */}
           <div className="flex gap-3 mt-2 sm:mt-2 sm:justify-center text-base sm:text-lg">
             <button
               type="button"
               onClick={() => setSelectedSize('Regular')}
-              className={`px-4 py-2 rounded-full font-medium transition-colors ${
+              className={`px-4 py-2 rounded-full font-medium transition-colors flex flex-col items-center ${
                 selectedSize === 'Regular'
                   ? 'bg-[#F39720] text-white shadow-sm'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Regular
+              <span>Regular</span>
+              <span className="text-xs font-normal">{formatPrice(regularPrice)}</span>
             </button>
             <button
               type="button"
               onClick={() => setSelectedSize('Large')}
-              className={`px-4 py-2 rounded-full font-medium transition-colors ${
+              className={`px-4 py-2 rounded-full font-medium transition-colors flex flex-col items-center ${
                 selectedSize === 'Large'
                   ? 'bg-[#F39720] text-white shadow-sm'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Large
+              <span>Large</span>
+              <span className="text-xs font-normal">{formatPrice(largePrice)}</span>
             </button>
-            {/* Price inline on desktop only */}
-            {selectedSize && (
-              <span className="ml-auto sm:ml-0 font-semibold text-[#F39720] text-base sm:text-lg hidden sm:block">
-                {formatPrice(BOWL_PRICES[selectedSize])}
-              </span>
-            )}
           </div>
           
           {/* Description from database - with more top margin on mobile */}
           <p className="text-xs text-primary whitespace-normal break-words mb-3 mt-8 sm:mt-3 sm:text-center">
-            {item.description}
+            {currentItem.description}
           </p>
           
           {/* Add to Cart Button */}
           <div className="mt-auto">
-            {item.out_of_stock ? (
+            {currentItem.out_of_stock ? (
               <Badge variant="destructive" className="text-xs w-full justify-center py-2">
                 {t('outOfStock')}
               </Badge>
@@ -125,7 +163,7 @@ export function SignatureCard({ item }: SignatureCardProps) {
                   <span className="sm:text-center">{t('addToCart')}</span>
                   {selectedSize && (
                     <span className="font-semibold sm:hidden">
-                      {formatPrice(BOWL_PRICES[selectedSize])}
+                      {formatPrice(selectedSize === 'Large' ? largePrice : regularPrice)}
                     </span>
                   )}
                 </div>

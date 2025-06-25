@@ -39,6 +39,9 @@ export function ItemDialog({ open, onOpenChange, editingItem, onSaveItem }: Item
     tags: ''
   });
 
+  // Check if this is a signature bowl (category_id === 3)
+  const isSignatureBowl = editingItem?.category_id === 3;
+
   useEffect(() => {
     if (editingItem) {
       setNewItem({
@@ -96,6 +99,11 @@ export function ItemDialog({ open, onOpenChange, editingItem, onSaveItem }: Item
                 onChange={(e) => setNewItem({...newItem, price: e.target.value})}
                 placeholder="0.00"
               />
+              {isSignatureBowl && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Le prix saisi correspond à la taille Regular. La taille Large apparaîtra automatiquement à +2 €.
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="item-tags">Tags (séparés par des virgules)</Label>
