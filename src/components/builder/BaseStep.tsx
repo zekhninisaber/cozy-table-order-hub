@@ -38,7 +38,7 @@ export function BaseStep() {
             className={`
               min-w-[5.5rem] px-3 text-sm whitespace-normal
               flex items-center justify-center text-center
-              max-sm:flex-col max-sm:py-1
+              max-sm:flex-col max-sm:py-1 max-sm:gap-0
               sm:flex-row sm:py-2 sm:gap-1
               ${state.base.includes(option.name)
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
