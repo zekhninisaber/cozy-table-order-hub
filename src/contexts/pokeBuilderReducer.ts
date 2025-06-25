@@ -1,11 +1,9 @@
-
 import { PokeBuilderState, PokeBuilderAction, initialState } from '@/types/pokeBuilder';
 
 export function pokeBuilderReducer(state: PokeBuilderState, action: PokeBuilderAction): PokeBuilderState {
   switch (action.type) {
     case 'SET_SIZE':
       const sizeKey = `size_${action.payload}`;
-      // Filter out any existing size options (stepId === 1) before adding the new one
       const filteredOptions = Object.fromEntries(
         Object.entries(state.selectedOptions).filter(([_, option]) => option.stepId !== 1)
       );
@@ -140,6 +138,21 @@ export function pokeBuilderReducer(state: PokeBuilderState, action: PokeBuilderA
       return state;
     case 'REMOVE_EXTRA_PROTEIN':
       return { ...state, extraProtein: state.extraProtein.filter(item => item !== action.payload) };
+    case 'NEXT_STEP':
+      return { 
+        ...state, 
+        currentStep: Math.min(state.currentStep + 1, state.totalSteps) 
+      };
+    case 'PREV_STEP':
+      return { 
+        ...state, 
+        currentStep: Math.max(state.currentStep - 1, 1) 
+      };
+    case 'GO_TO_STEP':
+      return { 
+        ...state, 
+        currentStep: Math.max(1, Math.min(action.payload, state.totalSteps)) 
+      };
     case 'RESET':
       return initialState;
     default:

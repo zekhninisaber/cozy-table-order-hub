@@ -1,8 +1,5 @@
 
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, ShoppingCart } from 'lucide-react';
 import { PokeBuilderProvider, usePokeBuilder } from '@/contexts/PokeBuilderContext';
 import { SizeStep } from '@/components/builder/SizeStep';
 import { BaseStep } from '@/components/builder/BaseStep';
@@ -13,14 +10,16 @@ import { ToppingsStep } from '@/components/builder/ToppingsStep';
 import { ExtraSauceStep } from '@/components/builder/ExtraSauceStep';
 import { ExtraGarnitureStep } from '@/components/builder/ExtraGarnitureStep';
 import { ExtraProteinStep } from '@/components/builder/ExtraProteinStep';
+import { StepHeader } from '@/components/builder/StepHeader';
+import { StepFooter } from '@/components/builder/StepFooter';
 import { ReviewBowlModal } from '@/components/builder/ReviewBowlModal';
 import { CartSummary } from '@/components/layout/CartSummary';
 import { useAppStore } from '@/lib/store';
-import { formatPrice } from '@/lib/utils';
+import { useState } from 'react';
 
 function PokeBuilderContent() {
   const navigate = useNavigate();
-  const { state, isValidForCart, getTotalPrice } = usePokeBuilder();
+  const { state, dispatch, getTotalPrice } = usePokeBuilder();
   const { addToCart, getCartItemCount } = useAppStore();
   const [showReviewModal, setShowReviewModal] = useState(false);
 
@@ -28,15 +27,29 @@ function PokeBuilderContent() {
   const hasCartItems = itemCount > 0;
   const totalPrice = getTotalPrice();
 
-  const handleReviewBowl = () => {
-    if (!isValidForCart) return;
+  const handleBack = () => {
+    if (state.currentStep === 1) {
+      navigate(-1);
+    } else {
+      dispatch({ type: 'PREV_STEP' });
+    }
+  };
+
+  const handleNext = () => {
+    dispatch({ type: 'NEXT_STEP' });
+  };
+
+  const handlePrevious = () => {
+    dispatch({ type: 'PREV_STEP' });
+  };
+
+  const handleAddToCart = () => {
     setShowReviewModal(true);
   };
 
   const handleConfirmAddToCart = () => {
-    // Add the custom poke bowl to cart with flat builder data structure
     addToCart({
-      id: Date.now(), // Temporary ID for custom bowls
+      id: Date.now(),
       name: "Poke perso",
       price: totalPrice,
       builderData: {
@@ -60,6 +73,31 @@ function PokeBuilderContent() {
     setShowReviewModal(false);
   };
 
+  const renderCurrentStep = () => {
+    switch (state.currentStep) {
+      case 1:
+        return <SizeStep />;
+      case 2:
+        return <BaseStep />;
+      case 3:
+        return <SauceStep />;
+      case 4:
+        return <GarnituresStep />;
+      case 5:
+        return <ProteinStep />;
+      case 6:
+        return <ToppingsStep />;
+      case 7:
+        return <ExtraSauceStep />;
+      case 8:
+        return <ExtraGarnitureStep />;
+      case 9:
+        return <ExtraProteinStep />;
+      default:
+        return <SizeStep />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-peach-cream">
       <CartSummary />
@@ -67,73 +105,21 @@ function PokeBuilderContent() {
       {/* Header */}
       <div className={`sticky bg-peach-cream z-30 border-b border-primary/10 ${hasCartItems ? 'top-16' : 'top-0'}`}>
         <div className="max-w-md mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate(-1)}
-              className="p-2"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <h1 className="text-xl font-bold text-primary">
-              Compose your bowl
-            </h1>
-          </div>
+          <StepHeader onBack={handleBack} />
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-md mx-auto p-4 pb-24">
-        {/* Size Step */}
-        <SizeStep />
-        
-        {/* Base Step */}
-        <BaseStep />
-        
-        {/* Sauce Step */}
-        <SauceStep />
-        
-        {/* Garnitures Step */}
-        <GarnituresStep />
-        
-        {/* Protein Step */}
-        <ProteinStep />
-        
-        {/* Toppings Step */}
-        <ToppingsStep />
-        
-        {/* Extra Steps */}
-        <ExtraSauceStep />
-        
-        <ExtraGarnitureStep />
-        
-        <ExtraProteinStep />
+      <div className="max-w-md mx-auto p-4 pb-32">
+        {renderCurrentStep()}
       </div>
 
-      {/* Add to Cart Button with Price */}
-      <div className="fixed bottom-0 left-0 right-0 bg-peach-cream border-t border-primary/10 p-4">
-        <div className="max-w-md mx-auto">
-          <Button
-            onClick={handleReviewBowl}
-            disabled={!isValidForCart}
-            className={`w-full py-4 ${
-              isValidForCart
-                ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
-                : 'opacity-50 cursor-not-allowed'
-            }`}
-            size="lg"
-          >
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-2">
-                <ShoppingCart className="w-5 h-5" />
-                <span>Add to cart</span>
-              </div>
-              <span className="font-bold">{formatPrice(totalPrice)}</span>
-            </div>
-          </Button>
-        </div>
-      </div>
+      {/* Footer Navigation */}
+      <StepFooter
+        onPrevious={handlePrevious}
+        onNext={handleNext}
+        onAddToCart={handleAddToCart}
+      />
 
       {/* Review Modal */}
       <ReviewBowlModal

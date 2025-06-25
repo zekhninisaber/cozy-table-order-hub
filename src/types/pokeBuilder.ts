@@ -1,4 +1,3 @@
-
 export interface PokeBuilderState {
   size: string | null;
   base: string[];
@@ -10,6 +9,8 @@ export interface PokeBuilderState {
   extraGarniture: string[];
   extraProtein: string[];
   selectedOptions: Record<string, { name: string; extraPrice: number; stepId: number }>;
+  currentStep: number;
+  totalSteps: number;
 }
 
 export type PokeBuilderAction = 
@@ -30,6 +31,9 @@ export type PokeBuilderAction =
   | { type: 'REMOVE_EXTRA_GARNITURE'; payload: string }
   | { type: 'ADD_EXTRA_PROTEIN'; payload: string }
   | { type: 'REMOVE_EXTRA_PROTEIN'; payload: string }
+  | { type: 'NEXT_STEP' }
+  | { type: 'PREV_STEP' }
+  | { type: 'GO_TO_STEP'; payload: number }
   | { type: 'RESET' };
 
 export const initialState: PokeBuilderState = {
@@ -42,5 +46,7 @@ export const initialState: PokeBuilderState = {
   extraSauce: [],
   extraGarniture: [],
   extraProtein: [],
-  selectedOptions: {}
+  selectedOptions: {},
+  currentStep: 1,
+  totalSteps: 9
 };
