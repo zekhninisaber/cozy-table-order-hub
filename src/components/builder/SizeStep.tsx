@@ -31,9 +31,10 @@ export function SizeStep() {
             key={option.id}
             variant={state.size === option.name ? "default" : "outline"}
             className={`
-              h-9 sm:h-10 min-w-[5.5rem] px-3 text-sm whitespace-normal
+              min-w-[5.5rem] px-3 text-sm whitespace-normal
               flex items-center justify-center text-center
               flex-row gap-1
+              max-sm:py-1 sm:py-2
               ${state.size === option.name 
                 ? 'bg-accent hover:bg-accent/90 text-accent-foreground' 
                 : 'hover:bg-accent/10'
