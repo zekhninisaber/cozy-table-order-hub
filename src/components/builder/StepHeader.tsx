@@ -11,26 +11,28 @@ export function StepHeader({ onBack }: StepHeaderProps) {
   const { state, getStepTitle } = usePokeBuilder();
 
   return (
-    <div className="flex items-center justify-between gap-3 mb-4 scroll-mt-[var(--cart-bar-h)]">
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={onBack}
-        className="p-2"
-      >
-        <ArrowLeft className="w-5 h-5" />
-      </Button>
-      
-      <div className="flex-1 text-center">
-        <h1 className="text-xl font-bold text-primary">
-          {getStepTitle()}
-        </h1>
-        <p className="text-sm text-primary opacity-70">
-          Step {state.currentStep} of {state.totalSteps}
-        </p>
+    <div className="sticky top-[var(--cart-bar-h)] z-40 bg-peach-cream border-b border-primary/10 scroll-mt-[var(--cart-bar-h)]">
+      <div className="flex items-center justify-between gap-3 py-4">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={onBack}
+          className="p-2"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </Button>
+        
+        <div className="flex-1 text-center">
+          <h1 className="text-xl font-bold text-primary">
+            {getStepTitle()}
+          </h1>
+          <p className="text-sm text-primary opacity-70">
+            Step {state.currentStep} of {state.totalSteps}
+          </p>
+        </div>
+        
+        <div className="w-9" /> {/* Spacer for centering */}
       </div>
-      
-      <div className="w-9" /> {/* Spacer for centering */}
     </div>
   );
 }

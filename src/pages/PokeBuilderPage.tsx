@@ -102,20 +102,15 @@ function PokeBuilderContent() {
     <div className="min-h-screen bg-peach-cream">
       <CartSummary />
       
-      {/* Content with proper spacing for cart bar */}
-      <div className={`${hasCartItems ? 'pt-[var(--cart-bar-h)]' : 'pt-0'}`}>
-        {/* Header */}
-        <div className="sticky top-0 bg-peach-cream z-30 border-b border-primary/10">
-          <div className="max-w-md mx-auto px-4 py-4">
-            <StepHeader onBack={handleBack} />
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="max-w-md mx-auto p-4 pb-32">
-          {renderCurrentStep()}
-        </div>
+      {/* Header positioned below cart bar */}
+      <div className="max-w-md mx-auto px-4">
+        <StepHeader onBack={handleBack} />
       </div>
+
+      {/* Content with proper spacing */}
+      <main className={`pt-[calc(var(--cart-bar-h)+80px)] max-w-md mx-auto p-4 pb-32`}>
+        {renderCurrentStep()}
+      </main>
 
       {/* Footer Navigation */}
       <StepFooter
