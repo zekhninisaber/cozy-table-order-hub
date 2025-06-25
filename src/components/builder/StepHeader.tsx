@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { usePokeBuilder } from '@/contexts/PokeBuilderContext';
+import { useAppStore } from '@/lib/store';
 
 interface StepHeaderProps {
   onBack: () => void;
@@ -9,9 +10,12 @@ interface StepHeaderProps {
 
 export function StepHeader({ onBack }: StepHeaderProps) {
   const { state, getStepTitle } = usePokeBuilder();
+  const { getCartItemCount } = useAppStore();
+  
+  const hasCartItems = getCartItemCount() > 0;
 
   return (
-    <div className="sticky top-[var(--cart-bar-h)] z-40 bg-peach-cream border-b border-primary/10 scroll-mt-[var(--cart-bar-h)]">
+    <div className={`sticky ${hasCartItems ? 'top-[var(--cart-bar-h)]' : 'top-0'} z-40 bg-peach-cream border-b border-primary/10 scroll-mt-[var(--cart-bar-h)]`}>
       <div className="flex items-center justify-between gap-3 py-4">
         <Button
           variant="ghost"
