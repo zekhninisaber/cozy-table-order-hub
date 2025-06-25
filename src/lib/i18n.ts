@@ -1,3 +1,4 @@
+
 export type Language = 'fr' | 'en' | 'nl';
 
 interface Translations {
@@ -36,6 +37,13 @@ interface Translations {
   reviewOrder: string;
   modifyBowl: string;
   from: string;
+  items: string;
+  closedMessage: string;
+  french: string;
+  english: string;
+  dutch: string;
+  selectLanguage: string;
+  thankYou: string;
 }
 
 const translations: Record<Language, Translations> = {
@@ -74,7 +82,14 @@ const translations: Record<Language, Translations> = {
     previous: 'Précédent',
     reviewOrder: 'Voir ma commande',
     modifyBowl: 'Modifier',
-    from: 'À partir de'
+    from: 'À partir de',
+    items: 'articles',
+    closedMessage: 'Nous sommes actuellement fermés. Nos heures d\'ouverture sont du lundi au samedi de 11h00 à 22h00.',
+    french: 'Français',
+    english: 'English',
+    dutch: 'Nederlands',
+    selectLanguage: 'Choisissez votre langue',
+    thankYou: 'Merci pour votre commande !'
   },
   en: {
     home: 'Home',
@@ -111,7 +126,14 @@ const translations: Record<Language, Translations> = {
     previous: 'Previous',
     reviewOrder: 'Review Order',
     modifyBowl: 'Modify',
-    from: 'From'
+    from: 'From',
+    items: 'items',
+    closedMessage: 'We are currently closed. Our opening hours are Monday to Saturday from 11:00 AM to 10:00 PM.',
+    french: 'Français',
+    english: 'English',
+    dutch: 'Nederlands',
+    selectLanguage: 'Select your language',
+    thankYou: 'Thank you for your order!'
   },
   nl: {
     home: 'Home',
@@ -148,7 +170,14 @@ const translations: Record<Language, Translations> = {
     previous: 'Vorige',
     reviewOrder: 'Bestelling Bekijken',
     modifyBowl: 'Wijzigen',
-    from: 'Vanaf'
+    from: 'Vanaf',
+    items: 'artikelen',
+    closedMessage: 'We zijn momenteel gesloten. Onze openingstijden zijn maandag tot zaterdag van 11:00 tot 22:00.',
+    french: 'Français',
+    english: 'English',
+    dutch: 'Nederlands',
+    selectLanguage: 'Selecteer uw taal',
+    thankYou: 'Bedankt voor uw bestelling!'
   }
 };
 
