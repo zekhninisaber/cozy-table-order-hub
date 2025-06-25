@@ -27,12 +27,8 @@ function PokeBuilderContent() {
   const totalPrice = getTotalPrice();
 
   const handleBack = () => {
-    if (state.currentStep === 1) {
-      // Navigate back to Poke Bowl category page (category ID 3)
-      navigate('/category/3');
-    } else {
-      dispatch({ type: 'PREV_STEP' });
-    }
+    // Always navigate back to Poke Bowl category page (category ID 3)
+    navigate('/category/3');
   };
 
   const handleNext = () => {
