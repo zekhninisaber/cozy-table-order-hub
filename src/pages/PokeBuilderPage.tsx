@@ -106,7 +106,7 @@ function PokeBuilderContent() {
       <StepHeader onBack={handleBack} />
 
       {/* Content with proper spacing for both cart and header */}
-      <main className={`${hasCartItems ? 'pt-[calc(var(--cart-bar-h)+80px)]' : 'pt-20'} max-w-md mx-auto p-4 pb-32`}>
+      <main className={`${hasCartItems ? 'pt-[calc(var(--cart-bar-h)+88px)]' : 'pt-20'} max-w-md mx-auto p-4 pb-32`}>
         {renderCurrentStep()}
       </main>
 
