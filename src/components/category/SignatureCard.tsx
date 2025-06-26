@@ -104,8 +104,8 @@ export function SignatureCard({ item }: SignatureCardProps) {
             {t('sizeChoice')}
           </div>
           
-          {/* Size Selector with prices */}
-          <div className="flex gap-3 mt-2 sm:mt-2 sm:justify-center text-base sm:text-lg max-sm:w-fit max-sm:ml-1 max-sm:self-start">
+          {/* Size Selector with prices - constrained width on mobile to avoid image */}
+          <div className="flex gap-3 mt-2 sm:mt-2 sm:justify-center text-base sm:text-lg max-sm:max-w-[calc(100%-10rem)] max-sm:ml-1">
             <button
               type="button"
               onClick={() => setSelectedSize('Regular')}
