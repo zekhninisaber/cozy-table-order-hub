@@ -8,44 +8,44 @@
 
 @layer base {
   :root {
-    --background: 0 0% 15%; /* dominant #272727 */
-    --foreground: 45 43% 76%; /* accent #EFD09E */
+    --background: 45 11% 97%; /* light peach-cream */
+    --foreground: 78 13% 15%; /* dark-green */
 
-    --card: 0 0% 12%; /* slightly lighter than dominant */
-    --card-foreground: 45 43% 76%; /* accent */
+    --card: 45 11% 97%;
+    --card-foreground: 78 13% 15%;
 
-    --popover: 0 0% 12%;
-    --popover-foreground: 45 43% 76%;
+    --popover: 45 11% 97%;
+    --popover-foreground: 78 13% 15%;
 
-    --primary: 36 42% 66%; /* secondary #D4AA7D */
-    --primary-foreground: 0 0% 15%; /* dominant */
+    --primary: 78 13% 15%; /* dark-green */
+    --primary-foreground: 45 11% 97%; /* peach-cream */
 
-    --secondary: 36 42% 66%; /* secondary #D4AA7D */
-    --secondary-foreground: 0 0% 15%; /* dominant */
+    --secondary: 65 14% 35%; /* olive */
+    --secondary-foreground: 45 11% 97%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 45 43% 76%;
+    --muted: 65 14% 35%;
+    --muted-foreground: 45 11% 97%;
 
-    --accent: 45 43% 76%; /* accent #EFD09E */
-    --accent-foreground: 0 0% 15%; /* dominant */
+    --accent: 31 89% 54%; /* mango */
+    --accent-foreground: 78 13% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 36 42% 66%; /* secondary */
-    --input: 36 42% 66%; /* secondary */
-    --ring: 36 42% 66%; /* secondary */
+    --border: 65 14% 35%;
+    --input: 65 14% 35%;
+    --ring: 78 13% 15%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 15%; /* dominant */
-    --sidebar-foreground: 45 43% 76%; /* accent */
-    --sidebar-primary: 36 42% 66%; /* secondary */
-    --sidebar-primary-foreground: 0 0% 15%; /* dominant */
-    --sidebar-accent: 45 43% 76%; /* accent */
-    --sidebar-accent-foreground: 0 0% 15%; /* dominant */
-    --sidebar-border: 36 42% 66%; /* secondary */
-    --sidebar-ring: 36 42% 66%; /* secondary */
+    --sidebar-background: 78 13% 15%;
+    --sidebar-foreground: 45 11% 97%;
+    --sidebar-primary: 31 89% 54%;
+    --sidebar-primary-foreground: 78 13% 15%;
+    --sidebar-accent: 65 14% 35%;
+    --sidebar-accent-foreground: 45 11% 97%;
+    --sidebar-border: 65 14% 35%;
+    --sidebar-ring: 31 89% 54%;
 
     /* Cart bar height variables */
     --cart-bar-h: 56px; /* mobile h-14 */
@@ -64,11 +64,7 @@
   }
 
   body {
-    @apply bg-dominant text-accent font-sans;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif text-secondary;
+    @apply bg-background text-foreground font-sans;
   }
 
   /* Prevent horizontal scrolling on mobile */

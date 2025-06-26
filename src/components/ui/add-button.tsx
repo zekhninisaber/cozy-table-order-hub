@@ -13,10 +13,10 @@ const AddButton = React.forwardRef<HTMLButtonElement, AddButtonProps>(
       <button
         className={cn(
           "w-full rounded-lg py-2 font-medium",
-          "bg-secondary text-dominant shadow",
+          "bg-[#F39720] text-white shadow",
           "transition",
-          "sm:hover:bg-[#c89a70]",        // desktop hover
-          "active:bg-[#c89a70]",          // mobile press color
+          "sm:hover:bg-[#E07E29]",        // desktop hover (unchanged)
+          "active:bg-[#E07E29]",          // mobile press color
           "active:scale-95",              // mobile press shrink
           "sm:active:scale-100",          // disable shrink on desktop
           "disabled:opacity-50 disabled:pointer-events-none",

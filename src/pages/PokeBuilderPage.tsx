@@ -95,7 +95,7 @@ function PokeBuilderContent() {
   };
 
   return (
-    <div className="min-h-screen bg-dominant">
+    <div className="min-h-screen bg-peach-cream">
       <CartSummary />
       
       {/* Header positioned below cart bar when cart has items */}
