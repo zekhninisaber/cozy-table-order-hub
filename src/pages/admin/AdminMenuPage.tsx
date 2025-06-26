@@ -13,18 +13,22 @@ export function AdminMenuPage() {
 
   if (selectedCategory) {
     return (
-      <CategoryView
-        category={selectedCategory}
-        canEdit={canEdit}
-        onBack={() => setSelectedCategory(null)}
-      />
+      <div className="min-h-screen bg-dominant">
+        <CategoryView
+          category={selectedCategory}
+          canEdit={canEdit}
+          onBack={() => setSelectedCategory(null)}
+        />
+      </div>
     );
   }
 
   return (
-    <CategoryListView
-      canEdit={canEdit}
-      onSelectCategory={setSelectedCategory}
-    />
+    <div className="min-h-screen bg-dominant">
+      <CategoryListView
+        canEdit={canEdit}
+        onSelectCategory={setSelectedCategory}
+      />
+    </div>
   );
 }

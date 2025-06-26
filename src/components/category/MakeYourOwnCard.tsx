@@ -14,10 +14,10 @@ export function MakeYourOwnCard() {
     <Card className="shadow-md border-0 cursor-pointer hover:shadow-lg transition-shadow" onClick={handleMakeYourOwn}>
       <CardContent className="p-6 text-center">
         <div className="space-y-3">
-          <h3 className="text-lg font-semibold text-primary">
+          <h3 className="text-lg font-serif font-semibold text-secondary">
             Create Your Perfect Bowl
           </h3>
-          <p className="text-sm text-primary opacity-80">
+          <p className="text-sm text-accent opacity-80">
             Choose your base, protein, vegetables, sauce and toppings
           </p>
           <AddButton 

@@ -20,7 +20,7 @@ export function CategoryHeader({ categoryName }: CategoryHeaderProps) {
       >
         <ArrowLeft className="h-5 w-5" />
       </Button>
-      <h1 className="text-2xl font-display font-bold text-primary">
+      <h1 className="text-2xl font-serif font-bold text-secondary">
         {categoryName}
       </h1>
     </div>

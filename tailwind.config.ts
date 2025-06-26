@@ -20,60 +20,66 @@ export default {
 		},
 		extend: {
 			colors: {
-				// Take A Bowl Brand Colors
+				// New Color Palette
+				'dominant': '#272727',
+				'secondary': '#D4AA7D',
+				'accent': '#EFD09E',
+				
+				// Take A Bowl Brand Colors (legacy - kept for compatibility)
 				'dark-green': '#283526',
 				'olive': '#697745',
 				'peach-cream': '#FFEFDA',
 				'mango': '#F39720',
 				
-				// Design System Colors
+				// Design System Colors (updated to use new palette)
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
-				background: 'hsl(var(--background))',
-				foreground: 'hsl(var(--foreground))',
+				background: '#272727', // dominant
+				foreground: '#EFD09E', // accent
 				primary: {
-					DEFAULT: '#283526', // dark-green
-					foreground: '#FFEFDA' // peach-cream
+					DEFAULT: '#D4AA7D', // secondary
+					foreground: '#272727' // dominant
 				},
 				secondary: {
-					DEFAULT: '#697745', // olive
-					foreground: '#FFEFDA' // peach-cream
+					DEFAULT: '#D4AA7D', // secondary
+					foreground: '#272727' // dominant
 				},
 				accent: {
-					DEFAULT: '#F39720', // mango
-					foreground: '#283526' // dark-green
+					DEFAULT: '#EFD09E', // accent
+					foreground: '#272727' // dominant
 				},
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
 				},
 				muted: {
-					DEFAULT: 'hsl(var(--muted))',
-					foreground: 'hsl(var(--muted-foreground))'
+					DEFAULT: '#1e1e1e',
+					foreground: '#EFD09E'
 				},
 				popover: {
-					DEFAULT: 'hsl(var(--popover))',
-					foreground: 'hsl(var(--popover-foreground))'
+					DEFAULT: '#1e1e1e',
+					foreground: '#EFD09E'
 				},
 				card: {
-					DEFAULT: 'hsl(var(--card))',
-					foreground: 'hsl(var(--card-foreground))'
+					DEFAULT: '#1e1e1e',
+					foreground: '#EFD09E'
 				},
 				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
+					DEFAULT: '#272727',
+					foreground: '#EFD09E',
+					primary: '#D4AA7D',
+					'primary-foreground': '#272727',
+					accent: '#EFD09E',
+					'accent-foreground': '#272727',
+					border: '#D4AA7D',
+					ring: '#D4AA7D'
 				}
 			},
 			fontFamily: {
 				sans: ['Inter', 'system-ui', 'sans-serif'],
-				display: ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
+				serif: ['"Playfair Display"', 'serif'],
+				display: ['"Playfair Display"', 'serif'], // alias for headings
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
