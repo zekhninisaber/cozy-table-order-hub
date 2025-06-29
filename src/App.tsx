@@ -20,7 +20,7 @@ import { AdminBuilderPage } from '@/pages/admin/AdminBuilderPage';
 import { AdminBuilderStepPage } from '@/pages/admin/AdminBuilderStepPage';
 import { AdminLiveOrdersPage } from '@/pages/admin/AdminLiveOrdersPage';
 import { AdminSettingsPage } from '@/pages/admin/AdminSettingsPage';
-import { PokeBuilderPage } from '@/pages/PokeBuilderPage';
+import PokeBuilderPage from '@/pages/PokeBuilderPage';
 import NotFound from '@/pages/NotFound';
 
 const queryClient = new QueryClient();
