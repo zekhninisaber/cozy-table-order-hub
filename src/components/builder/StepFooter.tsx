@@ -26,25 +26,38 @@ export function StepFooter({ onPrevious, onNext, onAddToCart }: StepFooterProps)
     <div className="fixed bottom-0 left-0 right-0 bg-peach-cream border-t border-primary/10 p-4">
       <div className="max-w-md mx-auto">
         {isLastStep ? (
-          // Final step - show Add to Cart button
-          <Button
-            onClick={onAddToCart}
-            disabled={!isValidForCart}
-            className={`w-full py-4 ${
-              isValidForCart
-                ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
-                : 'opacity-50 cursor-not-allowed'
-            }`}
-            size="lg"
-          >
-            <div className="flex items-center justify-between w-full">
-              <div className="flex items-center gap-2">
-                <ShoppingCart className="w-5 h-5" />
-                <span>Add to Cart</span>
+          // Final step - show both Previous and Add to Cart buttons
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              onClick={onPrevious}
+              disabled={isFirstStep}
+              className="flex-shrink-0 py-3"
+              size="lg"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Previous
+            </Button>
+            
+            <Button
+              onClick={onAddToCart}
+              disabled={!isValidForCart}
+              className={`flex-1 py-3 ${
+                isValidForCart
+                  ? 'bg-accent hover:bg-accent/90 text-accent-foreground'
+                  : 'opacity-50 cursor-not-allowed'
+              }`}
+              size="lg"
+            >
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-2">
+                  <ShoppingCart className="w-5 h-5" />
+                  <span>Add to Cart</span>
+                </div>
+                <span className="font-bold">{formatPrice(totalPrice)}</span>
               </div>
-              <span className="font-bold">{formatPrice(totalPrice)}</span>
-            </div>
-          </Button>
+            </Button>
+          </div>
         ) : (
           // Navigation steps
           <div className="flex gap-3">
