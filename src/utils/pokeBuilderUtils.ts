@@ -1,8 +1,32 @@
 
 import { PokeBuilderState } from '@/types/pokeBuilder';
 
+// Define required steps
+const REQUIRED_STEPS = [1, 2]; // Size and Base only
+
 export function isValidForCart(state: PokeBuilderState): boolean {
   return state.size !== null && state.base.length >= 1;
+}
+
+export function isStepRequired(stepId: number): boolean {
+  return REQUIRED_STEPS.includes(stepId);
+}
+
+export function isStepValid(stepId: number, state: PokeBuilderState): boolean {
+  // Optional steps are always valid
+  if (!isStepRequired(stepId)) {
+    return true;
+  }
+
+  // Check required steps
+  switch (stepId) {
+    case 1: // Size
+      return state.size !== null;
+    case 2: // Base
+      return state.base.length >= 1;
+    default:
+      return true;
+  }
 }
 
 export function getTotalPrice(state: PokeBuilderState): number {

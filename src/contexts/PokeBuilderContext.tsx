@@ -30,6 +30,9 @@ const stepTitles = [
   'Extra Protein'
 ];
 
+// Define which steps are required
+const REQUIRED_STEPS = [1, 2]; // Size and Base only
+
 export function PokeBuilderProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(pokeBuilderReducer, initialState);
   
@@ -37,24 +40,18 @@ export function PokeBuilderProvider({ children }: { children: ReactNode }) {
   const totalPrice = () => getTotalPrice(state);
 
   const canProceedToNext = () => {
+    // Only check requirements for required steps
+    if (!REQUIRED_STEPS.includes(state.currentStep)) {
+      return true; // Optional steps can always be skipped
+    }
+
     switch (state.currentStep) {
       case 1: // Size - required
         return state.size !== null;
       case 2: // Base - required (at least 1)
         return state.base.length >= 1;
-      case 3: // Sauce - required (at least 1)
-        return state.sauce.length >= 1;
-      case 4: // Garnitures - required (at least 1)
-        return state.garnitures.length >= 1;
-      case 5: // Protein - required
-        return state.protein !== null;
-      case 6: // Toppings - optional
-      case 7: // Extra Sauce - optional
-      case 8: // Extra Garniture - optional
-      case 9: // Extra Protein - optional
-        return true;
       default:
-        return false;
+        return true;
     }
   };
 
