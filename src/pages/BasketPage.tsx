@@ -25,7 +25,7 @@ export function BasketPage() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate('/category/3', { replace: true })}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
@@ -55,7 +55,7 @@ export function BasketPage() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/category/3', { replace: true })}
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
