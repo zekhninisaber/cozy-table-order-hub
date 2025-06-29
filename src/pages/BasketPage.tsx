@@ -1,5 +1,5 @@
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Minus, Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,12 +10,24 @@ import { renderBowlLines } from '@/utils/renderBowlLines';
 
 export function BasketPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { language, cart, updateCartQuantity, removeFromCart, getCartTotal, getCartItemCount } = useAppStore();
   const t = useTranslation(language);
   
   const itemCount = getCartItemCount();
   const hasCartItems = itemCount > 0;
   const total = getCartTotal();
+  
+  // Check if we came from poke builder
+  const cameFromPokeBuilder = location.state?.fromPokeBuilder === true;
+  
+  const handleBackClick = () => {
+    if (cameFromPokeBuilder) {
+      navigate('/category/3', { replace: true });
+    } else {
+      navigate(-1);
+    }
+  };
   
   if (cart.length === 0) {
     return (
@@ -25,7 +37,7 @@ export function BasketPage() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => navigate('/category/3', { replace: true })}
+              onClick={handleBackClick}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
@@ -55,7 +67,7 @@ export function BasketPage() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate('/category/3', { replace: true })}
+            onClick={handleBackClick}
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
