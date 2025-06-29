@@ -1,7 +1,6 @@
 
 import { Button } from '@/components/ui/button';
 import { usePokeBuilder } from '@/contexts/PokeBuilderContext';
-import { BuilderStep } from './BuilderStep';
 import { useBuilderOptions } from '@/hooks/useMenu';
 
 export function BaseStep() {
@@ -10,13 +9,17 @@ export function BaseStep() {
 
   if (loading) {
     return (
-      <BuilderStep title="Base" subtitle="choose max 2">
+      <div>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-primary">Base</h3>
+          <p className="text-sm text-primary opacity-70">choose max 2</p>
+        </div>
         <div className="grid grid-cols-2 gap-3">
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="h-12 bg-gray-200 animate-pulse rounded"></div>
           ))}
         </div>
-      </BuilderStep>
+      </div>
     );
   }
 
@@ -29,7 +32,11 @@ export function BaseStep() {
   };
 
   return (
-    <BuilderStep title="Base" subtitle="choose max 2">
+    <div>
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold text-primary">Base</h3>
+        <p className="text-sm text-primary opacity-70">choose max 2</p>
+      </div>
       <div className="grid grid-cols-2 gap-3">
         {baseOptions.map((option) => (
           <Button
@@ -61,6 +68,6 @@ export function BaseStep() {
           </Button>
         ))}
       </div>
-    </BuilderStep>
+    </div>
   );
 }

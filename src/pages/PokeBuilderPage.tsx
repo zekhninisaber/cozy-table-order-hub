@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PokeBuilderProvider, usePokeBuilder } from '@/contexts/PokeBuilderContext';
 import { StepHeader } from '@/components/builder/StepHeader';
-import { BuilderStep } from '@/components/builder/BuilderStep';
 import { StepFooter } from '@/components/builder/StepFooter';
 import { ReviewBowlModal } from '@/components/builder/ReviewBowlModal';
 import { useAppStore } from '@/lib/store';
@@ -120,9 +119,9 @@ function PokeBuilderContent() {
     <div className="min-h-screen bg-peach-cream">
       <div className={`max-w-md mx-auto ${hasCartItems ? 'pt-20' : 'pt-8'}`}>
         <StepHeader onBack={handleBack} />
-        <BuilderStep title="Custom Poke Bowl" subtitle="Build your perfect bowl">
+        <div className="px-4 py-4">
           {renderCurrentStep()}
-        </BuilderStep>
+        </div>
         <StepFooter 
           onPrevious={handlePrevious}
           onNext={handleNext}

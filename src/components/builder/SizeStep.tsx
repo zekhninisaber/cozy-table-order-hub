@@ -1,7 +1,6 @@
 
 import { Button } from '@/components/ui/button';
 import { usePokeBuilder } from '@/contexts/PokeBuilderContext';
-import { BuilderStep } from './BuilderStep';
 import { useBuilderOptions } from '@/hooks/useMenu';
 
 export function SizeStep() {
@@ -10,12 +9,16 @@ export function SizeStep() {
 
   if (loading) {
     return (
-      <BuilderStep title="Taille" subtitle="choisir 1">
+      <div>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-primary">Taille</h3>
+          <p className="text-sm text-primary opacity-70">choisir 1</p>
+        </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="h-9 sm:h-10 bg-gray-200 animate-pulse rounded"></div>
           <div className="h-9 sm:h-10 bg-gray-200 animate-pulse rounded"></div>
         </div>
-      </BuilderStep>
+      </div>
     );
   }
 
@@ -24,7 +27,11 @@ export function SizeStep() {
   };
 
   return (
-    <BuilderStep title="Taille" subtitle="choisir 1">
+    <div>
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold text-primary">Taille</h3>
+        <p className="text-sm text-primary opacity-70">choisir 1</p>
+      </div>
       <div className="grid grid-cols-2 gap-3">
         {sizeOptions.map((option) => (
           <Button
@@ -52,6 +59,6 @@ export function SizeStep() {
           </Button>
         ))}
       </div>
-    </BuilderStep>
+    </div>
   );
 }

@@ -1,7 +1,6 @@
 
 import { Button } from '@/components/ui/button';
 import { usePokeBuilder } from '@/contexts/PokeBuilderContext';
-import { BuilderStep } from './BuilderStep';
 import { useBuilderOptions } from '@/hooks/useMenu';
 
 export function ExtraProteinStep() {
@@ -10,13 +9,17 @@ export function ExtraProteinStep() {
 
   if (loading) {
     return (
-      <BuilderStep title="Extra Protein" subtitle="+€2 each">
+      <div>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-primary">Extra Protein</h3>
+          <p className="text-sm text-primary opacity-70">+€2 each</p>
+        </div>
         <div className="grid grid-cols-2 gap-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="h-12 bg-gray-200 animate-pulse rounded"></div>
           ))}
         </div>
-      </BuilderStep>
+      </div>
     );
   }
 
@@ -29,7 +32,11 @@ export function ExtraProteinStep() {
   };
 
   return (
-    <BuilderStep title="Extra Protein" subtitle="+€2 each">
+    <div>
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold text-primary">Extra Protein</h3>
+        <p className="text-sm text-primary opacity-70">+€2 each</p>
+      </div>
       <div className="grid grid-cols-2 gap-3">
         {extraProteinOptions.map((option) => (
           <Button
@@ -52,6 +59,6 @@ export function ExtraProteinStep() {
           </Button>
         ))}
       </div>
-    </BuilderStep>
+    </div>
   );
 }
