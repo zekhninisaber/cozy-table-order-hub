@@ -55,7 +55,8 @@ function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/menu" element={<MenuPage />} />
             <Route path="/category/:id" element={<CategoryPage />} />
-            <Route path="/poke-builder" element={<PokeBuilderPage />} />
+            <Route path="/poke-builder" element={<Navigate to="/poke-builder/1" replace />} />
+            <Route path="/poke-builder/:step" element={<PokeBuilderPage />} />
             <Route path="/basket" element={<BasketPage />} />
             <Route path="/summary" element={<SummaryPage />} />
             <Route path="/order-complete" element={<OrderCompletePage />} />
